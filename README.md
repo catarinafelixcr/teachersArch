@@ -1,6 +1,7 @@
 # PECD Sample Project
 
 This is a sample project for the PECD classes.
+Alterado para a turma PL1
 
 ## Getting started
 
