@@ -13,4 +13,12 @@ UC1.1 - Login com email e password.
 
 – Main Success Scenario: 1- O professor acede a página de login; 2- O professor introduz o seu email e password nos respetivos campos; 3- O professor clica no botão de Login; 4- O sistema verifica se as credenciais são válidas; 5- O sistema autentica o professor; 6- O sistema redireciona o professor para a página inicial do site.
 
-– Extensions: Caso o email seja inválido, o sistema informa com uma mensagem "Email Inválido", caso a password seja inválida, o sistema informa com uma mensagem "Password Incorreta", caso a base de dados não consiga identificar o professor, aparece uma mensagem "Erro Interno, tente novamente mais tarde".
+– Extensions:
+- 3a: O email não está registar: 
+    - 3a1:O sistema informa com uma mensagem que o email está válido
+    - 3a2:O professor seleciona a opação "Sign Up"
+- 3b: A password não está correta:
+    - 3b1:O sistema informa com uma mensagem sobre a password estar incorreta
+    - 3b2:O sistema verifica se a password está corretamente
+- 5a: A base de dados não identifica o professor:
+    - 5a1:O sistema informa com uma mensagem de erro
