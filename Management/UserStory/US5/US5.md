@@ -1,0 +1,1 @@
+Como professor, quero comparar a produtividade entre diferentes grupos de alunos na turma, para poder avaliar a sua colaboração e identificar os grupos que precisam de mais atenção.
