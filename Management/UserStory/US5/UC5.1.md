@@ -1,4 +1,4 @@
-UC.5.1. Ver quais são os alunos com previsão de reprovação
+UC.5.1. Ver o desempenho de diferentes grupos em trabalhos.
 
 Primary Actor: Professor.
 
