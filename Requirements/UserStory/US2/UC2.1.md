@@ -14,7 +14,6 @@ Preconditions: O professor deve estar autenticado no sistema (dependente do US1)
 Main Success Scenario:  
       
 1. O professor entra na plataforma e seleciona uma turma.
-           
 2. O profesor vê as notas de todos os alunos da turma.
      
 3. O professor seleciona a opção para prever quem vai reprovar.
