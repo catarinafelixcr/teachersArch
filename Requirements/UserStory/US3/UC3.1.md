@@ -1,22 +1,20 @@
-Use Case: Previsão de Desempenho Qualitativo da Turma e de um Aluno Singular
-
-Primary Actor: Educador – O professor que deseja obter previsões de desempenho para identificar quais alunos precisam de maior atenção.
-
-Scope: O sistema permite que os educadores observem previsões de desempenho qualitativo dos alunos, para que possam identificar aqueles com maior risco de reprovação e tomar decisões pedagógicas apropriadas.
+UC1.1 - Previsão de Desempenho Qualitativo da Turma e de um Aluno Singular
 
 
-Level: User Goals (Sea Level) – O caso de uso foca no objetivo do usuário ao interagir com o sistema para obter previsões.
-Stakeholders 
-- Educador: Precisa identificar rapidamente alunos com baixo desempenho para agir com antecedência.  
-- Estudantes: Beneficiam-se de um acompanhamento mais personalizado para melhorar seu aprendizado.  
+**Primary Actor**: Prefessor.
+
+**Scope/Goal**: O sistema permite que os professores observem previsões de desempenho qualitativo dos alunos, para que possam identificar aqueles com maior risco de reprovação e tomar decisões pedagógicas apropriadas.
+
+**Level**: User Goals (Sea Level).
+
+**Stakeholders and Interests**
+- Professor: Precisa identificar rapidamente alunos com baixo desempenho para agir com antecedência.  
 - Instituição de Ensino: Quer reduzir a taxa de reprovação e melhorar o desempenho geral dos alunos.  
 - Sistema de Previsão: Processa dados e gera previsões para apoiar a tomada de decisão pedagógica.  
 
-Preconditions
-- O educador deve estar autenticado no sistema.  
-- O sistema deve ter acesso aos dados acadêmicos dos alunos e às previsões geradas pelo modelo de análise.  
+**Preconditions**:  O professor deve estar autenticado no sistema. O sistema deve ter acesso aos dados dos alunos e às previsões geradas pelo modelo de análise.
 
-Main Success Scenario:
+**Main Success Scenario**:
 1. O educador acessa a plataforma do sistema.  
 2. O sistema apresenta opções para visualizar previsões de desempenho:  
    - Da turma inteira  
@@ -28,12 +26,12 @@ Main Success Scenario:
 7. O educador clica em um aluno para visualizar detalhes adicionais, como histórico de notas e fatores de risco.  
 8. O educador pode exportar o relatório ou tomar decisões pedagógicas informadas.  
 
-Extensions:
-1A – O educador deseja visualizar previsões de um único aluno  
-1A.1. Em vez de selecionar a turma completa, o educador pesquisa pelo nome ou matrícula de um aluno específico.  
-1A.2. O sistema exibe a previsão qualitativa individual do aluno.  
-1A.3. O fluxo retorna ao passo 7 do fluxo principal.  
+**Extensions**:
+1a: O educador deseja visualizar previsões de um único aluno  
+- 1a1: Em vez de selecionar a turma completa, o educador pesquisa pelo nome ou matrícula de um aluno específico.  
+- 1a2: O sistema exibe a previsão qualitativa individual do aluno.  
+- 1a3: O fluxo retorna ao passo 7 do fluxo principal.  
 
-2A – Dados insuficientes para previsão  
-2A.1. O sistema alerta o educador sobre a falta de dados para um ou mais alunos.  
-2A.2. O educador pode inserir novos dados ou solicitar informações adicionais da instituição.  
+2a: Dados insuficientes para previsão  
+- 2a1. O sistema alerta o educador sobre a falta de dados para um ou mais alunos.  
+- 2a2. O educador pode inserir novos dados ou solicitar informações adicionais da instituição.  
