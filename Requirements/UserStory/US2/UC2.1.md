@@ -14,13 +14,9 @@ Preconditions: O professor deve estar autenticado no sistema (dependente do US1)
 Main Success Scenario:  
       
 1. O professor entra na plataforma e seleciona uma turma.
-           
 2. O profesor vê as notas de todos os alunos da turma.
-     
 3. O professor seleciona a opção para prever quem vai reprovar.
-      
 4. O sistema mostra os dados previstos pelo modelo de ML. Os alunos com previsão de reprovação são destacados a vermelho.
-
 5. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
 
 
