@@ -1,14 +1,16 @@
 Como professor, quero obter a previsão do desempenho qualitativo da turma e de 
 um aluno singular, para saber quem precisa de maior atenção. 
 
-I – Não, depende de Autenticação.´
+**INVEST:**
 
-N – Sim, pode ser ajustado conforme as necessidades do professor.
+**I:** (Independent) Não, depende de Autenticação.
 
-V – Sim, ajuda o professor a focar nos alunos que mais precisam, melhorando a qualidade do ensino.
+**N:** (Negotiable) Sim, pode ser ajustado conforme as necessidades do professor.
 
-E – Sim, é bem definido e claro, então a equipe consegue planejar quanto tempo levará para desenvolvê-lo.
+**V:** (Valuable) Sim, ajuda o professor a focar nos alunos que mais precisam, melhorando a qualidade do ensino.
 
-S – Sim, o caso de uso é direto e não envolve muitas etapas complexas, podendo ser feito sem grandes dificuldades.
+**E:** (Estimable) Sim, é bem definido e claro, então a equipe consegue planejar quanto tempo levará para desenvolvê-lo.
 
-T – Sim, pode ser validado verificando se o sistema realmente prevê o desempenho e destaca os respetivos alunos.
+**S:** (Small) Sim, o caso de uso é direto e não envolve muitas etapas complexas, podendo ser feito sem grandes dificuldades.
+
+**T:** (Testable) Sim, pode ser validado verificando se o sistema realmente prevê o desempenho e destaca os respetivos alunos.
