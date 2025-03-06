@@ -1,5 +1,4 @@
-UC.2.2. Visualizar previsão de notas dos alunos de um grupo
-
+UC.2.2. Visualizar a previsão de notas dos alunos de um grupo
 
 **Primary Actor**: Professor.
 
@@ -32,7 +31,7 @@ UC.2.2. Visualizar previsão de notas dos alunos de um grupo
 - 4b1. O sistema exibe uma mensagem "Não há previsões de notas disponíveis para este grupo."
 
 5a. As previsões apresentam um nível de confiança baixo.
-- 5a1. O sistema exibe um aviso "Previsões com baixa confiança (probabilidade < 70%)."
+- 5a1. O sistema exibe uma mensagem "Previsões com baixa confiança (probabilidade < 70%)."
 
 7a. Sem detalhes do aluno.
 - 7a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."

@@ -1,4 +1,4 @@
-UC.2.1. Visualizar previsão de notas dos alunos.
+UC.2.1. Visualizar a previsão de notas dos alunos.
 
 
 **Primary Actor**: Professor.
@@ -27,7 +27,7 @@ UC.2.1. Visualizar previsão de notas dos alunos.
 - 3b1. O sistema exibe uma mensagem ‘Não há dados suficientes para gerar previsões de notas de momento."
 
 3a. As previsões apresentam um nível de confiança baixo.
-- 3a1. O sistema exibe um aviso "Estas previsões têm baixo nível de confiança."
+- 5a1. O sistema exibe uma mensagem "Previsões com baixa confiança (probabilidade < 70%)."
  
 5a. Sem detalhes do aluno.
 - 5a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."
