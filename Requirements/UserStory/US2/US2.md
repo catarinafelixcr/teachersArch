@@ -1,13 +1,13 @@
-Como professor, quero ver quais alunos têm previsão de reprovação, para poder alertá-los e orientá-los a tempo.
+Como professor, quero obter as notas de previsão para  calibrar o nível de dificuldade das próximas avaliações
 
 **I:** (Independent) O US2 é dependente do US1 (autenticação do professor) e da disponibilidade dos dados do GitLab e do modelo de Machine Learning.
 
-**N:** (Negotiable) Sim, há flexibilidade na implementação, incluindo a forma de visualização dos alunos (cores, ordenação, alertas) e a possibilidade de aplicar filtros adicionais para personalizar a análise.
+**N:** (Negotiable) Sim, há flexibilidade na implementação, incluindo a forma de visualização das previsões (gráficos, tabelas) e a possibilidade de filtrar/ordenar os alunos por diferentes critérios.
 
-**V:** (Valuable) Sim, permite que os professores identifiquem facilmente os alunos com maior probabilidade de reprovar.
+**V:** (Valuable) Sim, permite que os professores adaptem as futuras avaliações com base no desempenho previsto.
 
 **E:** (Estimable) Sim, é possível estimar o esforço necessário, pois envolve a integração com o modelo de ML, o desenvolvimento da interface e a lógica de destaque e os testes.
 
-**S:** (Small) Sim, foca apenas na visualização dos alunos em risco.
+**S:** (Small) Sim, foca especificamente na obtenção e análise de previsões de notas para o propósito definido de calibrar avaliações futuras, mantendo o escopo gerenciável.
 
-**T:** (Testable) Sim, pode-se testar se os alunos com previsão de reprovação são exibidos corretamente, se os destaques visuais estão aplicados conforme esperado e se os dados exibidos correspondem aos cálculos do modelo de ML.
+**T:** (Testable) Sim, pode-se testar se as previsões são exibidas corretamente, se fornecem informações suficientes para basear decisões sobre o nível de dificuldade das avaliações, e se as ferramentas de visualização são adequadas.
