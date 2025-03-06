@@ -5,14 +5,23 @@ Understand the context:
 
 Definir a Arquitetura: Client-server ( e Layered)
 - Subsistemas:
+
 •	Frontend (Client-side): mecanismos de cache para armazenar dados estáticos, e otimizar chamadas da API para reduzir pedidos desnecessários.
+
 •	Backend (Server-side): onde se encontra o modelo ML para fazer as previsões e para lidar com os pedidos que o utilizador faz, processando os dados e retornar as respostas.
+
 •	Base de Dados: armazena a informação processada	do GitLab e as previsões.
+
 •	Integração da API do GitLab: para obter os dados da atividade do GitLab dos alunos.
+
 - Responsabilidades dos subsistemas:
+
 •	Frontend – minimizar chamadas da API, otimizar a velocidade de carregamento da página.
+
 •	Backend – otimizar o processamento de dados e assegurar respostas de baixa latência.
+
 •	Base de dados – uso de queries, indexar e cache.
+
 •	API do GitLab – processa os dados assincronamente e gere limites de pedidos.
 
 
