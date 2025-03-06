@@ -1,6 +1,6 @@
 **Contexto**
 
-- O sistema é um site que inclui várias funcionalidades, incluindo a demonstração de um modelo de ML para prever o desempenho dos alunos ao longo do semestre, com base na atividade GitLab.
+- O sistema é um site que inclui várias funcionalidades, incluindo a demonstração de um modelo de ML para prever o desempenho dos alunos ao longo do semestre, com base na atividade GitLab. Como se trata de um sistema interativo e baseado em dados, a performance impacta diretamente a experiência do usuário e a eficácia das previsões.
 
 **Estímulo**
 
