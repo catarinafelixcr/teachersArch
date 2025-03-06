@@ -1,37 +1,24 @@
-UC1.1 - Previsão de Desempenho Qualitativo da Turma e de um Aluno Singular
+UC3.1 Visualizar a previsão de desempenho por categorias
 
+**Primary Actor**: Professor.
 
-**Primary Actor**: Prefessor.
-
-**Scope/Goal**: O sistema permite que os professores observem previsões de desempenho qualitativo dos alunos, para que possam identificar aqueles com maior risco de reprovação e tomar decisões pedagógicas apropriadas.
+**Scope**: O professor acede ao sistema para visualizar a previsão de desempenho dos alunos categorizada em faixas como "Muito bom", "Bom", "Médio", "Baixo" e "Muito baixo".
 
 **Level**: User Goals (Sea Level).
 
-**Stakeholders and Interests**
-- Professor: Precisa identificar rapidamente alunos com baixo desempenho para agir com antecedência.  
-- Instituição de Ensino: Quer reduzir a taxa de reprovação e melhorar o desempenho geral dos alunos.  
-- Sistema de Previsão: Processa dados e gera previsões para apoiar a tomada de decisão pedagógica.  
+**Stakeholders**: Professor (quer compreender o desempenho geral), aluno (beneficiam de um ensino mais adequado ao seu nível de desempenho), instituição de ensino (pretende melhorar a qualidade de ensino) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
 
-**Preconditions**:  O professor deve estar autenticado no sistema. O sistema deve ter acesso aos dados dos alunos e às previsões geradas pelo modelo de análise.
+**Preconditions**:  O professor deve estar autenticado no sistema. O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US2). 
 
 **Main Success Scenario**:
-1. O educador acessa a plataforma do sistema.  
-2. O sistema apresenta opções para visualizar previsões de desempenho:  
-   - Da turma inteira  
-   - De um aluno específico  
-3. O educador seleciona a opção desejada.  
-4. O sistema exibe uma lista com os alunos e suas respectivas previsões de desempenho qualitativo.  
-5. O educador pode filtrar os alunos com maior risco de reprovação.  
-6. O sistema destaca visualmente os alunos com previsão de baixo desempenho (exemplo: em vermelho).  
-7. O educador clica em um aluno para visualizar detalhes adicionais, como histórico de notas e fatores de risco.  
-8. O educador pode exportar o relatório ou tomar decisões pedagógicas informadas.  
+1. O professor está na dashboard com a opção "Previsão das Notas" ativa;
+2. O professor seleciona a opção "Previsão de Desempenho por Categorias";
+3. O sistema exibe as previsões categorizadas de todos os aluno;
+4. O sistema apresenta visualizações gráficas e tabelas interativas;
+5. O professor ir aplicar filtros iterativos como selecionar uma categoria especifica ou um grupo.
+6. O sistema atualiza automaticamente as visualizações conforme os filtros aplicados.
 
 **Extensions**:
-1a: O educador deseja visualizar previsões de um único aluno  
-- 1a1: Em vez de selecionar a turma completa, o educador pesquisa pelo nome ou matrícula de um aluno específico.  
-- 1a2: O sistema exibe a previsão qualitativa individual do aluno.  
-- 1a3: O fluxo retorna ao passo 7 do fluxo principal.  
 
-2a: Dados insuficientes para previsão  
-- 2a1. O sistema alerta o educador sobre a falta de dados para um ou mais alunos.  
-- 2a2. O educador pode inserir novos dados ou solicitar informações adicionais da instituição.  
+6a - O sistema falha ao exibir as visualizações interativas.
+- 6a1. O sistema sofre um erro técnico e faz uma mensagem "O sistema sofreu um erro técnico ao carregar as visualizações. Tente novamente mais tarde."
