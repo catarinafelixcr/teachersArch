@@ -1,6 +1,5 @@
-Como professor, quero obter a previsão do desempenho qualitativo da turma e de 
-um aluno singular, para saber quem precisa de maior atenção. 
----> identificar padrões e ajustar o plano de ensino. é um morivo melhor para este us
+Como professor, quero obter a previsão do desempenho qualitativo da turma e de
+um aluno singular, para identificar padrões e ajustar o plano de ensino.
 
 **INVEST:**
 

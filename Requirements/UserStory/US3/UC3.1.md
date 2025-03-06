@@ -1,13 +1,13 @@
-UC1.1 - Previsão de Desempenho Qualitativo da Turma e de um Aluno Singular
+UC3.1 - Previsão de Desempenho Qualitativo da Turma e de um Aluno Singular
 
 
-**Primary Actor**: Prefessor.
+**Primary Actor**: Professor.
 
 **Scope/Goal**: O sistema permite que os professores observem previsões de desempenho qualitativo dos alunos, para que possam identificar aqueles com maior risco de reprovação e tomar decisões pedagógicas apropriadas.
 
 **Level**: User Goals (Sea Level).
 
-**Stakeholders and Interests**
+**Stakeholders and Interests**:
 - Professor: Precisa identificar rapidamente alunos com baixo desempenho para agir com antecedência.  
 - Instituição de Ensino: Quer reduzir a taxa de reprovação e melhorar o desempenho geral dos alunos.  
 - Sistema de Previsão: Processa dados e gera previsões para apoiar a tomada de decisão pedagógica.  
