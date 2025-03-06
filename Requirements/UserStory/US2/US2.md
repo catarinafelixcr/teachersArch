@@ -2,7 +2,7 @@ Como professor, quero obter as notas de previsão para calibrar o nível de difi
 
 **I:** (Independent) O US2 é dependente do US1 (autenticação do professor) e da disponibilidade dos dados do GitLab e do modelo de Machine Learning.
 
-**N:** (Negotiable) Sim, há flexibilidade na implementação, incluindo a forma de visualização das previsões (gráficos, tabelas) e a possibilidade de filtrar/ordenar os alunos por diferentes critérios.
+**N:** (Negotiable) Sim, há flexibilidade na implementação, incluindo a forma de visualização das previsões (gráficos, tabelas) e a possibilidade de filtrar/ordenar os alunos por grupos.
 
 **V:** (Valuable) Sim, permite que os professores adaptem as futuras avaliações com base no desempenho previsto.
 

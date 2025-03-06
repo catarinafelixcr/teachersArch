@@ -34,5 +34,5 @@ UC.2.2. Visualizar previsão de notas dos alunos de um grupo
 5a. As previsões apresentam um nível de confiança baixo.
 - 5a1. O sistema exibe um aviso "Previsões com baixa confiança (probabilidade < 70%)."
 
-7a. O professor clica num aluno, mas não há detalhes disponíveis.
+7a. Sem detalhes do aluno.
 - 7a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."

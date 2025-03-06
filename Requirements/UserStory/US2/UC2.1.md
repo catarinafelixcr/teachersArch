@@ -16,7 +16,7 @@ UC.2.1. Visualizar previsão de notas dos alunos.
 2. Seleciona a opção "Previsão de Notas";
 3. O sistema exibe previsões de todos os alunos;
 4. O sistema apresenta estatísticas globais (média prevista, desvio padrão, percentis).
-5.  O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
+5. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
 
 **Extensions**:
 
@@ -29,5 +29,5 @@ UC.2.1. Visualizar previsão de notas dos alunos.
 3a. As previsões apresentam um nível de confiança baixo.
 - 3a1. O sistema exibe um aviso "Estas previsões têm baixo nível de confiança."
  
-5a.  Sem detalhes do aluno:
+5a. Sem detalhes do aluno.
 - 5a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."
