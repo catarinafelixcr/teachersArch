@@ -12,6 +12,7 @@ UC.6.1. Inserir Link do Repositório GitLab
 
 **Main Success Scenario**:
 1. O professor acede à dashboard;
+2. O professor escolhe uma das seguintes opções: para um aluno específico,para um grupo de alunos ou para toda a turma.
 2. Seleciona a opção "Inserir dados de GitLab";
 3. O professor insere o link do repositório GitLab;
 4. O sistema valida o link;
