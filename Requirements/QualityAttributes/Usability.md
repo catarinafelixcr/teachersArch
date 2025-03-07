@@ -4,8 +4,7 @@
 
 **Estímulo**
 
-- o utilizador acede ao site e tem que saber como usar as funcionalidades, visualizar e interpretar as previsões.
-- o sistema deve ser obejtivo e claro, de modo a que o utilizador não precise de ter muito conhecimento prévio.
+- O sistema deve ser obejtivo e claro, de modo a que o utilizador não precise de ter muito conhecimento prévio, e possa aceder ao site e saber como usar as funcionalidades, visualizar e interpretar as previsões.
 
 **Artefato**
 
@@ -28,5 +27,3 @@ A usabilidade do sistema avalia-se com:
     - Eficiência no uso do sistema: as ações mais comuns, como o pedido de previsões, a visualização de gráficos ou interpretar informações, pelo que as visualizações devem ser carregadas rapidamente, apresentando informações claras e objetivas, fáceis de entender.
 
     - Minimizar o impacto de erros: o sistema deve avisar o utilizador sobre erros que possam ocorrer, como o formato dos dados incorretos, algumas ações não aceites, com mensagens de modo a orientar o utilizador de como deve proceder para resolver os problemas. Caso o utilizador coloco um repositório muito pesado de carregar, uma vez que vai demorar mais tempo que o comum, o sistema deve ter opção de cancelar a operação.
-
-    - Adaptação do sistema às necessidades do utilizador: o sistema deve fixar as preferências do utilizador, de modo a ser mais fácil para ele aceder às funcionalidades que deseja.
