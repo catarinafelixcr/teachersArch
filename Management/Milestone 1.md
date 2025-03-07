@@ -14,4 +14,11 @@ Use Case IDs:
 
 Quality Attributes IDs:
 
-    
+    - #27
+    - #28
+    - #45
+    - #46
+    - #47
+    - #48
+    - #49
+    - #50
