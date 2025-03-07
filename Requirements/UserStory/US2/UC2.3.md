@@ -1,4 +1,4 @@
-UC.2.3. Comparar a previsão de notas entre grupos
+UC2.3. Comparar a previsão de notas entre grupos
 
 **Primary Actor**: Professor.
 
@@ -14,9 +14,9 @@ UC.2.3. Comparar a previsão de notas entre grupos
 1. O professor acede à dashboard;
 2. Seleciona a opção "Previsão de Notas";
 3. O sistema exibe o histórico das previsões para todos os alunos;
-4. O professor seleciona a opção "Comparar notas de grupos".
-5. O sistema exibe a lista de grupos disponíveis.
-6. O professor seleciona dois ou mais grupos para comparar.
+4. O professor seleciona a opção "Comparar notas de grupos";
+5. O sistema exibe a lista de grupos disponíveis;
+6. O professor seleciona dois ou mais grupos para comparar;
 7. O sistema exibe as estatísticas comparativas dos grupos, como a média prevista das notas por grupo, desvio padrão e variação entre as previsões dos grupos e a distribuição gráfica das previsões de notas.
 
 **Extensions**:

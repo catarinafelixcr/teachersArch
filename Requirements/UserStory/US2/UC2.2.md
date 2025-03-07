@@ -1,12 +1,12 @@
-UC.2.2. Visualizar a previsão de notas dos alunos de um grupo
+UC2.2. Visualizar a previsão de notas dos alunos de um grupo
 
 **Primary Actor**: Professor.
 
-**Scope**: O professor acede ao sistema para visualizar as previsões de notas dos alunos de um grupo específico, já geradas pelo modelo de Machine Learning (dependente do US6).
+**Scope**: O professor acede ao sistema para visualizar as previsões de notas dos alunos de um grupo específico, já geradas pelo modelo de Machine Learning.
 
 **Level**: User goals – Sea level.
 
-**Stakeholders and Interests**: Professor (precisa compreender o desempenho previsto de um grupo especifico para adaptar as suas estratégias), alunos (beneficiam de avaliações  mais personalizadas dentro do grupo), instituição de ensino (procuram melhorar a qualidade do ensino) e sistema de Previsão (fornece previsões de desempenho com base na atividade dos alunos.).
+**Stakeholders**: Professor (precisa compreender o desempenho previsto de um grupo especifico para adaptar as suas estratégias), alunos (beneficiam de avaliações  mais personalizadas dentro do grupo), instituição de ensino (procuram melhorar a qualidade do ensino) e sistema de Previsão (fornece previsões de desempenho com base na atividade dos alunos.).
 
 **Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já processadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo (dependente do US6).
 
