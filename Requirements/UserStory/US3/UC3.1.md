@@ -8,14 +8,14 @@ UC3.1 Visualizar a previsão de desempenho por categorias
 
 **Stakeholders**: Professor (quer compreender o desempenho geral), aluno (beneficiam de um ensino mais adequado ao seu nível de desempenho), instituição de ensino (pretende melhorar a qualidade de ensino) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
 
-**Preconditions**: O professor deve estar autenticado no sistema. O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US1, US2 e US6). 
+**Preconditions**: O professor deve estar autenticado no sistema. O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US1 e US6). 
 
 **Main Success Scenario**:
-1. O professor está na dashboard com a opção "Previsão das Notas" ativa;
+1. O professor está na dashboard;
 2. O professor seleciona a opção "Previsão de Desempenho por Categorias";
-3. O sistema exibe as previsões categorizadas de todos os aluno;
+3. O sistema exibe as previsões categorizadas de todos os aluno (histórico);
 4. O sistema apresenta visualizações gráficas e tabelas interativas;
-5. O professor aplicarfiltros iterativos ao selecionar uma categoria especifica ou um grupo;
+5. O professor aplica filtros iterativos ao selecionar uma categoria especifica;
 6. O sistema atualiza automaticamente as visualizações conforme os filtros aplicados.
 
 **Extensions**:
