@@ -8,13 +8,13 @@ UC.2.2. Visualizar a previsão de notas dos alunos de um grupo
 
 **Stakeholders and Interests**: Professor (precisa compreender o desempenho previsto de um grupo especifico para adaptar as suas estratégias), alunos (beneficiam de avaliações  mais personalizadas dentro do grupo), instituição de ensino (procuram melhorar a qualidade do ensino) e sistema de Previsão (fornece previsões de desempenho com base na atividade dos alunos.).
 
-**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já processadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo.
+**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já processadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo (dependente do US6).
 
 **Main Success Scenario**:  
 1. O professor acede à dashboard;
 2. Seleciona a opção "Previsão de Notas";
 3. O sistema exibe o histórico das previsões para todos os alunos;
-4. O professor seleciona um grupo.
+4. O professor seleciona o botão para visualizar de um grupo à sua escolha.
 5. O sistema filtra e exibe as previsões de notas dos alunos do grupo.
 6. O sistema apresenta estatísticas do grupo (média prevista, desvio padrão, percentis);
 7. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
