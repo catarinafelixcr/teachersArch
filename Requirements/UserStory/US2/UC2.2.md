@@ -2,7 +2,7 @@ UC.2.2. Visualizar a previsão de notas dos alunos de um grupo
 
 **Primary Actor**: Professor.
 
-**Scope**: O professor acede ao sistema para visualizar as previsões de notas dos alunos de um grupo específico, já geradas pelo modelo de Machine Learning
+**Scope**: O professor acede ao sistema para visualizar as previsões de notas dos alunos de um grupo específico, já geradas pelo modelo de Machine Learning (dependente do US6).
 
 **Level**: User goals – Sea level.
 
@@ -13,19 +13,19 @@ UC.2.2. Visualizar a previsão de notas dos alunos de um grupo
 **Main Success Scenario**:  
 1. O professor acede à dashboard;
 2. Seleciona a opção "Previsão de Notas";
-3. O sistema exibe as previsões de todos os alunos;
+3. O sistema exibe o histórico das previsões para todos os alunos;
 4. O professor seleciona um grupo.
 5. O sistema filtra e exibe as previsões de notas dos alunos do grupo.
-6. O sistema apresenta estatísticas do grupo (média prevista, desvio padrão, percentis) e comparação com os restantes grupos.
+6. O sistema apresenta estatísticas do grupo (média prevista, desvio padrão, percentis);
 7. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
 
 **Extensions**:
 
-3a. O modelo de ML não retorna previsões.
-- 3a1. O sistema exibe uma mensagem "Os dados de previsão não estão disponíveis de momento. Tente novamente mais tarde."
+3a. As previsões apresentam um nível de confiança baixo.
+- 3a1. O sistema exibe uma mensagem "Previsões com baixa confiança (probabilidade < 70%)."
 
-5a. As previsões apresentam um nível de confiança baixo.
-- 5a1. O sistema exibe uma mensagem "Previsões com baixa confiança (probabilidade < 70%)."
-
+3b. Não existe histórico de previsões.
+- 3b1. O sistema exibe uma mensagem "Não existem previsões disponíveis."
+ 
 7a. Sem detalhes do aluno.
 - 7a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."
