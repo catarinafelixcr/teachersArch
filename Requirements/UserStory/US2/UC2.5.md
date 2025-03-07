@@ -2,7 +2,7 @@ UC2.5. Criar um relatório de notas dos grupos.
 
 **Primary Actor**: Professor.
 
-**Scope**: Criar um relatório com as notas dos grupos dos alunos, baseado nas previsões de notas e estatísticas extraídas do modelo de Machine Learning.
+**Scope**: Criar um relatório com as notas dos grupos dos alunos, baseado nas previsões de notas e estatísticas extraídas do modelo de Machine Learning, permitindo o download em formato PDF.
 
 **Level**: User Goal (Sea Level).
 
