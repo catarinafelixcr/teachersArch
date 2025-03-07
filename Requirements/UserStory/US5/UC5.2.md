@@ -2,7 +2,7 @@ Criar um relatório personalizado de produtividade dos grupos.
 
 **Primary Actor**: Professor.
 
-**Scope/Goal**: Criar um relatório personalizado sobre a produtividade dos grupos de alunos, para análise detalhada e feedback.
+**Scope**: Criar um relatório personalizado sobre a produtividade dos grupos de alunos, para análise detalhada e feedback.
 
 **Level**: User Goal (Sea Level).
 
