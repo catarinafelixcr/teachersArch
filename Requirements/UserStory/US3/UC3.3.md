@@ -1,4 +1,4 @@
-UC3.2 Gerar Relatório de Desempenho por Categorias
+UC3.2 Gerar relatório de desempenho por categorias
 
 **Primary Actor**: Professor.
 
