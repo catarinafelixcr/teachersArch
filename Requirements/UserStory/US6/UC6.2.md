@@ -6,7 +6,7 @@ UC.6.2. Atualizar Dados do GitLab
 
 **Level**: User goals – Sea level.
 
-**Stakeholders and Interests**: Professor (garante que o sistema tem acesso aos repositórios certos), alunos (beneficiam de previsões baseadas nos dados do GitLab), instituição de ensino (procuram melhorar a qualidade do ensino) e o sistema de previsão (depende destes dados para gerar previsões precisas).
+**Stakeholders**: Professor (garante que o sistema tem acesso aos repositórios certos), alunos (beneficiam de previsões baseadas nos dados do GitLab), instituição de ensino (procuram melhorar a qualidade do ensino) e o sistema de previsão (depende destes dados para gerar previsões precisas).
 
 **Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso à API do GitLab para validação do link.
 
