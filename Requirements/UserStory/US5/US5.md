@@ -4,7 +4,7 @@ Como professor, quero comparar a produtividade entre diferentes grupos de alunos
 
 **I**: (Independent) Não, o US5 depende do US1 (autenticação do professor) e da disponibilidade dos dados do GitLab e do modelo de Machine Learning.
 
-**N**: (Negotiable) Sim, a forma como a análise da atividade dos alunos será apresentada pode ser discutida, podendo incluir diferentes métricas ou filtros de visualização.
+**N**: (Negotiable) Sim, a forma de apresentar a análise pode ser discutida, podendo incluir diferentes métricas ou filtros de visualização.
 
 **V**: (Valuable) Sim, porque permite ao professor avaliar a colaboração entre alunos, identificar padrões de trabalho e perceber quais equipas ou alunos necessitam de mais apoio.
 
