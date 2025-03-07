@@ -8,7 +8,7 @@ UC3.1 Visualizar a previsão de desempenho por categorias
 
 **Stakeholders**: Professor (quer compreender o desempenho geral), aluno (beneficiam de um ensino mais adequado ao seu nível de desempenho), instituição de ensino (pretende melhorar a qualidade de ensino) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
 
-**Preconditions**:  O professor deve estar autenticado no sistema. O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US2). 
+**Preconditions**: O professor deve estar autenticado no sistema. O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US2). 
 
 **Main Success Scenario**:
 1. O professor está na dashboard com a opção "Previsão das Notas" ativa;
