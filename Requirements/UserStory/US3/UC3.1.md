@@ -15,10 +15,10 @@ UC3.1 Visualizar a previsão de desempenho por categorias
 2. O professor seleciona a opção "Previsão de Desempenho por Categorias";
 3. O sistema exibe as previsões categorizadas de todos os aluno;
 4. O sistema apresenta visualizações gráficas e tabelas interativas;
-5. O professor ir aplicar filtros iterativos como selecionar uma categoria especifica ou um grupo.
+5. O professor aplicarfiltros iterativos ao selecionar uma categoria especifica ou um grupo;
 6. O sistema atualiza automaticamente as visualizações conforme os filtros aplicados.
 
 **Extensions**:
 
 6a - O sistema falha ao exibir as visualizações interativas.
-- 6a1. O sistema sofre um erro técnico e faz uma mensagem "O sistema sofreu um erro técnico ao carregar as visualizações. Tente novamente mais tarde."
+- 6a1. O sistema sofre um erro técnico e exibe uma mensagem "O sistema sofreu um erro técnico ao carregar as visualizações. Tente novamente mais tarde."

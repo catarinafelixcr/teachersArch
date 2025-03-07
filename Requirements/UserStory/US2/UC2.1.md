@@ -3,7 +3,7 @@ UC.2.1. Visualizar a previsão de notas dos alunos.
 
 **Primary Actor**: Professor.
 
-**Scope/Goal**: O professor acede ao sistema para visualizar a previsão de notas de todos os alunos.
+**Scope**: O professor acede ao sistema para visualizar a previsão de notas de todos os alunos.
 
 **Level**: User goals – Sea level.
 
