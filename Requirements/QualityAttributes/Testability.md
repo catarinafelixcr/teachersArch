@@ -16,8 +16,7 @@ Ambiente
 Resposta
 - O sistema tem que processar os pedidos de previsão e mostrar os resultados rapidamente.  
 
-Medida da Resposta 
-A testabilidade do sistema é avaliada com base nos seguintes critérios:  
+Medida da Resposta   
 
 - Cobertura de Testes: Percentual de testes unitários, de integração e de regressão aplicados ao sistema e ao modelo de ML.  
 - Ambientes de Teste: Lista das abordagens usadas, incluindo testes manuais e automáticos, testes de carga e desempenho.  
