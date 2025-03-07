@@ -29,6 +29,3 @@ UC1.1 - Login com email e password.
 - 3a4: O sistema mantém um registo do número de tentativas falhadas.
 - 3a5: Após cinco tentativas consecutivas falhadas, o sistema bloqueia temporariamente a conta.
 - 3a6: O sistema exibe uma mensagem "Muitas tentativas falhadas. Tente novamente em 15 minutos ou redefina a password."
-
-4a: A base de dados não identifica o professor:
-- 4a1: O sistema exibe a mensagem "Ocorreu um erro no sistema. Tente novamente mais tarde.
