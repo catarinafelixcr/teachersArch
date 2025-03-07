@@ -14,7 +14,7 @@ UC2.5. Criar um relatório de notas dos grupos.
 
 1. O professor acede à dashboard;
 2. Seleciona a opção "Previsão de Notas";
-3. O sistema exibe as previsões para todos os alunos.
+3. O sistema exibe as previsões para todos os alunos;
 4. O sistema apresenta estatísticas globais (média prevista, desvio padrão, percentis);
 5. O professor seleciona a opção "Gerar relatório";
 6. O sistema gera o relatório em formato PDF;

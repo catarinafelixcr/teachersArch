@@ -1,5 +1,4 @@
-UC.2.1. Visualizar a previsão de notas dos alunos.
-
+UC2.1. Visualizar a previsão de notas dos alunos.
 
 **Primary Actor**: Professor.
 

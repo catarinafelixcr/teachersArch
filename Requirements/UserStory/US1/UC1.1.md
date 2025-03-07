@@ -1,16 +1,14 @@
 UC1.1 - Login com email e password.
 
-
 **Primary Actor**: Professor.
 
-**Scope/Goal**: Autenticar o professor no sistema usando email e password.
+**Scope**: Autenticar o professor no sistema usando email e password.
 
 **Level**: User Goal (Sea Level).
 
-**Stakeholders and Interests**: Professor (aceder ao sistema), Administrador do Sistema (segurança e integridade do sistema) e Desenvolvedores (implementar o login).
+**Stakeholders**: Professor (pretende aceder ao sistema), administrador do sistema (segurança e integridade do sistema) e desenvolvedores (implementar o login).
 
 **Preconditions**: O professor deve ter uma conta registada no sistema. O professor deve conhecer as suas credenciais (email e password). O sistema deve estar operacional e conectado à base de dados.
-
 
 **Main Success Scenario**: 
 1. O professor acede à página de login; 
