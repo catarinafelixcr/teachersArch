@@ -1,4 +1,4 @@
-Como professor, quero fornecer o link do repositório GitLab ao sistema, para que os dados de atividade dos alunos sejam recolhidos e armazenados.
+Como professor, quero fornecer o link do repositório GitLab ao sistema, para que os dados de atividade dos alunos sejam recolhidos, armazenados e processados pelo modelo de Machine Learning.
 
 **INVEST:**
 
@@ -8,7 +8,7 @@ Como professor, quero fornecer o link do repositório GitLab ao sistema, para qu
 
 **V:** (Valuable) Sim, permite a recolha dos dados.
 
-**E:** (Estimable) Sim, é possível estimar o esforço necessário, pois
+**E:** (Estimable) Sim, é possível estimar o esforço necessário, pois envolve a interface para inserção do link, a validação do repositório e a integração com a API do GitLab.
 
 **S:** (Small) Sim, pode ser dividido em pequenas tarefas (inserção, validação e ligação à API).
 

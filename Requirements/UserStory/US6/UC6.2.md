@@ -12,17 +12,20 @@ UC.6.2. Atualizar Dados do GitLab
 
 **Main Success Scenario**:
 1. O professor acede à dashboard;
-2. Seleciona a opção "Inserir dados de GitLab";
+2. Seleciona a opção "Atualizar dados do GitLab";
 3. O professor insere o link do repositório do GitLab;
 4. O sistema valida o link e associa-o a um grupo ou aluno já existente;
-5. O sistema recolhe os dados do GitLab e armazena-os para processamento;
-6. O sistema reinicia automaticamente o processamento do modelo de Machine Learning;
-7. O professor recebe uma mensagem "O grupo ja existia os dados foram atualziados com sucesso. Em breve, poderá aceder às previsões de desempenho."
+5. O sistema recolhe apenas as novas atividades desde a última atualização;
+6. O sistema reinicia o processamento do modelo de Machine Learning;
+7. O professor recebe uma mensagem "Os dados do repositório foram atualizados com sucesso e o modelo de Machine Learning está a processar as novas previsões. Em breve, poderá consultá-las."
 
 **Extensions**:
 
 3a - O link fornecido não é válido
-- 3a1. O sistema exibe a mensagem: "O link do repositório GitLab não é válido ou está inacessível."
+- 3a1. O sistema exibe uma mensagem: "O link do repositório GitLab não é válido ou está inacessível."
+
+4a - Não há novos dados desde a última atualização
+- 4a1. O sistema exibe uma mensagem: "Os dados já estão atualizados. Não há novas atividades desde a última sincronização."
 
 6a - O processamento do modelo de ML falha
 - 6a1. O sistema exibe uma mensagem: "Os dados foram recolhidos, mas ocorreu um erro ao gerar as previsões. Tente novamente mais tarde."

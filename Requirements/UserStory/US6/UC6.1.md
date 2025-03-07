@@ -13,11 +13,11 @@ UC.6.1. Inserir Link do Repositório GitLab
 **Main Success Scenario**:
 1. O professor acede à dashboard;
 2. Seleciona a opção "Inserir dados de GitLab";
-3. O professor insere o link do repositório do GitLab;
+3. O professor insere o link do repositório GitLab;
 4. O sistema valida o link e associa-o a um grupo ou aluno;
 5. O sistema recolhe os dados do GitLab e armazena-os para processamento;
 6. O sistema inicia automaticamente o processamento do modelo de Machine Learning;
-7. O professor recebe uma mensagem "Os dados foram recolhidos com sucesso. Em breve, poderá aceder às previsões de desempenho."
+7. O professor recebe uma mensagem "Os dados foram recolhidos com sucesso e o modelo de Machine Learning está a processar as previsões. Em breve, poderá consultá-las."
 
 **Extensions**:
 
