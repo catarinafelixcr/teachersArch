@@ -1,4 +1,4 @@
-**Test Case ID:** TC2.1.2 - Visualizar detalhes de um aluno
+**Test Case ID:** TC2.2 - Visualizar detalhes de um aluno
 
 **Related Use Cases:** UC2.1
 
