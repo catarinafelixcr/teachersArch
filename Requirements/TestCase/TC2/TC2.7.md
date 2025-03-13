@@ -1,4 +1,4 @@
-**Test Case ID**: TC2.7 - Comparar Previsões Entre Grupos
+**Test Case ID**: TC2.7
 
 **Test Case Description**: Este teste verifica se o sistema compara corretamente as previsões entre grupos.
 
@@ -17,3 +17,5 @@
 **Expected Result:**
 - O sistema deve exibir estatísticas comparativas dos grupos (média, desvio padrão, variação).
 - O sistema deve apresentar a distribuição gráfica das previsões de notas.
+
+**Actual Result**:

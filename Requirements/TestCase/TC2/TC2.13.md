@@ -13,7 +13,7 @@
 - Na página de comparação das previsões, clicar num aluno.
 
 **Expected Result**:
-- O sistema deve exibir a comparação detalhada das previsões para o aluno selecionado,.
+- O sistema deve exibir a comparação detalhada das previsões para o aluno selecionado.
 - O sistema pode exibir um gráfico ou outro tipo de visualização para facilitar a comparação.
 
 **Actual Result**:

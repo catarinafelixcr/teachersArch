@@ -1,4 +1,4 @@
-**Test Case ID**: TC2.8 - Grupos não disponíveis para comparação
+**Test Case ID**: TC2.8
 
 **Related Use Cases:** UC2.3
 
@@ -12,3 +12,5 @@
 
 **Expected Result:**
 - O sistema deve exibir uma mensagem: "Nenhum grupo disponível para comparação. Verifique se há alunos corretamente associados a grupos."
+
+**Actual Result**: 

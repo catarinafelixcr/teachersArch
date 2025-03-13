@@ -14,3 +14,5 @@
 
 **Expected Result:**
 - O sistema deve exibir uma mensagem: "De momento, não existem dados adicionais sobre este aluno."
+
+**Actual Result**:
