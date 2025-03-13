@@ -12,3 +12,5 @@
 
 **Expected Result**:
 - O sistema deve exibir uma mensagem "Não existem previsões disponíveis."
+
+**Actual Result:**

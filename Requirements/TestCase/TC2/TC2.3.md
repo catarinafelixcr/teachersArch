@@ -1,6 +1,6 @@
 **Test Case ID**: TC2.3 - Previsões com baixa confiança
 
-Related Use Cases: UC2.1
+**Related Use Cases**: UC2.1
 
 **Pre-conditions:**
 - O professor deve estar autenticado no sistema.
