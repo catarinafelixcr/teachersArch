@@ -17,7 +17,7 @@ UC.2.4. Comparar a previsão em dois momentos distintos
 3. O sistema exibe o histórico das previsões para todos os alunos;
 4. O professor seleciona a opção "Comparar Previsões";
 5. O sistema apresenta opções para selecionar a data da previsão anterior a ser comparada;
-6. O sistema apresenta estatísticas globaisde ambas as previsões, como a media, desvio padrao;
+6. O sistema apresenta estatísticas globais de ambas as previsões, como a media, desvio padrao;
 7. O professor pode selecionar filtros para saber quem melhorou ou piorou;
 8. O professor clica num aluno para obter uma comparação detalhada.
 

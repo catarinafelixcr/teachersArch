@@ -1,6 +1,6 @@
 **Test Case ID**: TC2.5
 
-**Test Case Description**: Este teste visa verificar se o professor pode visualizar as previsões de notas de um grupo.
+**Test Case Description**: Este teste visa verificar se o professor pode visualizar as previsões de notas de um grupo específico.
 
 **Related Use Cases**: UC2.2
 
