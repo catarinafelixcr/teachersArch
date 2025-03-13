@@ -1,4 +1,6 @@
-**Test Case ID**: TC2.1 - Visualizar a previsão de notas dos alunos
+**Test Case ID**: TC2.1
+
+**Test case description:** Verificar se a previsão de notas dos alunos está a ser exibida corretamente.
 
 **Related Use Cases**: UC2.1
 

@@ -1,5 +1,7 @@
 **Test Case ID:** TC2.4 - Sem histórico de previsões
 
+**Test Case Description**: O sistema deve exibir o histórico de previsões para o professor.
+
 **Related Use Cases**: UC2.1
 
 **Pre-conditions**:

@@ -1,4 +1,6 @@
-**Test Case ID:** TC2.2 - Visualizar detalhes de um aluno
+**Test Case ID:** TC2.2
+
+**Test case description:** Este teste visa verificar se o sistema permite visualizar os detalhes de um aluno.
 
 **Related Use Cases:** UC2.1
 
