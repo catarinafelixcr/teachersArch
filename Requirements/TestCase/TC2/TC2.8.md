@@ -1,5 +1,7 @@
 **Test Case ID**: TC2.8
 
+**Test case description:** Verificar o comportamento do sistema quando os grupos não estão disponíveis para comparação.
+
 **Related Use Cases:** UC2.3
 
 **Pre-conditions:**

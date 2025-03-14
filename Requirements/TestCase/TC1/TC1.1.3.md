@@ -14,7 +14,7 @@
 
     - A base de dados deve estar acessível.
 
-**Stpes:**
+**Steps:**
 
     - Aceder à página de login do sistema.
 
