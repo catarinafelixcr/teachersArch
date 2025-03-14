@@ -1,4 +1,4 @@
-UC.2.4. Comparar a previsão em dois momentos distintos 
+UC.2.4. Comparar a previsão em dois momentos distintos  
 
 
 **Primary Actor**: Professor.
