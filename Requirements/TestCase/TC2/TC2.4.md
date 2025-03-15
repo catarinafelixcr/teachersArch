@@ -1,4 +1,4 @@
-**Test Case ID:** TC2.4 - Sem histórico de previsões
+**Test Case ID:** TC2.4 
 
 **Test Case Description**: O sistema deve exibir o histórico de previsões para o professor.
 

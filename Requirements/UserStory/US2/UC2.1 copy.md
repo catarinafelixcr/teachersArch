@@ -1,8 +1,8 @@
-UC2.1. Visualizar a previsão de notas dos alunos.
+UC2.1. Visualizar a previsão da nota de um aluno
 
 **Primary Actor**: Professor.
 
-**Scope**: O professor acede ao sistema para visualizar a previsão de notas de todos os alunos consultadas até ao dia.
+**Scope**: O professor acede ao sistema para visualizar detalhes da previsão de notas de um aluno.
 
 **Level**: User goals – Sea level.
 
@@ -13,8 +13,9 @@ UC2.1. Visualizar a previsão de notas dos alunos.
 **Main Success Scenario**:  
 1. O professor acede à dashboard;
 2. Seleciona a opção "Previsão de Notas";
-3. O sistema exibe o histórico das previsões para todos os alunos;
+3. O sistema exibe o histórico das previsões para todos os alunos que já foram colocados no repositório;
 4. O sistema apresenta estatísticas globais (média prevista, desvio padrão, percentis);
+5. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
 
 **Extensions**:
 
@@ -24,3 +25,5 @@ UC2.1. Visualizar a previsão de notas dos alunos.
 3b. Não existe histórico de previsões.
 - 3b1. O sistema exibe uma mensagem "Não existem previsões disponíveis."
  
+5a. Sem detalhes do aluno.
+- 5a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."

@@ -8,7 +8,7 @@ UC2.3. Comparar a previsão de notas entre grupos
 
 **Stakeholders and Interests**: Professor (precisa de analisar e comparar o desempenho previsto dos grupos), alunos (beneficiam de avaliações  mais personalizadas dentro do grupo), instituição de ensino (procuram melhorar a qualidade do ensino) e sistema de Previsão (fornece previsões de desempenho com base na atividade dos alunos.).
 
-**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já processadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo.
+**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já treinadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo.
 
 **Main Success Scenario**:  
 1. O professor acede à dashboard;
