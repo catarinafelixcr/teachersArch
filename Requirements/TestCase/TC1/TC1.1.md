@@ -1,4 +1,4 @@
-**Test case ID:** TC1.1.1
+**Test case ID:** TC1.1
 
 **Test case description:** Verificar se um professor consegue fazer login no sistema com credenciais válidas (email e password corretos).
 

@@ -1,4 +1,4 @@
-**Test case ID:** TC1.1.4
+**Test case ID:** TC1.4
 
 **Test case description:** Verificar se a conta de um professor é bloqueada temporariamente após 5 tentativas consecutivas de login falhadas.
 

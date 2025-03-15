@@ -1,4 +1,4 @@
-**Test case ID:** TC1.1.3
+**Test case ID:** TC1.3
 
 **Test case description:** Verificar se o sistema impede o login com uma password incorreta para um email registado e exibe a mensagem de erro adequada.
 
