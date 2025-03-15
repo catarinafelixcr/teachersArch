@@ -1,4 +1,4 @@
-**Test case ID:** TC6.1.2
+**Test case ID:** TC6.2
 
 **Test Case Description:** Verificar se o sistema rejeita um link GitLab com formato inválido (ex: URL mal formada) e exibe a mensagem de erro adequada.
 

@@ -1,4 +1,4 @@
-UC2.1. - Registar um novo Professor.
+UC7.1. - Registar um novo Professor.
 
 **Primary Actor**: Professor.
 

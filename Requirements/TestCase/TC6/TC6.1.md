@@ -1,4 +1,4 @@
-**Test case ID:** TC6.1.1
+**Test case ID:** TC6.1
 
 **Test Case Description:** Verificar se um professor consegue inserir um link de repositório GitLab válido, e se o sistema recolhe os dados e inicia o processamento do modelo de Machine Learning com sucesso.
 
