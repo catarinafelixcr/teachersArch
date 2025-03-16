@@ -14,7 +14,7 @@
 
 **Expected Result**:
 - O sistema deve validar o formato do email.
-- O sistema deve exibir uma mensagem de erro clara junto ao campo de email, informando que o email institucional é inválido e deve seguir o formato correto (se houver um formato específico definido).
+- O sistema deve exibir uma mensagem de erro clara junto ao campo de email, informando que o email institucional é inválido e deve seguir o formato correto (se houver um formato específico definido) - "Email institucional inválido, formato incorreto deverá seguir o deseguinte formato exemplo@uc.pt".
 - O registo não deve ser concluído.
 
 **Actual Results:**
