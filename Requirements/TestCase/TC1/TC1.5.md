@@ -1,4 +1,4 @@
-**Test case ID:** TC1.1.5
+**Test case ID:** TC1.5
 
 **Test case description:** Verificar se o link "Esqueci-me da password" está funcional e redireciona para a página de recuperação de password.
 
@@ -16,7 +16,7 @@
 
     - Localizar e clicar no link "Esqueci-me da password".
 
-**Expedted Results:**
+**Expected Results:**
 
     - O sistema deve redirecionar o utilizador para a página de recuperação de password (ex: página para inserir o email e solicitar a redefinição).
 

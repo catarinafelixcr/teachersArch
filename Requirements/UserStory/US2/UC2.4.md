@@ -9,7 +9,7 @@ UC.2.4. Comparar a previsão em dois momentos distintos
 
 **Stakeholders**: Professor (quer verificar se as previsões mudaram ao longo do tempo), instituição de ensino (pode usar essas comparações para entender melhor o impacto do tempo e da atividade dos alunos na precisão das previsões) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
 
-**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já processadas pelo modelo de Machine Learning (dependente do US6). O sistema deve armazenar previsões anteriores feitas em diferentes momentos.
+**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já treinadas pelo modelo de Machine Learning (dependente do US6). O sistema deve armazenar previsões anteriores feitas em diferentes momentos.
 
 **Main Success Scenario**:  
 1. O professor acede à dashboard;

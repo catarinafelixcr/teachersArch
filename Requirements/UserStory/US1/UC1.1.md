@@ -8,7 +8,7 @@ UC1.1 - Login com email e password.
 
 **Stakeholders**: Professor (pretende aceder ao sistema), administrador do sistema (segurança e integridade do sistema) e desenvolvedores (implementar o login).
 
-**Preconditions**: O professor deve ter uma conta registada no sistema. O professor deve conhecer as suas credenciais (email e password). O sistema deve estar operacional e conectado à base de dados.
+**Preconditions**: O professor deve ter uma conta registada no sistema (dependente do US7). O professor deve conhecer as suas credenciais (email e password). O sistema deve estar operacional e conectado à base de dados.
 
 **Main Success Scenario**: 
 1. O professor acede à página de login; 
