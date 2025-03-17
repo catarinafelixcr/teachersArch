@@ -21,7 +21,4 @@
 
 **Medida da Resposta**
 
-A segurança do sistema é avaliada com:
-- Registo de auditoria: cada modificação de dados é registada, o que proporciona mais controlo para investigar ações suspeitas.
-- Detecção e prevenção de alterações indevidas: ter ferramentas que impedem que utilizadores não autorizados modifiquem os dados.
-- Restauração dos dados: caso ocorra uma alteração indevida, a versão correta dos dados deve ser restaurada num prazo máximo de 24 horas.
+Caso um indivíduo altere informações sobre alunos cada remoção de dados é registada num registo de logs, o que proporciona mais controlo para investigar ações suspeitas; existe também controlo sobre o tipo de dados que cada utilizador poderá remover devido ao facto de que cada utilizador corresponde um token com permissões associadas e existe um backup dos dados para que caso essa remoção seja indevida ou engano se possam recuperar os dados corretos.

@@ -21,6 +21,4 @@
 
 **Medida da Resposta**
 
-A segurança do sistema é avaliada com:
-- Criptografia: informações sensíveis armazenadas de forma encriptada, reduzindo o risco de exposição
-- Controlo de acesso: implementação de autenticação (como OAuth ou JWT) e políticas de permissões para garantir que apenas utilizadores autorizados acedam a determinados dados.
+Qualquer utilizador com sessão iniciada tem um token de autenticação associado (como OAuth ou JWT) e políticas de permissões para garantir que apenas acedam aos dados que são supostos, e caso queiram acessar dados indevidamente as informações sensíveis já estarão armazenadas de forma encriptada, reduzindo o risco de exposição.
