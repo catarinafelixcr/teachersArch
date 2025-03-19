@@ -17,7 +17,7 @@
 **Expected Result**:
 - As visualizações gráficas e tabelas devem ser interativas.
 - Ao passar o cursor sobre elementos dos gráficos, devem ser exibidas informações relevantes sobre o elemento (ex: nome do aluno, categoria)
-- Ao clicar em elementos das tabelas, alguma ação deve ocorrer (ex: ordenação da tabela, filtro, detalhes do aluno, etc. - dependendo da funcionalidade implementada).
+- Ao clicar em elementos das tabelas, alguma ação deve ocorrer (ex: ordenação da tabela, filtro, detalhes do aluno, etc - dependendo da funcionalidade implementada).
 - Não devem ocorrer erros ou comportamentos inesperados durante a interação.
 
 **Actual Result**:
