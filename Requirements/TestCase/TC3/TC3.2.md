@@ -1,4 +1,4 @@
-**Test Case ID:** TC3.1.2
+**Test Case ID:** TC3.2
 
 **Test Case Description:**  Verificar se as visualizações gráficas e tabelas apresentadas na página de previsões por categorias são interativas, permitindo a exploração dos dados.
 
@@ -8,10 +8,11 @@
 - O Test Case 1 (TC3.1.1) deve ter sido bem-sucedido e a página de previsões por categorias deve estar acessível com as visualizações exibidas.
 
 **Steps**:
-- Aceder à página de "Previsão de Desempenho por Categorias"
+- O professor está na dashboard;
+- O professor seleciona a opção "Previsão de Desempenho por Categorias";
 - Interagir com as visualizações gráficas e tabelas apresentadas:
 - Passar o cursor sobre os elementos dos gráficos (barras, pie charts, etc.).
-- Tentar clicar em elementos das tabelas (linhas, colunas, células).
+- Clicar em elementos das tabelas (linhas, colunas, células).
 - Verificar se existem informações adicionais ao interagir com os elementos.
 
 **Expected Result**:

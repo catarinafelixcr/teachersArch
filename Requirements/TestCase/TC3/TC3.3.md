@@ -1,4 +1,4 @@
-**Test Case ID:** TC3.1.3
+**Test Case ID:** TC3.3
 
 **Test Case Description:**  Verificar se o professor consegue aplicar filtros para visualizar previsões apenas para uma categoria específica ("Muito Bom","Bom","Médio","Baixo","Muito Baizx4xo") e se o sistema atualiza as visualizações corretamente após a aplicação do filtro.
 
@@ -9,7 +9,9 @@
 - Deve existir a funcionalidade de filtro por categoria na página de previsões.
 
 **Steps**:
-- Aceder à página de "Previsão de Desempenho por Categorias".
+- O professor está na dashboard;
+- O professor seleciona a opção "Previsão de Desempenho por Categorias";
+- O sistema exibe as previsões categorizadas de todos os alunos (histórico);
 - Localizar e utilizar o mecanismo de filtro por categoria.
 - Selecionar uma categoria específica para filtrar.
 - Verificar se as visualizações são atualizadas automaticamente após a seleção do filtro.
