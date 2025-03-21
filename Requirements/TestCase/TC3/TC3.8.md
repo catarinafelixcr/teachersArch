@@ -1,4 +1,4 @@
-**Test Case ID:** TC3.3.2
+**Test Case ID:** TC3.8
 
 **Test Case Description:** Verificar se o sistema permite visualizar a comparação detalhada das previsões de um aluno específico.
 
