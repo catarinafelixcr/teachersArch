@@ -1,4 +1,4 @@
-**Test Case ID**: TC3.3.1
+**Test Case ID**: TC3.7
 
 **Test Case Description**: O sistema gera um relatório de desempenho por categorias.
 
