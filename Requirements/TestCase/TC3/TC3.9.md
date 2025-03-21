@@ -1,4 +1,4 @@
-**Test Case ID:** TC3.3.3
+**Test Case ID:** TC3.9
 
 **Test Case Description:** Verificar o comportamento do sistema quando ocorre uma falha inesperada durante a geração do relatório de desempenho.
 
