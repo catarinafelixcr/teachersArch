@@ -1,4 +1,4 @@
-**Test Case ID:** TC3.2.2
+**Test Case ID:** TC3.6
 
 **Test Case Description:** Verificar o comportamento do sistema quando ocorre uma falha inesperada durante a visualização detalhada das previsões de um grupo específico.
 
