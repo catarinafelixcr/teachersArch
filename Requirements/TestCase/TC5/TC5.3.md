@@ -1,4 +1,4 @@
-**Test Case ID**: TC5.1.3  
+**Test Case ID**: TC5.3  
 
 **Test Case Description**: Verificar se o professor consegue clicar num grupo da lista e obter acesso a uma página com detalhes sobre a colaboração entre os membros desse grupo.  
 
