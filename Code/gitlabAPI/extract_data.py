@@ -3,123 +3,137 @@ from collections import defaultdict
 from statistics import mean
 import datetime
 import csv
+import os
+from datetime import datetime, timezone
 
-
+# Configurações iniciais
 gitlab_url = "https://gitlab.com"
-gitlab_token = 'glpat-z7gzPpe48a5krLoLa4o4'  
-'''project_ids = [
-    61760884, 61760973, 61760822, 61708094, 61760919, 61708152, 61708114, 61708087,
-    50521584, 50554251, 50554274, 50554307, 50554328, 50554344, 50479247, 50554382
-]'''
+gitlab_token = os.getenv("GITLAB_TOKEN", 'glpat-z7gzPpe48a5krLoLa4o4')  # preferencialmente via env var
 
 project_ids = [
-    50521584, 50554251, 50554274, 50554307,
-    50554328, 50554344, 50479247, 50554382
+    61760884, 61760973, 61760822, 61708094, 61760919, 61708152, 61708114, 61708087,
+    50521584, 50554251, 50554274, 50554307, 50554328, 50554344, 50479247, 50554382
 ]
 
-start_date = datetime.datetime(2022, 2, 1).isoformat()
-end_date = datetime.datetime(2025, 1, 1).isoformat()
+start_date = datetime(2022, 2, 1).isoformat()
+end_date = datetime(2025, 1, 1).isoformat()
+
+def is_last_minute(commit_date_str, deadline="2024-12-31T23:59:59"):
+    deadline_dt = datetime.fromisoformat(deadline).replace(tzinfo=timezone.utc)
+    commit_dt = datetime.fromisoformat(commit_date_str)
+    if commit_dt.tzinfo is None:
+        commit_dt = commit_dt.replace(tzinfo=timezone.utc)
+    return (deadline_dt - commit_dt).days <= 2
 
 def main():
     gl = Gitlab(gitlab_url, private_token=gitlab_token)
-
-    all_commits, all_mrs, all_issues = [], [], []
-
     for pid in project_ids:
-        print(f"\nProcessando projeto ID: {pid}")
+        print(f"\n🔍 Processando projeto ID: {pid}")
         try:
             project = gl.projects.get(pid)
-
-            print("Commits...")
             commits = fetch_gitlab_commits(project)
-            all_commits.extend(commits)
-
-            print("Merge Requests...")
             mrs = fetch_gitlab_merge_requests(project)
-            all_mrs.extend(mrs)
-
-            print("Issues...")
+            for mr in mrs:
+                mr["project_id"] = pid
             issues = fetch_gitlab_issues(project)
-            all_issues.extend(issues)
+            for issue in issues:
+                issue["project_id"] = pid
+
+            student_metrics = aggregate_all_features(commits, mrs, issues)
+            save_metrics_to_csv({pid: student_metrics}, filename=f"project_{pid}.csv")
 
         except Exception as e:
-            print(f"Erro ao processar projeto {pid}: {e}")
-
-    print("\nAgregando métricas por estudante...")
-    student_features = aggregate_all_features(all_commits, all_mrs, all_issues)
-
-    for student, metrics in student_features.items():
-        print(f"\nEstudante: {student}")
-        for k, v in metrics.items():
-            print(f"  {k}: {v}")
-
-    save_metrics_to_csv(student_features)
+            print(f"❌ Erro ao processar projeto {pid}: {e}")
 
 def fetch_gitlab_commits(project):
     commits = project.commits.list(since=start_date, until=end_date, all=True, get_all=True)
     print(f"  → {len(commits)} commits encontrados")
-
     commits_data = []
 
     for commit in commits:
-        detailed_commit = project.commits.get(commit.id)
-        stats = detailed_commit.stats
-
-        commits_data.append({
-            "author_name": detailed_commit.author_name,
-            "created_at": detailed_commit.created_at,
-            "lines_added": stats['additions'],
-            "lines_deleted": stats['deletions'],
-            "lines_changed": stats['additions'] + stats['deletions']
-        })
-
+        try:
+            detailed_commit = project.commits.get(commit.id)
+            stats = detailed_commit.stats
+            commits_data.append({
+                "project_id": project.id,
+                "author_name": detailed_commit.author_name,
+                "created_at": detailed_commit.created_at,
+                "lines_added": stats['additions'],
+                "lines_deleted": stats['deletions'],
+                "lines_changed": stats['additions'] + stats['deletions'],
+                "last_minute": is_last_minute(detailed_commit.created_at)
+            })
+        except Exception as e:
+            print(f"⚠️ Erro ao obter detalhes do commit {commit.id}: {e}")
     return commits_data
+
+def count_comments_given_by_user(project, mr):
+    comments = mr.notes.list(get_all=True)
+    authors = defaultdict(int)
+    for comment in comments:
+        if comment.author and 'name' in comment.author:
+            authors[comment.author['name']] += 1
+    return dict(authors)
 
 def fetch_gitlab_merge_requests(project):
     mrs = project.mergerequests.list(state='all', created_after=start_date, created_before=end_date, all=True, get_all=True)
     print(f"  → {len(mrs)} merge requests encontrados")
-
     return [{
         "author_name": mr.author['name'],
         "created_at": mr.created_at,
         "state": mr.state,
-        "merged": mr.merged_at is not None
+        "merged": mr.merged_at is not None,
+        "review_comments_received": len(mr.notes.list(get_all=True)),
+        "review_comments_given": count_comments_given_by_user(project, mr)
     } for mr in mrs]
 
 def fetch_gitlab_issues(project):
     issues = project.issues.list(state='all', created_after=start_date, created_before=end_date, all=True, get_all=True)
     print(f"  → {len(issues)} issues encontrados")
-
     return [{
         "author_name": issue.author['name'],
         "created_at": issue.created_at,
         "state": issue.state,
-        "assignee": issue.assignee['name'] if issue.assignee else None
+        "assignee": issue.assignee['name'] if issue.assignee else None,
+        "resolved": issue.state == "closed",
+        "comments": len(issue.notes.list(get_all=True)),
+        "participants": list(set([n.author['name'] for n in issue.notes.list(get_all=True)]))
     } for issue in issues]
 
 def aggregate_all_features(commits, merge_requests, issues):
     features = defaultdict(lambda: {
         "total_commits": 0,
         "avg_lines_per_commit": 0,
+        "avg_lines_added": 0,
+        "avg_lines_deleted": 0,
         "active_days": 0,
+        "last_minute_commits": 0,
         "total_merge_requests": 0,
         "merged_requests": 0,
+        "review_comments_received": 0,
+        "review_comments_given": 0,
         "total_issues_created": 0,
-        "total_issues_assigned": 0
+        "total_issues_assigned": 0,
+        "issues_resolved": 0,
+        "issue_participation": 0
     })
 
+    commit_lines_added = defaultdict(list)
+    commit_lines_deleted = defaultdict(list)
     commit_dates_by_user = defaultdict(set)
-    lines_changed_by_user = defaultdict(list)
 
     for commit in commits:
         user = commit["author_name"]
         features[user]["total_commits"] += 1
-        lines_changed_by_user[user].append(commit["lines_changed"])
-        commit_date = commit["created_at"][:10]
-        commit_dates_by_user[user].add(commit_date)
+        features[user]["last_minute_commits"] += int(commit["last_minute"])
+        commit_lines_added[user].append(commit["lines_added"])
+        commit_lines_deleted[user].append(commit["lines_deleted"])
+        commit_dates_by_user[user].add(commit["created_at"][:10])
 
-    for user in lines_changed_by_user:
-        features[user]["avg_lines_per_commit"] = mean(lines_changed_by_user[user])
+    for user in commit_lines_added:
+        features[user]["avg_lines_per_commit"] = mean([a + b for a, b in zip(commit_lines_added[user], commit_lines_deleted[user])])
+        features[user]["avg_lines_added"] = mean(commit_lines_added[user])
+        features[user]["avg_lines_deleted"] = mean(commit_lines_deleted[user])
         features[user]["active_days"] = len(commit_dates_by_user[user])
 
     for mr in merge_requests:
@@ -127,36 +141,43 @@ def aggregate_all_features(commits, merge_requests, issues):
         features[user]["total_merge_requests"] += 1
         if mr["merged"]:
             features[user]["merged_requests"] += 1
+        features[user]["review_comments_received"] += mr["review_comments_received"]
+        for commenter, count in mr["review_comments_given"].items():
+            features[commenter]["review_comments_given"] += count
 
     for issue in issues:
         creator = issue["author_name"]
         features[creator]["total_issues_created"] += 1
         if issue["assignee"]:
-            assignee = issue["assignee"]
-            features[assignee]["total_issues_assigned"] += 1
+            features[issue["assignee"]]["total_issues_assigned"] += 1
+        if issue["resolved"]:
+            features[creator]["issues_resolved"] += 1
+        for participant in issue["participants"]:
+            features[participant]["issue_participation"] += 1
 
     return features
 
-
-
-def save_metrics_to_csv(data, filename="student_metrics.csv"):
-    # Extrai os nomes de todas as métricas da primeira entrada
+def save_metrics_to_csv(data, filename="gitlab_activity.csv"):
     if not data:
         print("⚠️ Nenhum dado para guardar.")
         return
 
-    header = ["student"] + list(next(iter(data.values())).keys())
+    for pid, students in data.items():
+        if not students:
+            print(f"⚠️ Sem métricas para o projeto {pid}.")
+            continue
 
-    with open(filename, mode="w", newline='', encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(header)
+        sample_metrics = next(iter(students.values()))
+        header = ["project_id", "student"] + list(sample_metrics.keys())
 
-        for student, metrics in data.items():
-            row = [student] + [metrics.get(k, "") for k in header[1:]]
-            writer.writerow(row)
+        with open(filename, mode="w", newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+            for student, metrics in students.items():
+                row = [pid, student] + [metrics.get(k, "") for k in header[2:]]
+                writer.writerow(row)
 
-    print(f"Dados guardados em: {filename}")
-
+        print(f"✅ Dados guardados em: {filename}")
 
 if __name__ == "__main__":
     main()
