@@ -5,3 +5,5 @@
 - Na dashboard principal nós mencionamos em todos os UCs como "dashboard" --> mudar para home.
 
 - Botão "Ver por Grupo" torna-se desnecessário. com a integração do "Select Group" no UC2.1, o botão "Ver por Grupo" torna-se redundante nesta página. basicamenye integramos uc2.1 e uc2.2 na mesma pagina! ao selecionar o grupo os dados (tabela + estatisticas) mudam!
+
+- os botões e mensagens estão em português... mas deveriam estar em inglês certo? para bater certo com o nosso site. *duvida*
