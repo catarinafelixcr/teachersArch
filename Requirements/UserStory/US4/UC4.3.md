@@ -14,7 +14,7 @@ UC4.3. Gerar relatório de desempenho por categorias
 1. O professor acede ao painel de controlo.  
 2. O professor seleciona a opção "Relatório de Alunos em Risco".  
 3. O sistema exibe a lista de alunos identificados como "em risco".  
-4. O professor aplica os filtros desejados (por exemplo, grupo, percentagem de risco, disciplina).  
+4. O professor aplica os filtros desejados (por exemplo, grupo, percentagem de risco).  
 5. O professor seleciona a opção "Gerar Relatório".  
 6. O sistema gera o relatório com os dados filtrados e permite o download em formato PDF.
 

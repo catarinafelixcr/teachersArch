@@ -1,6 +1,5 @@
 UC.2.4. Comparar a previsão em dois momentos distintos  
 
-
 **Primary Actor**: Professor.
 
 **Scope**: O professor acede ao sistema para comparar a previsão atual de notas dos alunos com previsões feitas em momentos anteriores.
