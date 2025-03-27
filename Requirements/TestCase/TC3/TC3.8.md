@@ -5,12 +5,12 @@
 **Related Use Cases**: UC3.3
 
 **Pre-conditions**:
-- O professor deve estar autenticado no sistema (Dependente do US1). 
+- O professor deve estar autenticado no sistema (dependente do US1). 
 - O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US6).
 
 **Steps**:
-- O professor está na dashboard;
-- O professor seleciona a opção "Previsão de Desempenho por Categorias";
+- O professor está na dashboard.
+- O professor seleciona a opção "Previsão de Desempenho por Categorias".
 
 **Expected Result**:
 - O sistema sofre um erro técnico e falha ao exibir as visualizações interativas.

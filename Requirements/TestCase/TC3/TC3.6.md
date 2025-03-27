@@ -9,10 +9,10 @@
 - O sistema deve ter acesso às previsões geradas pelo modelo de Machine Learning (dependente do US6).
 
 **Steps**:
-- O professor está na dashboard;
-- O professor seleciona a opção "Previsão de Desempenho por Categorias";
-- O sistema exibe as previsões categorizadas de todos os aluno (histórico);
-- O professor seleciona um grupo especifico nos filtros;
+- O professor está na dashboard.
+- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O sistema exibe as previsões categorizadas de todos os aluno (histórico).
+- O professor seleciona um grupo especifico nos filtros.
 
 **Expected Result**:
 - O sistema sofre um erro técnico e falha ao exibir as visualizações interativas.

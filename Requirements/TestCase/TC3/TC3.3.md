@@ -5,13 +5,13 @@
 **Related Use Cases**:  UC3.1 - Visualizar a previsão de desempenho por categorias, Main Success Scenario, Passos 5-6.
 
 **Pre-conditions**:
-- TC3.1.1 deve ter sido bem-sucedido e a página de previsões por categorias deve estar acessível com as visualizações exibidas.
+- TC3.1 deve ter sido bem-sucedido e a página de previsões por categorias deve estar acessível com as visualizações exibidas.
 - Deve existir a funcionalidade de filtro por categoria na página de previsões.
 
 **Steps**:
-- O professor está na dashboard;
-- O professor seleciona a opção "Previsão de Desempenho por Categorias";
-- O sistema exibe as previsões categorizadas de todos os alunos (histórico);
+- O professor está na dashboard.
+- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O sistema exibe as previsões categorizadas de todos os alunos (histórico).
 - Localizar e utilizar o mecanismo de filtro por categoria.
 - Selecionar uma categoria específica para filtrar.
 - Verificar se as visualizações são atualizadas automaticamente após a seleção do filtro.

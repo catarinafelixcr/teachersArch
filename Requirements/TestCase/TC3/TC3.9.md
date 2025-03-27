@@ -10,11 +10,11 @@
 - Previsões de desempenho exibidas com sucesso (TC3.1 bem-sucedido).
 
 **Steps**:
-- O professor está na dashboard;
-- O professor seleciona a opção "Previsão de Desempenho por Categorias";
-- O sistema exibe as previsões categorizadas de todos os aluno (histórico);
-- O professor seleciona os filtros que desejar;
-- O professor escolhe a opção "Gerar Relatório";
+- O professor está na dashboard.
+- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O sistema exibe as previsões categorizadas de todos os aluno (histórico).
+- O professor seleciona os filtros que desejar.
+- O professor escolhe a opção "Gerar Relatório".
 
 **Expected Result**:
 - O sistema não deve gerar o relatório de desempenho em PDF.
