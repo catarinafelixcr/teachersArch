@@ -1,4 +1,4 @@
-**Test case ID**: TC4.2 - Ver o desempenho dos Grupos
+**Test case ID**: TC4.4 - Ver o desempenho dos Grupos
 
 **Test case description**: Verificar se o professor consegue ver o desempenho dos grupos e identificar alunos em risco de reprovação.  
 
