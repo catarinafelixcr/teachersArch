@@ -1,4 +1,4 @@
-**Test case ID**: TC4.3.2  
+**Test case ID**: TC4.6  
 
 **Test case description**: Verificar o comportamento do sistema quando não é possível gerar e descarregar o relatório de desempenho dos alunos em risco de reprovação.  
 
@@ -12,7 +12,7 @@
 - Aceder à dashboard.  
 - Selecionar a opção "Relatório de Alunos em Risco".  
 - O sistema tenta exibir a lista de alunos identificados como "em risco".  
-- Aplicar os filtros desejados (por exemplo, grupo, percentagem de risco, disciplina).  
+- Aplicar os filtros desejados (por exemplo, grupo, percentagem de risco).  
 - Selecionar a opção "Gerar Relatório".  
 - O sistema tenta processar o relatório.  
 
@@ -20,4 +20,4 @@
 - O sistema exibe uma mensagem informando que não foi possível gerar o relatório.  
 - Nenhum ficheiro PDF é disponibilizado para download.  
 
-**Actual result**: 
+**Actual result**:
