@@ -1,4 +1,4 @@
-**Test case ID**: TC4.1.2  
+**Test case ID**: TC4.2  
 
 **Test case description**: Testar o comportamento do sistema quando não existem dados para a exibição da previsão do desempenho dos alunos e para identificação dos alunos em situação de risco de reprovação. 
 
