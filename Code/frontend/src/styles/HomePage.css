@@ -1,0 +1,59 @@
+.page {
+    font-family: Arial, sans-serif;
+}
+  
+.navbar {
+    background-color: transparent;
+    color: #003465;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.navbar .links a {
+    color: #003465;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+  
+.hero {
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.card {
+    background: rgb(88, 130, 193, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 90px;
+    border-radius: 20px;
+    text-align: center;
+    color: black;
+}
+  
+.card .highlight {
+    color: white;       /* mantém a letra branca */
+    font-weight: 500;   /* ou 600 se quiser um pouco mais forte */
+}
+  
+
+.hello {
+    font-weight: 700; /* Bold */
+    letter-spacing: 1px;   
+}
+  
+.teacher {
+    font-weight: 500; /* Medium */
+    letter-spacing: 1px;   
+}
+  
+.subtext {
+    font-weight: 600;      /* Semi-bold */
+    margin-top: 10px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;   
+}
+  
