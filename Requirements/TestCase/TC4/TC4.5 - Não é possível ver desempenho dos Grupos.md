@@ -1,4 +1,4 @@
-**Test case ID**: TC4.2.2  
+**Test case ID**: TC4.5  
 
 **Test case description**: Verificar o comportamento do sistema quando não há dados suficientes para visualizar o desempenho dos grupos e identificar alunos em risco de reprovação.  
 
