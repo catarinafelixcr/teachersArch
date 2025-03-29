@@ -189,5 +189,5 @@ def save_metrics_to_csv(data, filename="gitlab_activity.csv"):
 
         print(f"✅ Dados guardados em: {filename}")
 
-if _name_ == "_main_":
-    main()
+if __name__ == "__main__":
+    main()
