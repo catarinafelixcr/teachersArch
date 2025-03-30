@@ -1,7 +1,3 @@
-.page {
-    font-family: Arial, sans-serif;
-}
-  
 .navbar {
     background-color: transparent;
     color: #003465;
@@ -26,7 +22,7 @@
 }
   
 .card {
-    background: rgb(88, 130, 193, 0.1);
+    background: rgb(88, 130, 193, 0.4);
     backdrop-filter: blur(10px);
     padding: 90px;
     border-radius: 20px;

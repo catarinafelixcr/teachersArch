@@ -5,7 +5,7 @@ import background from "../assets/background-dei.jpg"; // importa imagem via Rea
 function HomePage() {
   return (
     <div
-      className="page"
+      className="home-page"
       style={{
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",

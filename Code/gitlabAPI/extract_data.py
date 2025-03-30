@@ -10,6 +10,7 @@ gitlab_url = "https://gitlab.com"
 gitlab_token = os.getenv("GITLAB_TOKEN", 'glpat-z7gzPpe48a5krLoLa4o4')
 
 project_ids = [
+    #61760884, 61760973, 61760822, 61708094, 61760919, 61708152,
     61708114, 61708087,
     50521584, 50554251, 50554274, 50554307, 50554328, 50554344, 50479247, 50554382
 ]
