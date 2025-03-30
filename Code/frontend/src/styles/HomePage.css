@@ -1,55 +1,86 @@
-.navbar {
+/* Navbar base */
+.home-page .navbar {
     background-color: transparent;
     color: #003465;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+  }
   
-.navbar .links a {
+  .home-page .navbar .links a {
     color: #003465;
     margin-left: 20px;
     text-decoration: none;
     font-weight: bold;
-}
+  }
   
-.hero {
+  /* Botões Login e Sign Up */
+  .home-page .navbar .links .nav-button.login-link,
+  .home-page .navbar .links .nav-button.signup-link {
+    color: white;
+    background-color: #003465;
+    border: 1px solid #003465;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .home-page .navbar .links .nav-button:hover {
+    background-color: white;
+    color: #003465;
+  }
+  
+  /* Centraliza a .card */
+  .home-page .hero {
     height: calc(100vh - 80px);
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
   
-.card {
+  /* Card visual */
+  .home-page .card {
+    width: 60%;
+    margin: -190px auto 10px auto;
+    display: block;
     background: rgb(88, 130, 193, 0.4);
     backdrop-filter: blur(10px);
     padding: 90px;
     border-radius: 20px;
     text-align: center;
     color: black;
-}
+  }
   
-.card .highlight {
-    color: white;       /* mantém a letra branca */
-    font-weight: 500;   /* ou 600 se quiser um pouco mais forte */
-}
+  .home-page .card .highlight {
+    color: white;
+    font-weight: 500;
+  }
   
-
-.hello {
-    font-weight: 700; /* Bold */
-    letter-spacing: 1px;   
-}
+  .home-page .hello {
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
   
-.teacher {
-    font-weight: 500; /* Medium */
-    letter-spacing: 1px;   
-}
+  .home-page .teacher {
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
   
-.subtext {
-    font-weight: 600;      /* Semi-bold */
+  .home-page .subtext {
+    font-weight: 600;
     margin-top: 10px;
     font-size: 1.1rem;
-    letter-spacing: 1px;   
-}
+    letter-spacing: 1px;
+  }
+  
+
+  .home-page .logo-area img {
+    height: 80px;
+    margin-left: 60px;
+    margin-top: 2   0px;
+  }
   

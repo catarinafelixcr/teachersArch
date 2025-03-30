@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'; // 👈 ADICIONADO
 import '../styles/LoginPage.css';
 import backgroundImage from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
+import arrowIcon from '../assets/arrow-white.png';
+
 
 function LoginPage() {
   const navigate = useNavigate(); // 👈 ADICIONADO
@@ -20,7 +22,9 @@ function LoginPage() {
       </header>
 
       <div className="login-box">  
-        <button className="back-button" onClick={() => navigate('/')}>←</button> {/* 👈 ALTERADO */}
+      <button className="back-button" onClick={() => navigate('/')}>
+          <img src={arrowIcon} alt="Back" className="arrow-icon" />
+        </button> 
         <h2>Login</h2>
 
         <label htmlFor="email">Email</label>

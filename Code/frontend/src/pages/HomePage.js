@@ -1,6 +1,9 @@
 import React from "react";
 import "../styles/HomePage.css";
 import background from "../assets/background-dei.jpg"; // importa imagem via React
+import logo from '../assets/logo.png';
+import { Link } from 'react-router-dom';
+
 
 function HomePage() {
   return (
@@ -14,12 +17,14 @@ function HomePage() {
       }}
     >
       <nav className="navbar">
-        <div className="logo">TEACHERS ARCH</div>
+      <div className="logo-area">
+        <img src={logo} alt="Logo" />
+      </div>
         <div className="links">
-          <a href="#">Help</a>
-          <a href="#">About</a>
-          <a href="#">Login</a>
-          <a href="#" className="signup">Sign Up</a>
+        <a href="#">Help</a>
+        <a href="#">About</a>
+        <Link to="/login" className="nav-button login-link">Login</Link>
+        <Link to="/signup" className="nav-button signup-link">Sign Up</Link>
         </div>
       </nav>
 
