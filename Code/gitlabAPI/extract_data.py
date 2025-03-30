@@ -10,7 +10,6 @@ gitlab_url = "https://gitlab.com"
 gitlab_token = os.getenv("GITLAB_TOKEN", 'glpat-z7gzPpe48a5krLoLa4o4')
 
 project_ids = [
-    #61760884, 61760973, 61760822, 61708094, 61760919, 61708152,
     61708114, 61708087,
     50521584, 50554251, 50554274, 50554307, 50554328, 50554344, 50479247, 50554382
 ]
@@ -24,6 +23,13 @@ def is_last_minute(commit_date_str, deadline="2024-12-31T23:59:59"):
     if commit_dt.tzinfo is None:
         commit_dt = commit_dt.replace(tzinfo=timezone.utc)
     return (deadline_dt - commit_dt).days <= 2
+
+def fetch_branching_activity(project):
+    branches = project.branches.list(all=True)
+    return len(branches)
+
+def count_merges_to_main(mrs):
+    return sum(1 for mr in mrs if mr["merged"] and mr.get("target_branch") in ["main", "master"])
 
 def main():
     gl = Gitlab(gitlab_url, private_token=gitlab_token)
@@ -39,7 +45,10 @@ def main():
             for issue in issues:
                 issue["project_id"] = pid
 
-            student_metrics = aggregate_all_features(commits, mrs, issues)
+            branches_created = fetch_branching_activity(project)
+            merges_to_main = count_merges_to_main(mrs)
+
+            student_metrics = aggregate_all_features(commits, mrs, issues, branches_created, merges_to_main)
             save_metrics_to_csv({pid: student_metrics}, filename=f"project_{pid}.csv")
 
         except Exception as e:
@@ -84,6 +93,7 @@ def fetch_gitlab_merge_requests(project):
         "created_at": mr.created_at,
         "state": mr.state,
         "merged": mr.merged_at is not None,
+        "target_branch": mr.target_branch,
         "review_comments_received": len(mr.notes.list(get_all=True)),
         "review_comments_given": count_comments_given_by_user(project, mr)
     } for mr in mrs]
@@ -101,26 +111,17 @@ def fetch_gitlab_issues(project):
         "participants": list(set([n.author['name'] for n in issue.notes.list(get_all=True)]))
     } for issue in issues]
 
-def aggregate_all_features(commits, merge_requests, issues):
+def aggregate_all_features(commits, merge_requests, issues, branches_created, merges_to_main):
     features = defaultdict(lambda: {
-        "project_id":"",
-        "student":"",
-        "student_email": "",
-        "group_id": "",  # Pode ser preenchido manualmente ou por outro sistema
-        "total_commits": 0,
-        "avg_lines_per_commit": 0,
-        "avg_lines_added": 0,
-        "avg_lines_deleted": 0,
-        "active_days": 0,
-        "last_minute_commits": 0,
-        "total_merge_requests": 0,
-        "merged_requests": 0,
-        "review_comments_received": 0,
-        "review_comments_given": 0,
-        "total_issues_created": 0,
-        "total_issues_assigned": 0,
-        "issues_resolved": 0,
-        "issue_participation": 0
+        "project_id":"", "student":"", "student_email": "", "group_id": "",
+        "total_commits": 0, "avg_lines_per_commit": 0,
+        "avg_lines_added": 0, "avg_lines_deleted": 0,
+        "active_days": 0, "last_minute_commits": 0,
+        "total_merge_requests": 0, "merged_requests": 0,
+        "review_comments_received": 0, "review_comments_given": 0,
+        "total_issues_created": 0, "total_issues_assigned": 0,
+        "issues_resolved": 0, "issue_participation": 0,
+        "branches_created": 0, "merges_to_main_branch": 0
     })
 
     commit_lines_added = defaultdict(list)
@@ -163,6 +164,11 @@ def aggregate_all_features(commits, merge_requests, issues):
         for participant in issue["participants"]:
             features[participant]["issue_participation"] += 1
 
+    # Adicionar os dados de branches a todos os usuários
+    for user in features:
+        features[user]["branches_created"] = branches_created
+        features[user]["merges_to_main_branch"] = merges_to_main
+
     return features
 
 def save_metrics_to_csv(data, filename="gitlab_activity.csv"):
@@ -172,7 +178,8 @@ def save_metrics_to_csv(data, filename="gitlab_activity.csv"):
         "active_days", "last_minute_commits",
         "total_merge_requests", "merged_requests",
         "review_comments_given", "review_comments_received",
-        "total_issues_created", "total_issues_assigned", "issues_resolved", "issue_participation"
+        "total_issues_created", "total_issues_assigned", "issues_resolved", "issue_participation",
+        "branches_created", "merges_to_main_branch"
     ]
 
     for pid, students in data.items():
