@@ -10,8 +10,8 @@ gitlab_url = "https://gitlab.com"
 gitlab_token = os.getenv("GITLAB_TOKEN", 'glpat-z7gzPpe48a5krLoLa4o4')
 
 project_ids = [
-    #61760884, 61760973, 61760822, 61708094, 61760919,61708152,61708114, 61708087,50521584, 50554251, 
-    50554274, 50554307, 50554328, 50554344, 50479247, 50554382
+    61760884, 61760973, 61760822, 61708094, 61760919,61708152,61708114, 61708087,
+    50521584, 50554251,50554274, 50554307, 50554328, 50554344, 50479247, 50554382
 ]
 
 start_date = datetime(2022, 2, 1).isoformat()
@@ -37,6 +37,13 @@ def main():
         print(f"\n🔍 Processando projeto ID: {pid}")
         try:
             project = gl.projects.get(pid)
+            
+            # Obter group_id corretamente
+            namespace = project.namespace
+            group_id = namespace['id'] if namespace['kind'] == 'group' else None
+            
+            print(f"  → Grupo ID: {group_id} ({namespace['kind']})")
+            
             commits = fetch_gitlab_commits(project)
             mrs = fetch_gitlab_merge_requests(project)
             for mr in mrs:
@@ -48,7 +55,12 @@ def main():
             branches_created = fetch_branching_activity(project)
             merges_to_main = count_merges_to_main(mrs)
 
-            student_metrics = aggregate_all_features(commits, mrs, issues, branches_created, merges_to_main)
+            student_metrics = aggregate_all_features(
+                commits, mrs, issues, 
+                branches_created, merges_to_main,
+                group_id  # Passando group_id para a agregação
+            )
+            
             save_metrics_to_csv({pid: student_metrics}, filename=f"project_{pid}.csv")
 
         except Exception as e:
@@ -111,18 +123,30 @@ def fetch_gitlab_issues(project):
         "participants": list(set([n.author['name'] for n in issue.notes.list(get_all=True)]))
     } for issue in issues]
 
-def aggregate_all_features(commits, merge_requests, issues, branches_created, merges_to_main):
+def aggregate_all_features(commits, merge_requests, issues, branches_created, merges_to_main, group_id):
     features = defaultdict(lambda: {
-        "project_id":"", "student":"", "student_email": "", "group_id": "",
-        "total_commits": 0, "avg_lines_per_commit": 0,
-        "avg_lines_added": 0, "avg_lines_deleted": 0,
-        "active_days": 0, "last_minute_commits": 0,
-        "total_merge_requests": 0, "merged_requests": 0,
-        "review_comments_received": 0, "review_comments_given": 0,
-        "total_issues_created": 0, "total_issues_assigned": 0,
-        "issues_resolved": 0, "issue_participation": 0,
-        "branches_created": 0, "merges_to_main_branch": 0
+        "project_id": "",
+        "student": "",
+        "student_email": "",
+        "group_id": group_id,  # Usando o group_id passado
+        "total_commits": 0,
+        "avg_lines_per_commit": 0,
+        "avg_lines_added": 0,
+        "avg_lines_deleted": 0,
+        "active_days": 0,
+        "last_minute_commits": 0,
+        "total_merge_requests": 0,
+        "merged_requests": 0,
+        "review_comments_received": 0,
+        "review_comments_given": 0,
+        "total_issues_created": 0,
+        "total_issues_assigned": 0,
+        "issues_resolved": 0,
+        "issue_participation": 0,
+        "branches_created": 0,
+        "merges_to_main_branch": 0
     })
+
 
     commit_lines_added = defaultdict(list)
     commit_lines_deleted = defaultdict(list)
@@ -172,6 +196,7 @@ def aggregate_all_features(commits, merge_requests, issues, branches_created, me
     return features
 
 def save_metrics_to_csv(data, filename="gitlab_activity.csv"):
+    # Header já inclui group_id
     header = [
         "project_id", "group_id", "student", "student_email",
         "total_commits", "avg_lines_added", "avg_lines_deleted", "avg_lines_per_commit",
