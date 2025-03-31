@@ -147,4 +147,7 @@
     object-fit: contain;
   }
 
+  * {
+    font-family: 'Inter', sans-serif;
+  }
   

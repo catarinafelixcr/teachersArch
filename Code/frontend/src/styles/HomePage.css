@@ -1,29 +1,27 @@
 /* Navbar base */
 .home-page .navbar {
     background-color: transparent;
-    color: #003465;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
   .home-page .navbar .links a {
-    color: #003465;
+    color: black;
     margin-left: 20px;
     text-decoration: none;
     font-weight: bold;
   }
   
-  /* Botões Login e Sign Up */
-  .home-page .navbar .links .nav-button.login-link,
+  /* Botões Sign Up */
   .home-page .navbar .links .nav-button.signup-link {
     color: white;
     background-color: #003465;
-    border: 1px solid #003465;
+    /*border: 1px solid #003465;*/
     padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 3px;
+    font-weight: semibold;
     text-decoration: none;
     margin-left: 10px;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -68,11 +66,13 @@
   .home-page .teacher {
     font-weight: 500;
     letter-spacing: 1px;
+    background-color: #003465;
+    color: white; 
+    padding: 3px 8px;                 /* espaço interno */
   }
   
   .home-page .subtext {
     font-weight: 600;
-    margin-top: 10px;
     font-size: 1.1rem;
     letter-spacing: 1px;
   }
@@ -82,5 +82,9 @@
     height: 80px;
     margin-left: 60px;
     margin-top: 2   0px;
+  }
+  
+  * {
+    font-family: 'Inter', sans-serif;
   }
   

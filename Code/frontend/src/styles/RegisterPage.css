@@ -102,3 +102,7 @@
     height: 20px;
     object-fit: contain;
   }
+
+  * {
+    font-family: 'Inter', sans-serif;
+  }

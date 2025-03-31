@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // 👈 ADICIONADO
 import '../styles/LoginPage.css';
-import backgroundImage from '../assets/background-dei.jpg';
+import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
 import arrowIcon from '../assets/arrow-white.png';
 
@@ -10,7 +10,15 @@ function LoginPage() {
   const navigate = useNavigate(); // 👈 ADICIONADO
 
   return (
-    <div className="login-page" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="login-page" 
+          style={{
+            backgroundImage: `url(${background})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            /*height: "100vh",*/
+          }}
+    >
       <header className="top-bar">
         <div className="logo-area">
           <img src={logo} alt="Logo" />

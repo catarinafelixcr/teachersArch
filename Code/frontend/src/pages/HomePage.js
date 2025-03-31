@@ -13,7 +13,8 @@ function HomePage() {
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "100vh",
+        backgroundAttachment: "fixed",
+        /*height: "100vh",*/
       }}
     >
       <nav className="navbar">
@@ -23,8 +24,8 @@ function HomePage() {
         <div className="links">
         <a href="#">Help</a>
         <a href="#">About</a>
-        <Link to="/login" className="nav-button login-link">Login</Link>
-        <Link to="/signup" className="nav-button signup-link">Sign Up</Link>
+        <Link to="/login" className="nav-button login-link">LOGIN</Link>
+        <Link to="/signup" className="nav-button signup-link">SIGN UP</Link>
         </div>
       </nav>
 
@@ -32,7 +33,7 @@ function HomePage() {
         <div className="card">
         <h1>
             <span className="hello">Hello</span>{" "}
-            <span className="teacher">teacher</span>!
+            <span className="teacher">teacher</span>  !
         </h1>
         <p className="subtext">Using GitLab Data to Support Your Students</p>
 
