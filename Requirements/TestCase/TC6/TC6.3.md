@@ -19,8 +19,7 @@
 **Expected Result**:  
 
 - O sistema não deve validar o link.  
-- O sistema deve exibir a mensagem de erro:  
-  - "O link do repositório GitLab não é válido ou está inacessível".  
+- O sistema deve exibir uma mensagem de erro: "O link do repositório GitLab não é válido ou está inacessível".  
 - O sistema não deve tentar recolher dados nem reiniciar o processamento de ML.  
 
 **Actual Result**:

@@ -20,7 +20,6 @@
 
 - O sistema deve recolher os novos dados do GitLab.  
 - O sistema deve falhar ao processar o modelo de Machine Learning.  
-- O sistema deve exibir a mensagem de erro:  
-  - "Os dados foram recolhidos, mas ocorreu um erro ao gerar as previsões. Tente novamente mais tarde".  
+- O sistema deve exibir a mensagem de erro: "Os dados foram recolhidos, mas ocorreu um erro ao gerar as previsões. Tente novamente mais tarde".  
 
 **Actual Result**:
