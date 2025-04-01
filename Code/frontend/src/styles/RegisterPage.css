@@ -9,7 +9,9 @@
   .register-page .top-bar {
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px;
+    margin-right: 20px;
+    margin-top: 2px;
+    padding: 8px 16px;
     align-items: center;
     color: #000;
   }
@@ -20,14 +22,20 @@
   }
   
   .register-page .logo-area img {
-    height: 40px;
-    margin-right: 10px;
+    height: 80px;
+    margin-left: 60px;
+    margin-top: 2   0px;
+  }
+
+
+  .register-page .nav-links {
+    display: flex;
+    gap: 20px; /* espaçamento entre os links */
   }
   
   .register-page .nav-links a {
-    margin-left: 20px;
+    color: #003465; /* ou white, se quiseres texto branco */
     text-decoration: none;
-    color: #333;
     font-weight: bold;
   }
   
@@ -54,6 +62,7 @@
     text-align: left;
     margin-top: 16px;
     margin-bottom: 6px;
+    margin-left: 190px; 
     font-weight: 500;
     color: #002b7f;
     font-size: 14px;
@@ -72,7 +81,7 @@
   
   .register-button {
     width: 40%;
-    background-color: #002b7f;
+    background-color: #003465;
     color: white;
     border: none;
     padding: 12px;
@@ -80,6 +89,16 @@
     cursor: pointer;
     font-weight: bold;
     margin-top: 20px;
+  }
+
+  .register-page .back-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    cursor: pointer;
   }
   
   .register-page .back-button {

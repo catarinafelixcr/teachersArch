@@ -24,8 +24,8 @@ function HomePage() {
         <div className="links">
         <a href="#">Help</a>
         <a href="#">About</a>
-        <Link to="/login" className="nav-button login-link">LOGIN</Link>
-        <Link to="/signup" className="nav-button signup-link">SIGN UP</Link>
+        <Link to="/login" className="nav-button login-link">Login</Link>
+        <Link to="/signup" className="nav-button signup-link">Sign Up</Link>
         </div>
       </nav>
 

@@ -46,7 +46,16 @@ function LoginPage() {
         <button className="sign-in">Sign in</button>
 
         <p className="register-text">
-            Don't have an account yet? <a href="#">Register for free</a>
+          Don't have an account yet?{" "}
+          <span 
+            style={{ color: '#003465', fontWeight: 'bold', cursor: 'pointer' }} 
+            onClick={() => navigate('/signup')}
+          >
+            Register for free
+          </span>
+          <span onClick={() => navigate('/forgot-password')} className="forgot" style={{ cursor: 'pointer' }}>
+            Forgot Password?
+          </span>
         </p>
       </div>
     </div>

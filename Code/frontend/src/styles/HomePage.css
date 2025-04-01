@@ -1,4 +1,12 @@
-/* Navbar base */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* impede scroll vertical */
+}
+
+
+
 .home-page .navbar {
     background-color: transparent;
     padding: 10px;
@@ -8,7 +16,7 @@
   }
   
   .home-page .navbar .links a {
-    color: black;
+    color: #003465;
     margin-left: 20px;
     text-decoration: none;
     font-weight: bold;

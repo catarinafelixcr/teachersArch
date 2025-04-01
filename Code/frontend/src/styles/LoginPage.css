@@ -9,7 +9,8 @@
   .login-page .top-bar  {
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px;
+    margin-right: 20px;
+    padding: 8px 16px;
     align-items: center;
     color: #000;
   }
