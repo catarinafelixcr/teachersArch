@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/ForgotPasswordPage.css';
 import background from '../assets/background-dei.jpg';
+import logo from '../assets/logo.png';
 
 function ForgotPasswordPage() {
   return (
@@ -14,6 +15,9 @@ function ForgotPasswordPage() {
       }}
     >
       <header className="top-bar">
+        <div className="logo-area">
+          <img src={logo} alt="Logo" />
+        </div>
         <div className="nav-links">
           <a href="#">Help</a>
           <a href="#">About</a>
@@ -24,7 +28,7 @@ function ForgotPasswordPage() {
         <h2>Forgot password</h2>
         <p className="instruction">Please enter your email to reset the password</p>
 
-        <label htmlFor="email">Your Email</label>
+        <label htmlFor="email">Email</label>
         <input type="email" id="email" placeholder="username@gmail.com" />
 
         <button className="reset-button">Reset Password</button>
