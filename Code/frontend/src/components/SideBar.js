@@ -1,0 +1,41 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiLogOut, FiSettings } from 'react-icons/fi';
+import { FaHome, FaChartLine, FaUserGraduate, FaUsers, FaDatabase } from 'react-icons/fa';
+import logo from '../assets/logo.png';
+import '../styles/Sidebar.css';
+
+function Sidebar() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-logo">
+        <img src={logo} alt="Logo" />
+        <h1>TEACHERS<br />ARCH</h1>
+      </div>
+
+      <nav className="sidebar-nav">
+        <button onClick={() => navigate('/initialpage')}><FaHome /> Home</button>
+        <button onClick={() => navigate('/previsao-notas')}><FaChartLine /> Prediction of Grades</button>
+        <button onClick={() => navigate('/alunos-risco')}><FaUserGraduate /> Student at Risk</button>
+        <button onClick={() => navigate('/performance-categoria')}><FaUsers /> Performance Forecast by Category</button>
+        <button onClick={() => navigate('/produtividade-grupos')}><FaUsers /> Compare Group Productivity</button>
+        <button onClick={() => navigate('/inserir-repositorio')}><FaDatabase /> Insert Repository</button>
+      </nav>
+
+      <div className="sidebar-footer">
+        <div className="footer-setting">
+          <FiSettings /> <span>Setting</span>
+        </div>
+        <div className="footer-user">
+          <p>Nome</p>
+          <span className="username">nomeProfessor</span>
+          <FiLogOut className="logout-icon" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Sidebar;

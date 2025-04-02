@@ -1,0 +1,116 @@
+.dashboard-page {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dashboard-page {
+    position: relative;
+    overflow: hidden;
+  }
+
+
+  .dashboard-page .blue-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(88, 130, 193, 0.6); /* tua cor + transparência */
+    z-index: 0;
+  }
+  
+  /* Garante que o conteúdo fica acima do overlay */
+  .dashboard-page > *:not(.blue-overlay) {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .dashboard-page .top-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+    margin-top: 2px;
+    padding: 8px 16px;
+    align-items: center;
+    color: #000;
+  }
+  
+  .dashboard-page .logo-area img {
+    height: 80px;
+    margin-left: 60px;
+    margin-top: 2   0px;
+  }
+  
+  .dashboard-page .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .dashboard-page .nav-links a {
+    color: #003465;
+    margin-bottom: 4px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+
+  .dashboard-page .insert-link-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: center; 
+    margin-top: 220px;
+    z-index: 1;
+  }
+  
+  .dashboard-page .insert-link-button {
+    width: 350px; /* ou 300px, ou o valor que quiseres */
+    padding: 12px 20px;
+    background-color: #003465;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dashboard-page .insert-link-button:hover {
+    background-color: #002b7f;
+  }
+  
+  .dashboard-page .card-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 150px; /* remove o empurrão */
+    flex-wrap: wrap;
+  }
+  
+  .dashboard-page .dashboard-card {
+    background: rgba(30, 58, 138, 0.7); /* equivalente a #1E3A8A com opacidade */
+    backdrop-filter: blur(10px);
+    width: 300px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .dashboard-page .dashboard-layout {
+    display: flex;
+  }
+  
+  .dashboard-page {
+    margin-left: 240px; /* sidebar width */
+    width: calc(100% - 240px);
+  }
+  

@@ -1,0 +1,87 @@
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: #1E3A8A;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .sidebar-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+  }
+  
+  .sidebar-logo img {
+    width: 40px;
+    margin-bottom: 8px;
+  }
+  
+  .sidebar-logo h1 {
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px;
+  }
+  
+  .sidebar-nav button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .sidebar-nav button:hover {
+    background-color: #3753b3;
+    border-radius: 8px;
+  }
+  
+  .sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .footer-setting {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .footer-user {
+    font-size: 13px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .username {
+    font-size: 12px;
+    color: #8ca9ff;
+  }
+  
+  .logout-icon {
+    cursor: pointer;
+    color: white;
+  }
+  
