@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // 👈 ADICIONADO
+import { useNavigate } from 'react-router-dom'; 
 import '../styles/LoginPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
@@ -7,7 +7,7 @@ import arrowIcon from '../assets/arrow-white.png';
 
 
 function LoginPage() {
-  const navigate = useNavigate(); // 👈 ADICIONADO
+  const navigate = useNavigate(); 
 
   return (
     <div className="login-page" 
@@ -16,7 +16,6 @@ function LoginPage() {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundAttachment: "fixed",
-            /*height: "100vh",*/
           }}
     >
       <header className="top-bar">
@@ -41,7 +40,9 @@ function LoginPage() {
         <label htmlFor="password">Password</label>
         <input type="password" id="password" placeholder="Password" />
 
-        <a href="#" className="forgot">Forgot Password?</a>
+        <span onClick={() => navigate('/forgotpassword')} className="forgot" style={{ cursor: 'pointer' }}>
+            Forgot Password?
+        </span>
 
         <button className="sign-in">Sign in</button>
 
@@ -52,9 +53,6 @@ function LoginPage() {
             onClick={() => navigate('/signup')}
           >
             Register for free
-          </span>
-          <span onClick={() => navigate('/forgot-password')} className="forgot" style={{ cursor: 'pointer' }}>
-            Forgot Password?
           </span>
         </p>
       </div>
