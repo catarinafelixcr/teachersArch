@@ -2,18 +2,18 @@ import React from 'react';
 import '../styles/InitialPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
-import Sidebar from '../components/SideBar';
+import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
 
 
-function HomeDashboard() {
+function InitialPage() {
   const navigate = useNavigate();
 
   return (
     <div className="dashboard-layout">
       <Sidebar />
   
-      <div className="dashboard-page" style={{ backgroundImage: `url(${background})` }}>
+      <div className="dashboard-content" style={{ backgroundImage: `url(${background})` }}>
         <div className="blue-overlay"></div>
   
         <header className="top-bar">
@@ -27,7 +27,7 @@ function HomeDashboard() {
         </header>
   
         <div className="insert-link-wrapper">
-          <button className="insert-link-button" onClick={() => navigate('/inserir-link')}>
+          <button className="insert-link-button" onClick={() => navigate('/insertlink')}>
             Insert Link
           </button>
         </div>
@@ -54,4 +54,4 @@ function HomeDashboard() {
   
 }
 
-export default HomeDashboard;
+export default InitialPage;

@@ -1,16 +1,16 @@
 .sidebar {
-    width: 240px;
-    height: 100vh;
-    background-color: #1E3A8A;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 10;
-  }
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #1E3A8A;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+}
   
   .sidebar-logo {
     display: flex;
@@ -20,8 +20,9 @@
   }
   
   .sidebar-logo img {
-    width: 40px;
-    margin-bottom: 8px;
+    height: 70px;
+    margin-left: -15px;
+    margin-top: 2   0px;
   }
   
   .sidebar-logo h1 {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { FaHome, FaChartLine, FaUserGraduate, FaUsers, FaDatabase } from 'react-icons/fa';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo-white.png';
 import '../styles/Sidebar.css';
 
 function Sidebar() {
@@ -12,7 +12,6 @@ function Sidebar() {
     <div className="sidebar">
       <div className="sidebar-logo">
         <img src={logo} alt="Logo" />
-        <h1>TEACHERS<br />ARCH</h1>
       </div>
 
       <nav className="sidebar-nav">

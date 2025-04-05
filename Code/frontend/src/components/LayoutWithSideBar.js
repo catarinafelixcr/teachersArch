@@ -1,15 +1,15 @@
 import React from 'react';
-import Sidebar from './SideBar';
+import Sidebar from './Sidebar';
 
-function LayoutWithSidebar({ children }) {
+function LayoutWithSideBar({ children }) {
   return (
     <div className="dashboard-layout">
       <Sidebar />
-      <div className="dashboard-page">
+      <div className="dashboard-content">
         {children}
       </div>
     </div>
   );
 }
 
-export default LayoutWithSidebar;
+export default LayoutWithSideBar;
