@@ -19,13 +19,12 @@ function Sidebar() {
         <button onClick={() => navigate('/previsao-notas')}><FaChartLine /> Prediction of Grades</button>
         <button onClick={() => navigate('/alunos-risco')}><FaUserGraduate /> Student at Risk</button>
         <button onClick={() => navigate('/performance-categoria')}><FaUsers /> Performance Forecast by Category</button>
-        <button onClick={() => navigate('/produtividade-grupos')}><FaUsers /> Compare Group Productivity</button>
-        <button onClick={() => navigate('/inserir-repositorio')}><FaDatabase /> Insert Repository</button>
+        <button onClick={() => navigate('/insertrepository')}><FaDatabase /> Insert Repository</button>
       </nav>
 
       <div className="sidebar-footer">
         <div className="footer-setting">
-          <FiSettings /> <span>Setting</span>
+          <FiSettings /> <span>Settings</span>
         </div>
         <div className="footer-user">
           <p>Nome</p>

@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import InitialPage from './pages/InitialPage';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
+import InsertRepositoryPage from './pages/InsertRepositoryPage';
 
 function App() {
   return (
@@ -17,6 +18,12 @@ function App() {
         <Route path="/initialpage" element={
             <LayoutWithSideBar>
               <InitialPage />
+            </LayoutWithSideBar>
+          }
+        />
+        <Route path="/insertrepository" element= {
+            <LayoutWithSideBar>
+              <InsertRepositoryPage />
             </LayoutWithSideBar>
           }
         />

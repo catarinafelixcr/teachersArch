@@ -60,18 +60,28 @@
   font-weight: bold;
 }
 
+.dashboard-content .welcome-text {
+  position: absolute;
+  top: 200px;
+  left: calc(50% + 120px); /* compensa metade da sidebar (240px / 2) */
+  transform: translateX(-50%);
+  font-size: 40px;
+  font-weight: 600;
+  color: #003465;
+  z-index: 1;
+}
 /* Botão Insert Link */
 .dashboard-content .insert-link-wrapper {
   display: flex;
   justify-content: flex-start; /* ← Alinha à esquerda */
   margin-left: 715px;            /* ajusta conforme a margem desejada */
-  margin-top: 250px;
+  margin-top: 290px;
 }
 
 .dashboard-content .insert-link-button {
   width: 350px;
   padding: 12px 20px;
-  background-color: #003465;
+  background-color: #3D4766;
   color: white;
   border: none;
   border-radius: 8px;
@@ -82,7 +92,7 @@
 }
 
 .dashboard-content .insert-link-button:hover {
-  background-color: #002b7f;
+  background-color: #1E3A8A;
 }
 
 /* Cartões da dashboard */
