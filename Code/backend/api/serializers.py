@@ -1,0 +1,87 @@
+from rest_framework import serializers
+from .models import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth.hashers import check_password
+from .models import Utilizador
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import serializers
+from django.contrib.auth.hashers import check_password
+from rest_framework.exceptions import AuthenticationFailed
+from .models import Utilizador
+
+class UtilizadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilizador
+        fields = '__all__'
+
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = '__all__'
+
+class GrupoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grupo
+        fields = '__all__'
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+class AlunoGitlabActSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlunoGitlabAct
+        fields = '__all__'
+
+class PrevisaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Previsao
+        fields = '__all__'
+
+class PrevisaoGrupoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrevisaoGrupo
+        fields = '__all__'
+
+class GrupoProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GrupoProject
+        fields = '__all__'
+
+class TeacherGrupoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherGrupo
+        fields = '__all__'
+
+class AlunoGitlabactPrevisaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlunoGitlabactPrevisao
+        fields = '__all__'
+
+
+
+class CustomTokenObtainPairSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+
+        try:
+            user = Utilizador.objects.get(email=email)
+        except Utilizador.DoesNotExist:
+            raise AuthenticationFailed("Email inválido")
+
+        if not check_password(password, user.password):
+            raise AuthenticationFailed("Password inválida")
+
+        # Criar tokens manualmente
+        refresh = RefreshToken.for_user(user)
+
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }

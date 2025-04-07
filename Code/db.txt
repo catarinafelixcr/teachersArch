@@ -1,0 +1,110 @@
+CREATE TABLE teacher (
+	teacher_name	 VARCHAR(512),
+	link_gitlab	 VARCHAR(512),
+	utilizador_id BIGINT,
+	PRIMARY KEY(utilizador_id)
+);
+
+CREATE TABLE aluno_gitlabact (
+	student_email			 VARCHAR(512),
+	group_id				 BIGINT NOT NULL,
+	gitlabact_total_commits		 BIGINT NOT NULL,
+	gitlabact_avg_lines_added		 BIGINT NOT NULL,
+	gitlabact_avg_lines_deleted	 BIGINT NOT NULL,
+	gitlabact_avg_lines_per_commit	 BIGINT NOT NULL,
+	gitlabact_active_days		 BIGINT NOT NULL,
+	gitlabact_last_minute_commits	 BIGINT NOT NULL,
+	gitlabact_total_merge_requests	 BIGINT NOT NULL,
+	gitlabact_merged_requests		 BIGINT NOT NULL,
+	gitlabact_review_comments_given	 BIGINT NOT NULL,
+	gitlabact_review_comments_received BIGINT NOT NULL,
+	gitlabact_total_issues_created	 BIGINT NOT NULL,
+	gitlabact_total_issues_assigned	 BIGINT NOT NULL,
+	gitlabact_issues_resolved		 BIGINT NOT NULL,
+	gitlabact_issue_participation	 BIGINT NOT NULL,
+	gitlabact_branches_created	 BIGINT NOT NULL,
+	gitlabact_merges_to_main_branch	 BIGINT NOT NULL,
+	utilizador_id			 BIGINT,
+	PRIMARY KEY(utilizador_id)
+);
+
+CREATE TABLE previsao (
+	previsao_id	 BIGINT,
+	prev_categoria CHAR(255),
+	student_id	 BIGINT,
+	nota_prevista	 BIGINT NOT NULL,
+	risco_reprovar BOOL NOT NULL,
+	data_previsao	 DATE NOT NULL,
+	PRIMARY KEY(previsao_id,student_id)
+);
+
+CREATE TABLE grupo (
+	group_id	 BIGINT,
+	group_name VARCHAR(512) NOT NULL,
+	PRIMARY KEY(group_id)
+);
+
+
+
+CREATE TABLE utilizador (
+	id	 BIGINT,
+	name	 VARCHAR(512),
+	password VARCHAR(512),
+	email	 VARCHAR(512),
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE project (
+	project_id BIGINT,
+	PRIMARY KEY(project_id)
+);
+
+CREATE TABLE previsao_grupo (
+	previsao_previsao_id BIGINT,
+	previsao_student_id	 BIGINT,
+	grupo_group_id	 BIGINT NOT NULL,
+	PRIMARY KEY(previsao_previsao_id,previsao_student_id)
+);
+
+CREATE TABLE grupo_project (
+	grupo_group_id	 BIGINT,
+	project_project_id BIGINT NOT NULL,
+	PRIMARY KEY(grupo_group_id)
+);
+
+
+CREATE TABLE teacher_grupo (
+	teacher_utilizador_id BIGINT NOT NULL,
+	grupo_group_id	 BIGINT,
+	PRIMARY KEY(grupo_group_id)
+);
+
+
+
+CREATE TABLE aluno_gitlabact_previsao (
+	aluno_gitlabact_utilizador_id BIGINT,
+	previsao_previsao_id		 BIGINT NOT NULL,
+	previsao_student_id		 BIGINT NOT NULL,
+	PRIMARY KEY(aluno_gitlabact_utilizador_id)
+);
+
+ALTER TABLE teacher ADD UNIQUE (link_gitlab);
+ALTER TABLE teacher ADD CONSTRAINT teacher_fk1 FOREIGN KEY (utilizador_id) REFERENCES utilizador(id);
+ALTER TABLE aluno_gitlabact ADD UNIQUE (student_num, student_email, group_id);
+ALTER TABLE aluno_gitlabact ADD CONSTRAINT aluno_gitlabact_fk1 FOREIGN KEY (utilizador_id) REFERENCES utilizador(id);
+ALTER TABLE previsao ADD UNIQUE (data_previsao);
+ALTER TABLE grupo ADD UNIQUE (group_name);
+ALTER TABLE utilizador ADD UNIQUE (password);
+ALTER TABLE previsao_grupo ADD UNIQUE (grupo_group_id);
+ALTER TABLE previsao_grupo ADD CONSTRAINT previsao_grupo_fk1 FOREIGN KEY (previsao_previsao_id, previsao_student_id) REFERENCES previsao(previsao_id, student_id);
+ALTER TABLE previsao_grupo ADD CONSTRAINT previsao_grupo_fk2 FOREIGN KEY (grupo_group_id) REFERENCES grupo(group_id);
+ALTER TABLE grupo_project ADD UNIQUE (project_project_id);
+ALTER TABLE grupo_project ADD CONSTRAINT grupo_project_fk1 FOREIGN KEY (grupo_group_id) REFERENCES grupo(group_id);
+ALTER TABLE grupo_project ADD CONSTRAINT grupo_project_fk2 FOREIGN KEY (project_project_id) REFERENCES project(project_id);
+ALTER TABLE teacher_grupo ADD CONSTRAINT teacher_grupo_fk1 FOREIGN KEY (teacher_utilizador_id) REFERENCES teacher(utilizador_id);
+ALTER TABLE teacher_grupo ADD CONSTRAINT teacher_grupo_fk2 FOREIGN KEY (grupo_group_id) REFERENCES grupo(group_id);
+ALTER TABLE grupo_productivity ADD UNIQUE (productivity_productivity_id);
+ALTER TABLE aluno_gitlabact_previsao ADD UNIQUE (previsao_previsao_id, previsao_student_id);
+ALTER TABLE aluno_gitlabact_previsao ADD CONSTRAINT aluno_gitlabact_previsao_fk1 FOREIGN KEY (aluno_gitlabact_utilizador_id) REFERENCES aluno_gitlabact(utilizador_id);
+ALTER TABLE aluno_gitlabact_previsao ADD CONSTRAINT aluno_gitlabact_previsao_fk2 FOREIGN KEY (previsao_previsao_id, previsao_student_id) REFERENCES previsao(previsao_id, student_id);
+
