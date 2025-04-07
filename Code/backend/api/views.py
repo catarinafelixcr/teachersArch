@@ -90,5 +90,24 @@ def register_teacher(request):
     return Response({'success': 'Conta criada com sucesso!'})
 
 
+# --------------------------------------------
+# Endpoint de Recuperação da Password (POST)
+# --------------------------------------------
 
+@api_view(['POST'])
+def password_reset_request(request):
+    email = request.data.get("email")
 
+    if not email:
+        return Response({"error": "Email é obrigatório."}, status=400)
+
+    try:
+        user = Utilizador.objects.get(email=email)
+    except Utilizador.DoesNotExist:
+        return Response({"error": "Nenhuma conta com esse email."}, status=404)
+
+    # 🔧 Aqui vamos só simular o envio de email
+    print(f"[SIMULAÇÃO DE EMAIL] Recuperação de conta para {user.email}")
+    print(f"Mensagem: Olá {user.name}, clique aqui para redefinir a sua password.")
+
+    return Response({"success": "Instruções de recuperação foram enviadas para o seu email."})

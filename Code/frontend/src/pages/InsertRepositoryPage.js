@@ -29,14 +29,17 @@ function InsertRepositoryPage() {
       <div className="insert-repo-page">
         <div className="blue-overlay"></div>
 
-        <h1>
-          Insert Repository <span className="highlight">Link</span>
-        </h1>
+        {/* Novo bloco para mover título e descrição */}
+        <div className="insert-repo-header">
+          <h1>
+            Insert Repository <span className="highlight">Link</span>
+          </h1>
 
-        <p className="description">
-          Here you can enter the students' gitlab data. You must select the option you want to analyze,
-          according to the type of target you want to obtain results for. You can also update the data by inserting an updated link.
-        </p>
+          <p className="description">
+            Here you can enter the students' gitlab data. You must select the option you want to analyze,
+            according to the type of target you want to obtain results for. You can also update the data by inserting an updated link.
+          </p>
+        </div>
 
         <div className="repo-inputs">
           <div className="repo-block">

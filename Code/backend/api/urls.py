@@ -19,4 +19,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/register/', register_teacher),
     path('auth/token/login/', CustomLoginView.as_view(), name='custom_login'),
+    path('api/password-reset/', password_reset_request, name='password_reset'),
 ]
