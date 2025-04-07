@@ -1,45 +1,47 @@
 .register-page {
-    height: 100vh;
+    min-height: 50vh;
     background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
-  }
+    overflow-y: auto;
+    padding-bottom: 40px;
+}
   
-  .register-page .top-bar {
+.register-page .top-bar {
     display: flex;
     justify-content: space-between;
-    margin-right: 20px;
+    margin-right: 50px;
     margin-top: 2px;
     padding: 8px 16px;
     align-items: center;
     color: #000;
-  }
+}
   
-  .register-page .logo-area {
+.register-page .logo-area {
     display: flex;
     align-items: center;
-  }
+}
   
-  .register-page .logo-area img {
+.register-page .logo-area img {
     height: 80px;
     margin-left: 60px;
     margin-top: 2   0px;
-  }
+}
 
 
-  .register-page .nav-links {
+.register-page .nav-links {
     display: flex;
     gap: 20px; /* espaçamento entre os links */
-  }
+}
   
-  .register-page .nav-links a {
+.register-page .nav-links a {
     color: #003465; /* ou white, se quiseres texto branco */
     text-decoration: none;
     font-weight: bold;
-  }
+}
   
-  .register-box {
+.register-box {
     width: 80%;
     max-width: 900px; /* limite horizontal */
     margin: 60px auto;
@@ -50,14 +52,15 @@
     text-align: center;
     position: relative;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .register-box h2 {
+.register-box h2 {
     margin-bottom: 20px;
     color: #002b7f;
-  }
+    font-size: 30px;
+}
   
-  .register-box label {
+.register-box label {
     display: block;
     text-align: left;
     margin-top: 16px;
@@ -66,20 +69,20 @@
     font-weight: 500;
     color: #002b7f;
     font-size: 14px;
-  }
+}
   
-  .register-box input {
-    width: 70%;
-    max-width: 500px;
+.register-box input {
+    width: 95%;
+    max-width: 600px;
     margin: 0 auto 10px auto;
     display: block;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #0707b6;
     border-radius: 6px;
-  }
+}
   
   
-  .register-button {
+.register-button {
     width: 40%;
     background-color: #003465;
     color: white;
@@ -89,9 +92,9 @@
     cursor: pointer;
     font-weight: bold;
     margin-top: 20px;
-  }
+}
 
-  .register-page .back-button {
+.register-page .back-button {
     background: none;
     border: none;
     font-size: 20px;
@@ -99,9 +102,9 @@
     left: 20px;
     top: 20px;
     cursor: pointer;
-  }
+}
   
-  .register-page .back-button {
+.register-page .back-button {
     background-color: #3D4766;
     border-radius: 8px;
     color: white;
@@ -114,14 +117,93 @@
     left: 20px;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .register-page .arrow-icon {
+.register-page .arrow-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
-  }
+}
 
-  * {
+* {
     font-family: 'Inter', sans-serif;
-  }
+}
+
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.input-error {
+  border: 2px solid red;
+}
+
+.input-ok {
+  border: 2px solid green;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 90%;
+  max-width: 520px;
+  /* padding-right: 30px; */
+  margin: 0 auto 10px auto;
+}
+
+.check-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: green;
+  pointer-events: none;
+}
+
+
+.error-text {
+  color: #800000;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  text-align: left;
+  margin-left: 190px;
+}
+
+.password-strength {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;           /* 👈 centra o texto */
+  margin-top: 6px;
+  margin-bottom: 10px;
+  color: #002b7f;
+}
+
+
+.password-strength.weak {
+  color: #800000;
+}
+
+.password-strength.medium {
+  color: orange;
+}
+
+.password-strength.strong {
+  color: green;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #003465;
+  cursor: pointer;
+  padding: 0;
+}

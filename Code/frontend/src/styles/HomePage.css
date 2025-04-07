@@ -13,6 +13,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: 60px;
   }
   
   .home-page .navbar .links a {

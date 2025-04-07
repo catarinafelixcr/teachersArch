@@ -1,61 +1,60 @@
 .login-page {
-    height: 100vh;
+    min-height: 100vh;
     background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
-  }
+}
   
-  .login-page .top-bar  {
+.login-page .top-bar  {
     display: flex;
     justify-content: space-between;
-    margin-right: 20px;
+    margin-right: 50px;
     padding: 8px 16px;
     align-items: center;
     color: #000;
-  }
+}
   
   
-  .login-page .logo-area img {
+.login-page .logo-area img {
     height: 80px;
     margin-left: 60px;
     margin-top: 2   0px;
-  }
+}
   
 
-  .login-page .nav-links {
+.login-page .nav-links {
     display: flex;
     gap: 20px; /* espaçamento entre os links */
-  }
+}
   
-  .login-page .nav-links a {
+.login-page .nav-links a {
     color: #003465; /* ou white, se quiseres texto branco */
     text-decoration: none;
     font-weight: bold;
-  }
+}
 
-  .login-box {
-    width: 500px;
+.login-box {
     min-width: 600px;
     margin: auto;
     background: rgb(88, 130, 193, 0.4);
     padding: 40px;
     margin-top: 110px;
     border-radius: 20px;
-    width: 300px;
     text-align: center;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     position: relative;
-  }
+    margin-top: 5%;
+}
   
-  .login-box h2 {
+.login-box h2 {
     font-size: 35px;
     margin-bottom: 20px;
     color: #002b7f;
-  }
+}
   
-  .login-box input {
+.login-box input {
     width: 60%;
     margin: 10px auto;
     display: block;
@@ -63,9 +62,9 @@
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
-  }
+}
   
-  .login-box .forgot {
+.login-box .forgot {
     width: 60%;
     margin: 10px auto;
     display: block;
@@ -73,9 +72,9 @@
     font-size: 12px;
     margin-bottom: 20px;
     color: #333;
-  }
+}
   
-  .login-box .sign-in {
+.login-box .sign-in {
     width: 30%;
     margin: 10px auto;
     display: block;
@@ -86,9 +85,9 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
-  }
+}
 
-  .login-box label {
+.login-box label {
     display: block;
     text-align: left;
     margin-top: 16px;
@@ -97,19 +96,19 @@
     font-weight: 500;
     color: #002b7f;
     font-size: 14px;
-  }
+}
   
-  .login-box .register-text {
+.login-box .register-text {
     font-size: 12px;
     margin-top: 20px;
-  }
+}
   
-  .login-box .register-text a {
+.login-box .register-text a {
     color: #003465;
     font-weight: bold;
-  }
+}
   
-  .login-page .back-button {
+.login-page .back-button {
     background: none;
     border: none;
     font-size: 20px;
@@ -117,10 +116,10 @@
     left: 20px;
     top: 20px;
     cursor: pointer;
-  }
+}
 
 
-  .login-page .back-button {
+.login-page .back-button {
     background-color: #3D4766;
     border-radius: 8px;
     color: white;
@@ -133,22 +132,20 @@
     left: 20px;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .login-page .back-button:hover {
+.login-page .back-button:hover {
     background-color: white;
     color: white;
-  }
+}
   
-
-
-  .login-page .arrow-icon {
+.login-page .arrow-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
-  }
+}
 
-  * {
+* {
     font-family: 'Inter', sans-serif;
-  }
+}
   
