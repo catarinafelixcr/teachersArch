@@ -6,6 +6,8 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import InitialPage from './pages/InitialPage';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import InsertRepositoryPage from './pages/InsertRepositoryPage';
+import GradePredictions from './components/GradePredictions';
+
 
 function App() {
   return (
@@ -27,6 +29,11 @@ function App() {
             </LayoutWithSideBar>
           }
         />
+        <Route path="/gradepredictions" element={
+          <LayoutWithSideBar>
+            <GradePredictions />
+          </LayoutWithSideBar>
+        } />
       </Routes>
     </Router>
   );

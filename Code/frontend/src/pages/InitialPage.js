@@ -37,7 +37,7 @@ function InitialPage() {
         </div>
   
         <div className="card-container">
-          <div className="dashboard-card" onClick={() => navigate('/previsao-notas')}>
+          <div className="dashboard-card" onClick={() => navigate('/gradepredictions')}>
             <h3>Prediction of Grades</h3>
             <p>Visualize the students' performance forecast based on the data.</p>
           </div>
