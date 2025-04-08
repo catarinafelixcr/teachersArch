@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; 
 import '../styles/LoginPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
@@ -7,11 +7,21 @@ import arrowIcon from '../assets/arrow-white.png';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Estado para email e password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [activated, setActivated] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('activated') === 'true') {
+      setActivated(true);
+      // Esconde a mensagem após 4 segundos
+      setTimeout(() => setActivated(false), 4000);
+    }
+  }, [location.search]);
 
   const handleLogin = async () => {
     try {
@@ -28,7 +38,7 @@ function LoginPage() {
       if (response.ok) {
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
-        navigate('/initialpage'); // muda para a página que quiseres
+        navigate('/initialpage');
       } else {
         setError(data.detail || "Login falhou");
       }
@@ -62,6 +72,11 @@ function LoginPage() {
           <img src={arrowIcon} alt="Back" className="arrow-icon" />
         </button>
         <h2>Login</h2>
+
+        {/* ✅ Mensagem de sucesso */}
+        {activated && (
+          <div className="activation-success">✅ Account successfully activated!</div>
+        )}
 
         <label htmlFor="email">Email</label>
         <input type="email" id="email" placeholder="username@gmail.com"
