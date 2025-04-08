@@ -104,11 +104,12 @@ function RegisterPage() {
           <a href="/help">Help</a>
           <a href="/about">About</a>
           <a href="/login">Login</a>
+          <a href="/">Homepage</a>
         </div>
       </header>
 
       <div className="register-box">
-        <button className="back-button" onClick={() => navigate('/')}>
+        <button className="back-button" onClick={() => navigate(-1)}>
           <img src={arrowIcon} alt="Back" className="arrow-icon" />
         </button>
 
@@ -217,7 +218,7 @@ function RegisterPage() {
         <div className="success-modal">
           <div className="success-content">
             <h2>Account created successfully!</h2>
-            <p>You can now log in to the platform.</p>
+            <p>Please check your email to verify your account before logging in.</p>
             <button onClick={() => navigate('/login')}>LOGIN</button>
           </div>
         </div>
