@@ -20,4 +20,5 @@ urlpatterns = [
     path('api/register/', register_teacher),
     path('auth/token/login/', CustomLoginView.as_view(), name='custom_login'),
     path('api/password-reset/', password_reset_request, name='password_reset'),
+    path('api/activate/<str:token>/', activate_account, name='activate_account'),
 ]

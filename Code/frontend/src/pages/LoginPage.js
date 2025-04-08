@@ -75,7 +75,7 @@ function LoginPage() {
 
         {/* ✅ Mensagem de sucesso */}
         {activated && (
-          <div className="activation-success">✅ Account successfully activated!</div>
+          <div className="activation-success">Account successfully activated!</div>
         )}
 
         <label htmlFor="email">Email</label>

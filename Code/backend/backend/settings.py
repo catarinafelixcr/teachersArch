@@ -1,15 +1,19 @@
-import os
-from pathlib import Path
-
 # Caminho base do projeto
+from pathlib import Path
+import os
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Segurança
+# ---------------------
+# SEGURANÇA
+# ---------------------
 SECRET_KEY = 'django-insecure-altera-isto-para-producao'
 DEBUG = True
 ALLOWED_HOSTS = []
 
-# Aplicações instaladas
+# ---------------------
+# APPS INSTALADAS
+# ---------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -22,13 +26,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    # Tua app
-    'api'
+    # App do projeto
+    'api',
 ]
 
-# Middleware
+# ---------------------
+# MIDDLEWARES
+# ---------------------
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # CORS middleware primeiro
+    'corsheaders.middleware.CorsMiddleware',  # Deve vir antes de CommonMiddleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,12 +44,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'  # ← ALTERA "your_project" para o nome da pasta principal do teu projeto
+ROOT_URLCONF = 'backend.urls'
 
+# ---------------------
+# TEMPLATES
+# ---------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # Podes adicionar pastas de templates se necessário
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,48 +65,62 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'  # ← ALTERA aqui também
+WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Base de dados PostgreSQL
+# ---------------------
+# BASE DE DADOS
+# ---------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pecd',
-        'USER': 'postgres',         # ← Altera se tiveres outro user
-        'PASSWORD': 'postgres',     # ← Altera se tiveres outra password
+        'USER': 'postgres',      # <-- metam todos isto para conseguirmos aceder todos sem estarmos sempre a mudar
+        'PASSWORD': 'postgres',  # <-- aqui também
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
-# Validação de passwords (opcional em dev)
+# ---------------------
+# PASSWORD VALIDATORS
+# ---------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
 ]
 
-# Localização e fusos horários
+# ---------------------
+# LOCALIZAÇÃO
+# ---------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Ficheiros estáticos (CSS, JS, imagens)
+# ---------------------
+# STATIC FILES
+# ---------------------
 STATIC_URL = 'static/'
 
-# Campo padrão para IDs
+# ---------------------
+# CAMPOS PADRÃO
+# ---------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS: permitir React app
+# ---------------------
+# CORS (Permitir React)
+# ---------------------
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
+#  Para desenvolvimento apenas — em produção usa apenas CORS_ALLOWED_ORIGINS !!!!!!!!!!!!!!!!!!!!!!!
 CORS_ALLOW_ALL_ORIGINS = True
 
-
-# Django REST Framework configs (opcional)
+# ---------------------
+# REST FRAMEWORK (Autenticação JWT)
+# ---------------------
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -105,8 +128,22 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+# ---------------------
+# EMAILS (para ativação de conta ou recuperação de password)
+# ---------------------
+# para já os emails aparecem só no terminal (modo de desenvolvimento)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'projetopecd@gmail.com'
+EMAIL_HOST_PASSWORD = 'efnclqzgbsrpvurp'  # a app password que o Google deu (sem espaços)
+DEFAULT_FROM_EMAIL = 'teu.email@gmail.com'
+
+EMAIL_USE_LOCALTIME = True
+EMAIL_SUBJECT_PREFIX = '[TeacherSArch] '

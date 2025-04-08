@@ -6,6 +6,10 @@ from .models import *
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+from django.core.mail import send_mail
+from uuid import uuid4
+from django.shortcuts import redirect
+
 
 class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
@@ -55,16 +59,22 @@ class CustomLoginView(TokenObtainPairView):
 # ----------------------------
 # Endpoint de Registo (POST)
 # ----------------------------
-
 @api_view(['POST'])
 def register_teacher(request):
+    # - Gera um token de ativação único
+    # - Marca a conta como inativa (is_active=False)
+    # - Envia um email com link para ativar
     data = request.data
 
     name = data.get('fullname')
     email = data.get('email')
     password = data.get('password')
-    utilizador_id = data.get('teacherid')
+    teacher_id_raw = data.get('teacherid')
 
+    try:
+        utilizador_id = int(teacher_id_raw)
+    except (TypeError, ValueError):
+        return Response({'error': 'Teacher ID must be a number.'}, status=400)
 
     if not all([name, email, password, utilizador_id]):
         return Response({'error': 'Todos os campos são obrigatórios'}, status=400)
@@ -72,27 +82,61 @@ def register_teacher(request):
     if Utilizador.objects.filter(id=utilizador_id).exists():
         return Response({'error': 'Já existe um utilizador com esse ID'}, status=400)
 
-    hashed_password = make_password(password)
+    activation_token = str(uuid4())
 
     utilizador = Utilizador.objects.create(
         id=utilizador_id,
         name=name,
         email=email,
-        password=hashed_password  # password segura!
+        password=make_password(password),
+        is_active=False,
+        activation_token=activation_token
     )
 
     Teacher.objects.create(
         utilizador=utilizador,
         teacher_name=name,
-        link_gitlab=""
+        link_gitlab=None
     )
 
-    return Response({'success': 'Conta criada com sucesso!'})
+    # Link de ativação
+    activation_url = f"http://localhost:8000/api/activate/{activation_token}/"
+
+    send_mail(
+        subject='Activate your TeacherSArch account',
+        message=(
+            f"Hi {name},\n\n"
+            f"Thank you for registering on TeacherSArch!\n\n"
+            f"To complete your registration and activate your account, please click the link below:\n\n"
+            f"{activation_url}\n\n"
+            f"If you didn’t request this registration, please ignore this email.\n\n"
+            f"Best regards,\n"
+            f"The TeacherSArch Team"
+        ),
+        from_email='noreply@teachersarch.com',
+        recipient_list=[email]
+    )
+
+
+    return Response({'success': 'Conta criada! Verifique o seu email para ativar a conta.'})
+
+@api_view(['GET'])
+def activate_account(request, token):
+    try:
+        user = Utilizador.objects.get(activation_token=token)
+        user.is_active = True
+        user.activation_token = None  # token usado, remove
+        user.save()
+        return redirect('http://localhost:3000/login?activated=true')
+
+    except Utilizador.DoesNotExist:
+        return Response({'error': 'Token inválido ou já usado.'}, status=400)
 
 
 # --------------------------------------------
 # Endpoint de Recuperação da Password (POST)
 # --------------------------------------------
+
 
 @api_view(['POST'])
 def password_reset_request(request):
@@ -106,8 +150,21 @@ def password_reset_request(request):
     except Utilizador.DoesNotExist:
         return Response({"error": "Nenhuma conta com esse email."}, status=404)
 
-    # 🔧 Aqui vamos só simular o envio de email
-    print(f"[SIMULAÇÃO DE EMAIL] Recuperação de conta para {user.email}")
-    print(f"Mensagem: Olá {user.name}, clique aqui para redefinir a sua password.")
+    # ENVIO REAL DE EMAIL!
+    subject = 'Recuperação de Password - TeacherSArch'
+    message = f"""
+    Bem vindo {user.name},
 
-    return Response({"success": "Instruções de recuperação foram enviadas para o seu email."})
+    Recebemos um pedido para redefinir a tua password.
+
+    Clica no link abaixo para continuares o processo:
+    https://tua-app/reset-password/{user.id}/
+
+    Se não foste tu quem pediu, ignora este email.
+
+    —
+    TeacherSArch
+    """
+    send_mail(subject, message, 'teu.email@gmail.com', [user.email])
+
+    return Response({"success": "Instruções de recuperação foram enviadas para o teu email."})

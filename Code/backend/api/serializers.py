@@ -77,6 +77,10 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         if not check_password(password, user.password):
             raise AuthenticationFailed("Password inválida")
+        
+        if not getattr(user, 'is_active', True):  # Default para True por segurança em dev
+            raise AuthenticationFailed("Account not activated. Please check your email.")
+
 
         # Criar tokens manualmente
         refresh = RefreshToken.for_user(user)
