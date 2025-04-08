@@ -1,83 +1,103 @@
-.login-page {
+/* ========== RESET & BASE ========== */
+* {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* ========== LAYOUT PRINCIPAL ========== */
+  .login-page {
     min-height: 100vh;
     background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
-}
+  }
   
-.login-page .top-bar  {
+  /* ========== TOPO ========== */
+  .login-page .top-bar {
     display: flex;
     justify-content: space-between;
-    margin-right: 50px;
-    padding: 8px 16px;
     align-items: center;
+    margin-right: 5%;
+    padding: 8px 16px;
     color: #000;
-}
+  }
   
-  
-.login-page .logo-area img {
+  .login-page .logo-area img {
     height: 80px;
     margin-left: 60px;
-    margin-top: 2   0px;
-}
+    margin-top: 20px;
+  }
   
-
-.login-page .nav-links {
+  .login-page .nav-links {
     display: flex;
-    gap: 20px; /* espaçamento entre os links */
-}
+    gap: 20px;
+  }
   
-.login-page .nav-links a {
-    color: #003465; /* ou white, se quiseres texto branco */
+  .login-page .nav-links a {
+    color: #003465;
     text-decoration: none;
     font-weight: bold;
-}
-
-.login-box {
+  }
+  
+  /* ========== LOGIN BOX ========== */
+  .login-box {
     min-width: 600px;
-    margin: auto;
-    background: rgb(88, 130, 193, 0.4);
+    margin: 5% auto;
+    background: rgba(88, 130, 193, 0.4);
+    backdrop-filter: blur(10px);
     padding: 40px;
-    margin-top: 110px;
     border-radius: 20px;
     text-align: center;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
-    margin-top: 5%;
-}
+  }
   
-.login-box h2 {
+  .login-box h2 {
     font-size: 35px;
     margin-bottom: 20px;
     color: #002b7f;
-}
+  }
   
-.login-box input {
+  .login-box label {
+    display: block;
+    text-align: left;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    margin-left: 20%;
+    font-weight: 500;
+    color: #002b7f;
+    font-size: 14px;
+  }
+  
+  .login-box input {
     width: 60%;
+    padding: 10px;
     margin: 10px auto;
     display: block;
-    padding: 10px;
-    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
-}
+  }
   
-.login-box .forgot {
+  .login-box .forgot {
     width: 60%;
     margin: 10px auto;
     display: block;
     text-align: left;
     font-size: 12px;
-    margin-bottom: 20px;
     color: #333;
-}
+  }
   
-.login-box .sign-in {
+  .login-box .sign-in {
     width: 30%;
-    margin: 10px auto;
-    display: block;
+    margin: 20px auto 10px;
     background-color: #003465;
     color: white;
     border: none;
@@ -85,77 +105,137 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
-}
-
-.login-box label {
-    display: block;
-    text-align: left;
-    margin-top: 16px;
-    margin-bottom: 6px;
-    margin-left: 110px;
-    font-weight: 500;
-    color: #002b7f;
-    font-size: 14px;
-}
+  }
   
-.login-box .register-text {
+  .login-box .register-text {
     font-size: 12px;
     margin-top: 20px;
-}
+  }
   
-.login-box .register-text a {
+  .login-box .register-text span {
     color: #003465;
     font-weight: bold;
-}
-  
-.login-page .back-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    position: absolute;
-    left: 20px;
-    top: 20px;
     cursor: pointer;
-}
-
-
-.login-page .back-button {
+  }
+  
+  /* ========== BOTÃO VOLTAR ========== */
+  .back-button {
     background-color: #3D4766;
     border-radius: 8px;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
-    padding: 8px 12px;
+    padding: 6px 10px;
     cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     position: absolute;
     top: 20px;
     left: 20px;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
+  }
   
-.login-page .back-button:hover {
-    background-color: white;
-    color: white;
-}
+  .back-button:hover {
+    background-color: #2c3550;
+  }
   
-.login-page .arrow-icon {
-    width: 20px;
-    height: 20px;
+  .back-button:active {
+    background-color: #1f253b;
+  }
+  
+  .arrow-icon {
+    width: 18px;
+    height: 18px;
     object-fit: contain;
-}
-
-* {
-    font-family: 'Inter', sans-serif;
-}
-
-
-.activation-success {
+  }
+  
+  /* ========== MENSAGENS ========== */
+  .activation-success {
     background-color: #d4edda;
     color: #155724;
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 16px;
     font-weight: bold;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .error-message {
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  
+  /* ========== RESPONSIVO ========== */
+  @media (max-width: 768px) {
+    .login-box {
+      min-width: unset;
+      width: 90%;
+      padding: 30px 20px;
+    }
+  
+    .login-box input,
+    .login-box .forgot,
+    .login-box .sign-in,
+    .activation-success,
+    .error-message {
+      width: 100%;
+    }
+  
+    .login-box label {
+      margin-left: 0;
+    }
+  
+    .login-page .top-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 20px;
+    }
+  
+    .login-page .logo-area img {
+      margin-left: 0;
+    }
+  
+    .back-button {
+      top: 10px;
+      left: 10px;
+      padding: 6px;
+    }
+  }
+  
+  .input-wrapper {
+    position: relative;
+    width: 60%;
+    margin: 0 auto 10px auto;
+  }
+  
+  .input-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* espaço à direita para o botão */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #003465;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0;
+  }
   
