@@ -4,10 +4,10 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import InitialPage from './pages/InitialPage';
-import LayoutWithSideBar from './components/LayoutWithSideBar';
 import InsertRepositoryPage from './pages/InsertRepositoryPage';
+import ComparePredictions from './pages/ComparePredictions'; // ✅ importa o novo componente
 import GradePredictions from './components/GradePredictions';
-
+import LayoutWithSideBar from './components/LayoutWithSideBar';
 
 function App() {
   return (
@@ -17,23 +17,38 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
-        <Route path="/initialpage" element={
+        <Route
+          path="/initialpage"
+          element={
             <LayoutWithSideBar>
               <InitialPage />
             </LayoutWithSideBar>
           }
         />
-        <Route path="/insertrepository" element= {
+        <Route
+          path="/insertrepository"
+          element={
             <LayoutWithSideBar>
               <InsertRepositoryPage />
             </LayoutWithSideBar>
           }
         />
-        <Route path="/gradepredictions" element={
-          <LayoutWithSideBar>
-            <GradePredictions />
-          </LayoutWithSideBar>
-        } />
+        <Route
+          path="/gradepredictions"
+          element={
+            <LayoutWithSideBar>
+              <GradePredictions />
+            </LayoutWithSideBar>
+          }
+        />
+        <Route
+          path="/compare-predictions"
+          element={
+            <LayoutWithSideBar>
+              <ComparePredictions />
+            </LayoutWithSideBar>
+          }
+        />
       </Routes>
     </Router>
   );
