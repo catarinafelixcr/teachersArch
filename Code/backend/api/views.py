@@ -8,6 +8,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from django.core.mail import send_mail
 from uuid import uuid4
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 
@@ -146,52 +149,67 @@ def password_reset_request(request):
         return Response({"error": "Email é obrigatório."}, status=400)
 
     try:
-        # Busca o primeiro usuário com o e-mail
-        user = Utilizador.objects.filter(email=email).first()
+        user = User.objects.filter(email=email).first()
         if not user:
             return Response({"error": "Nenhuma conta com esse email."}, status=404)
-    except Utilizador.MultipleObjectsReturned:
+    except User.MultipleObjectsReturned:
         return Response({"error": "Mais de um usuário encontrado com esse email."}, status=400)
 
-    # Gerar o link de recuperação de senha
-    reset_link = f"http://localhost:3000/reset-password/{user.id}/"
+    # Gera uid e token seguros
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
 
-    # Enviar o e-mail
+    # Gera link para o frontend
+    reset_link = f"http://localhost:3000/reset-password/{uid}/{token}/"
+    print("🔗 Link de reset gerado:", reset_link)  # Apenas para testes locais
+
+    # Nome para exibir no email (se houver)
+    user_display_name = user.get_full_name() or user.username or "User"
+
+    # Mensagem personalizada
     subject = 'Password Recovery - TeacherSArch'
     message = f"""
-    Hello {user.name},
+Hello {user_display_name},
 
-    We received a request to reset your password.
+We received a request to reset your password.
 
-    Click the link below to continue the process:
-    {reset_link}
+Click the link below to set a new password:
+{reset_link}
 
-    If you didn’t request this, please ignore this email.
+If you didn’t request this, please ignore this email.
 
-    —
-    TeacherSArch
-    """
+—
+TeacherSArch Team
+"""
+
     send_mail(subject, message, 'projetopecd@gmail.com', [user.email])
 
-    return Response({"success": "Instruções de recuperação enviadas para o seu e-mail."})
+    return Response({"success": "Recovery instructions sent to your email."})
 
 
 # Função para confirmar a redefinição da senha
 @api_view(['POST'])
 def reset_password_confirm(request):
-    uid = request.data.get("uid")
+    from django.utils.http import urlsafe_base64_decode
+    from django.contrib.auth.tokens import default_token_generator
+
+    uidb64 = request.data.get("uid")
     token = request.data.get("token")
     new_password = request.data.get("new_password")
-    
-    # Validar o token aqui (por exemplo, verificar se o token é válido ou se está expirado)
-    
+
+    if not all([uidb64, token, new_password]):
+        return Response({"error": "Todos os campos são obrigatórios."}, status=400)
+
     try:
-        user = User.objects.get(id=uid)
-    except User.DoesNotExist:
-        return Response({"error": "Usuário não encontrado."}, status=404)
-    
-    # Definir a nova senha
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Utilizador.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Utilizador.DoesNotExist):
+        return Response({"error": "Utilizador inválido."}, status=400)
+
+    if not default_token_generator.check_token(user, token):
+        return Response({"error": "Token inválido ou expirado."}, status=400)
+
     user.set_password(new_password)
     user.save()
 
-    return Response({"success": "Senha redefinida com sucesso."})
+    return Response({"success": "Password updated successfully."})

@@ -154,7 +154,7 @@ EMAIL_SUBJECT_PREFIX = '[TeacherSArch] '
 SITE_ID = 1
 
 DJANGO_REST_AUTH = {
-    'PASSWORD_RESET_CONFIRM_URL': 'reset-password-confirm/{uid}/{token}/',
+    'PASSWORD_RESET_CONFIRM_URL': 'reset-password/{uid}/{token}/',
     'USE_JWT': True,  # ou False, se não estiveres a usar JWT
 }
 
