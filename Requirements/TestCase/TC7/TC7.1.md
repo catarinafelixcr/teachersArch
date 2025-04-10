@@ -19,3 +19,5 @@
 - O sistema deve exibir uma mensagem de sucesso de registo: "Registo efetuado com sucesso. Verifique o seu email para confirmação."
 
 **Actual Results:**
+Válido.
+Quando abrimos o link da confirmação no email abre a pasta do gamma, mas depois de retornarmos a pagina de login o registo esta feito.
