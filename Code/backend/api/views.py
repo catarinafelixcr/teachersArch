@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from django.core.mail import send_mail
 from uuid import uuid4
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
 
 
@@ -136,8 +137,7 @@ def activate_account(request, token):
 # --------------------------------------------
 # Endpoint de Recuperação da Password (POST)
 # --------------------------------------------
-
-
+# Função de recuperação de senha
 @api_view(['POST'])
 def password_reset_request(request):
     email = request.data.get("email")
@@ -146,25 +146,52 @@ def password_reset_request(request):
         return Response({"error": "Email é obrigatório."}, status=400)
 
     try:
-        user = Utilizador.objects.get(email=email)
-    except Utilizador.DoesNotExist:
-        return Response({"error": "Nenhuma conta com esse email."}, status=404)
+        # Busca o primeiro usuário com o e-mail
+        user = Utilizador.objects.filter(email=email).first()
+        if not user:
+            return Response({"error": "Nenhuma conta com esse email."}, status=404)
+    except Utilizador.MultipleObjectsReturned:
+        return Response({"error": "Mais de um usuário encontrado com esse email."}, status=400)
 
-    # ENVIO REAL DE EMAIL!
-    subject = 'Recuperação de Password - TeacherSArch'
+    # Gerar o link de recuperação de senha
+    reset_link = f"http://localhost:3000/reset-password/{user.id}/"
+
+    # Enviar o e-mail
+    subject = 'Password Recovery - TeacherSArch'
     message = f"""
-    Bem vindo {user.name},
+    Hello {user.name},
 
-    Recebemos um pedido para redefinir a tua password.
+    We received a request to reset your password.
 
-    Clica no link abaixo para continuares o processo:
-    https://tua-app/reset-password/{user.id}/
+    Click the link below to continue the process:
+    {reset_link}
 
-    Se não foste tu quem pediu, ignora este email.
+    If you didn’t request this, please ignore this email.
 
     —
     TeacherSArch
     """
-    send_mail(subject, message, 'teu.email@gmail.com', [user.email])
+    send_mail(subject, message, 'projetopecd@gmail.com', [user.email])
 
-    return Response({"success": "Instruções de recuperação foram enviadas para o teu email."})
+    return Response({"success": "Instruções de recuperação enviadas para o seu e-mail."})
+
+
+# Função para confirmar a redefinição da senha
+@api_view(['POST'])
+def reset_password_confirm(request):
+    uid = request.data.get("uid")
+    token = request.data.get("token")
+    new_password = request.data.get("new_password")
+    
+    # Validar o token aqui (por exemplo, verificar se o token é válido ou se está expirado)
+    
+    try:
+        user = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return Response({"error": "Usuário não encontrado."}, status=404)
+    
+    # Definir a nova senha
+    user.set_password(new_password)
+    user.save()
+
+    return Response({"success": "Senha redefinida com sucesso."})

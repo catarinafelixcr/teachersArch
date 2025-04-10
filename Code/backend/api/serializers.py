@@ -7,6 +7,8 @@ from .models import Utilizador
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
 from django.contrib.auth.hashers import check_password
+from dj_rest_auth.serializers import PasswordResetSerializer
+from django.core.mail import send_mail
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Utilizador
 
@@ -89,3 +91,27 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
+    
+class CustomPasswordResetSerializer(PasswordResetSerializer):
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        uid = context['uid']
+        token = context['token']
+        reset_link = f"http://localhost:3000/reset-password-confirm/{uid}/{token}/"
+
+        subject = "Reset Your TeacherSArch Password"
+        message = f"""
+Hello!
+
+We received a request to reset your password on the TeacherSArch platform.
+
+Click the link below to create a new password:
+{reset_link}
+
+If you didn't make this request, you can ignore this email.
+
+Best regards,
+The TeacherSArch Team
+        """
+
+        send_mail(subject, message, from_email, [to_email])

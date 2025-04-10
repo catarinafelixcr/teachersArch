@@ -20,7 +20,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/register/', register_teacher),
     path('auth/token/login/', CustomLoginView.as_view(), name='custom_login'),
-    path('api/password-reset/', password_reset_request, name='password_reset'),
     path('api/activate/<str:token>/', activate_account, name='activate_account'),
+    path('api/password-reset/', password_reset_request, name='password_reset'),
     path('api/auth/', include('dj_rest_auth.urls')), 
+    path('api/password-reset/confirm/', reset_password_confirm, name='password_reset_confirm'),
 ]

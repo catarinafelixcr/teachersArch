@@ -146,7 +146,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'projetopecd@gmail.com'
 EMAIL_HOST_PASSWORD = 'efnclqzgbsrpvurp'  # a app password que o Google deu (sem espaços)
-DEFAULT_FROM_EMAIL = 'teu.email@gmail.com'
+DEFAULT_FROM_EMAIL = 'projetopecd@gmail.com'
 
 EMAIL_USE_LOCALTIME = True
 EMAIL_SUBJECT_PREFIX = '[TeacherSArch] '
@@ -156,4 +156,8 @@ SITE_ID = 1
 DJANGO_REST_AUTH = {
     'PASSWORD_RESET_CONFIRM_URL': 'reset-password-confirm/{uid}/{token}/',
     'USE_JWT': True,  # ou False, se não estiveres a usar JWT
+}
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'api.serializers.auth.CustomPasswordResetSerializer'
 }

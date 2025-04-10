@@ -5,64 +5,41 @@ import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
 import arrowIcon from '../assets/arrow-white.png';
 
-function SetNewPasswordPage() {
+function ForgotPasswordPage() {
   const navigate = useNavigate();
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const checkPasswordStrength = (pwd) => {
-    if (pwd.length < 6) return 'Weak';
-    if (pwd.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)) return 'Strong';
-    return 'Medium';
-  };
-
-  const validatePassword = () => {
-    if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters.');
-      return false;
-    }
-    if (!/^(?=.*[A-Za-z])(?=.*\d)/.test(newPassword)) {
-      setError('Include at least one letter and one number.');
-      return false;
-    }
-    if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
-      return false;
-    }
-    setError('');
-    return true;
-  };
-
-  const handleSetPassword = async () => {
-    setError('');
+  const handleResetPassword = async () => {
     setMessage('');
+    setError('');
 
-    if (!validatePassword()) return;
+    if (!email.trim()) {
+      setError('Please enter your email address.');
+      return;
+    }
 
     setLoading(true);
+
     try {
-      const response = await fetch('http://localhost:8000/api/auth/password/set/', {
+      const response = await fetch('http://localhost:8000/api/password-reset/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: newPassword }),
+        body: JSON.stringify({ email }),
       });
 
       if (response.ok) {
-        setMessage('Password has been successfully reset.');
-        setNewPassword('');
-        setConfirmPassword('');
+        setMessage('If this email exists, password reset instructions have been sent.');
+        setEmail('');
       } else {
-        setError('An error occurred. Please try again.');
+        setError('An error occurred. Please try again later.');
       }
-    } catch {
-      setError('Could not connect to server. Try again later.');
+    } catch (err) {
+      setError('Unable to connect to the server. Please try again.');
     }
+
     setLoading(false);
   };
 
@@ -96,53 +73,18 @@ function SetNewPasswordPage() {
           <img src={arrowIcon} alt="Back" className="arrow-icon" />
         </button>
 
-        <h2>Set New Password</h2>
-        <p className="instruction">Please enter and confirm your new password</p>
+        <h2>Forgot password</h2>
+        <p className="instruction">Please enter your email to reset the password</p>
 
         <div className="input-column">
-          <label htmlFor="new-password">New Password</label>
-          <div className="password-input-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              id="new-password"
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => {
-                const val = e.target.value;
-                setNewPassword(val);
-                setPasswordStrength(checkPasswordStrength(val));
-              }}
-            />
-            <span
-              className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </span>
-          </div>
-
-          {newPassword && (
-            <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
-              Strength: {passwordStrength}
-            </p>
-          )}
-
-          <label htmlFor="confirm-password">Confirm Password</label>
-          <div className="password-input-wrapper">
-            <input
-              type={showConfirm ? 'text' : 'password'}
-              id="confirm-password"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <span
-              className="toggle-password"
-              onClick={() => setShowConfirm(!showConfirm)}
-            >
-              {showConfirm ? 'Hide' : 'Show'}
-            </span>
-          </div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="username@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
 
         {error && <p className="error-message">{error}</p>}
@@ -150,14 +92,14 @@ function SetNewPasswordPage() {
 
         <button
           className="reset-button"
-          onClick={handleSetPassword}
+          onClick={handleResetPassword}
           disabled={loading}
         >
-          {loading ? 'Setting...' : 'Set Password'}
+          {loading ? 'Sending...' : 'Reset Password'}
         </button>
       </div>
     </div>
   );
 }
 
-export default SetNewPasswordPage;
+export default ForgotPasswordPage;
