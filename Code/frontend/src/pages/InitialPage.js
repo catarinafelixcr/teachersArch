@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'; 
 import '../styles/InitialPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-
 function InitialPage() {
   const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('Teacher');
+
+  useEffect(() => {
+    const token = localStorage.getItem('access'); // <- o teu JWT token
+    if (!token) return;
+
+    fetch('http://localhost:8000/api/profile/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Unauthorized or fetch error');
+      return res.json();
+    })
+    .then(data => {
+      if (data.name) {
+        const first = data.name.split(' ')[0];
+        setFirstName(first);
+      }
+    })
+    .catch(err => {
+      console.error('Failed to fetch profile:', err);
+    });
+  }, []);
 
   return (
     <div className="dashboard-layout">
@@ -26,10 +51,10 @@ function InitialPage() {
           </div>
         </header>
   
-
         <div className="welcome-text">
-            Hi, nomeProfessor!
-          </div>
+          Hi, {firstName}!
+        </div>
+
         <div className="insert-link-wrapper">
           <button className="insert-link-button" onClick={() => navigate('/insertlink')}>
             Insert Repository
@@ -55,7 +80,6 @@ function InitialPage() {
       </div>
     </div>
   );
-  
 }
 
 export default InitialPage;

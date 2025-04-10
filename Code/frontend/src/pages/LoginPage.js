@@ -29,12 +29,14 @@ function LoginPage() {
   }, [location.search]);
 
   useEffect(() => {
-    if (loginAttempts >= 3) {
+    if (loginAttempts >= 5) {
       setIsBlocked(true);
+      setError("Too many failed login attempts. Please try again in 30 seconds.");
       setTimeout(() => {
         setLoginAttempts(0);
         setIsBlocked(false);
-      }, 10000); // 10 segundos de bloqueio
+        setError('');
+      }, 30000); // 30 segundos de bloqueio
     }
   }, [loginAttempts]);
 
@@ -60,6 +62,7 @@ function LoginPage() {
         setError("Email or password invalid");
       }
     } catch (err) {
+      setLoginAttempts(prev => prev + 1);
       setError("Email or password invalid");
     }
     setLoading(false);
@@ -150,7 +153,7 @@ function LoginPage() {
         </span>
 
         <button className="sign-in" onClick={handleLogin} disabled={loading || isBlocked}>
-          {loading ? 'Signing in...' : 'Sign in'}
+          {isBlocked ? 'Temporarily Blocked' : loading ? 'Signing in...' : 'Sign in'}
         </button>
 
         {error && <p className="error-message">{error}</p>}

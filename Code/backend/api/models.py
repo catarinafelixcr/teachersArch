@@ -4,7 +4,7 @@ from uuid import uuid4
 class Utilizador(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=512, null=True, blank=True)
-    password = models.CharField(max_length=512, unique=True)
+    password = models.CharField(max_length=512)
     email = models.CharField(max_length=512, unique=True)
     is_active = models.BooleanField(default=False)  # ADICIONEI AQUI --> se o prof confirmou o email --> permite bloquear o acesso até o utilizador confirmar o registo
     activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True)  # E AQUI!! --> usado para gerar o link de verificação. Depois de ativar, é removido

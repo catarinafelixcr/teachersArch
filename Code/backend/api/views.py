@@ -1,6 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
 from .models import *
 from .serializers import *
@@ -12,6 +10,9 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from django.shortcuts import redirect
 
 
@@ -63,11 +64,11 @@ class CustomLoginView(TokenObtainPairView):
 # ----------------------------
 # Endpoint de Registo (POST)
 # ----------------------------
+from django.db import IntegrityError
+from rest_framework import status
+
 @api_view(['POST'])
 def register_teacher(request):
-    # - Gera um token de ativação único
-    # - Marca a conta como inativa (is_active=False)
-    # - Envia um email com link para ativar
     data = request.data
 
     name = data.get('fullname')
@@ -78,51 +79,66 @@ def register_teacher(request):
     try:
         utilizador_id = int(teacher_id_raw)
     except (TypeError, ValueError):
-        return Response({'error': 'Teacher ID must be a number.'}, status=400)
+        return Response({'teacherid': 'O ID do professor deve ser um número.'}, status=400)
 
     if not all([name, email, password, utilizador_id]):
-        return Response({'error': 'Todos os campos são obrigatórios'}, status=400)
-
-    if Utilizador.objects.filter(id=utilizador_id).exists():
-        return Response({'error': 'Já existe um utilizador com esse ID'}, status=400)
+        return Response({'error': 'Todos os campos são obrigatórios.'}, status=400)
 
     activation_token = str(uuid4())
 
-    utilizador = Utilizador.objects.create(
-        id=utilizador_id,
-        name=name,
-        email=email,
-        password=make_password(password),
-        is_active=False,
-        activation_token=activation_token
-    )
+    try:
+        utilizador = Utilizador.objects.create(
+            id=utilizador_id,
+            name=name,
+            email=email,
+            password=make_password(password),
+            is_active=False,
+            activation_token=activation_token
+        )
 
-    Teacher.objects.create(
-        utilizador=utilizador,
-        teacher_name=name,
-        link_gitlab=None
-    )
+        Teacher.objects.create(
+            utilizador=utilizador,
+            teacher_name=name,
+            link_gitlab=None
+        )
 
-    # Link de ativação
-    activation_url = f"http://localhost:8000/api/activate/{activation_token}/"
+        activation_url = f"http://localhost:8000/api/activate/{activation_token}/"
 
-    send_mail(
-        subject='Activate your TeacherSArch account',
-        message=(
-            f"Hi {name},\n\n"
-            f"Thank you for registering on TeacherSArch!\n\n"
-            f"To complete your registration and activate your account, please click the link below:\n\n"
-            f"{activation_url}\n\n"
-            f"If you didn’t request this registration, please ignore this email.\n\n"
-            f"Best regards,\n"
-            f"The TeacherSArch Team"
-        ),
-        from_email='noreply@teachersarch.com',
-        recipient_list=[email]
-    )
+        send_mail(
+            subject='Activate your TeacherSArch account',
+            message=(
+                f"Hi {name},\n\n"
+                f"Thank you for registering on TeacherSArch!\n\n"
+                f"To complete your registration and activate your account, please click the link below:\n\n"
+                f"{activation_url}\n\n"
+                f"If you didn’t request this registration, please ignore this email.\n\n"
+                f"Best regards,\n"
+                f"The TeacherSArch Team"
+            ),
+            from_email='noreply@teachersarch.com',
+            recipient_list=[email]
+        )
 
+        return Response({'success': 'Conta criada! Verifique o seu email para ativar a conta.'})
 
-    return Response({'success': 'Conta criada! Verifique o seu email para ativar a conta.'})
+    except IntegrityError as e:
+        errors = {}
+        if 'email' in str(e):
+            errors['email'] = 'Este email já está registado.'
+        if 'utilizador_pkey' in str(e) or 'id' in str(e):
+            errors['teacherid'] = 'Este ID de professor já está em uso.'
+
+        return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    return Response({
+        'id': user.id,
+        'name': user.name,
+        'email': user.email
+    })
 
 @api_view(['GET'])
 def activate_account(request, token):

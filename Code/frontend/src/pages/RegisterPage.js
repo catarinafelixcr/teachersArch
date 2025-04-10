@@ -15,13 +15,13 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const [errors, setErrors] = useState({});
+  const [globalError, setGlobalError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Input references
   const fullnameRef = useRef(null);
   const emailRef = useRef(null);
   const teacherIdRef = useRef(null);
@@ -86,9 +86,22 @@ function RegisterPage() {
 
     if (response.ok) {
       setShowSuccessModal(true);
+      setGlobalError('');
     } else {
       const errorData = await response.json();
-      alert(`Error: ${errorData.error}`);
+      const newErrors = {};
+
+      if (errorData.email || errorData.teacherid) {
+        setGlobalError('You already have an account with this email address or teacher ID.');
+      }
+
+      if (errorData.email) {
+        newErrors.email = 'This email is already registered.'; 
+      }
+      if (errorData.teacherid) {
+        newErrors.teacherid = 'This teacher ID is already in use.'; 
+      }
+      setErrors(newErrors);
     }
   };
 
@@ -114,6 +127,15 @@ function RegisterPage() {
         </button>
 
         <h2>Register new account</h2>
+
+        {globalError && (
+          <div className="global-error-box">
+            <p>{globalError}</p>
+            <button onClick={() => navigate('/forgotpassword')} className="recover-btn">
+            Password recovery
+            </button>
+          </div>
+        )}
 
         <label htmlFor="fullname">Full name</label>
         <div className="input-wrapper">

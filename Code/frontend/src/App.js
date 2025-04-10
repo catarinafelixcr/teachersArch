@@ -9,6 +9,7 @@ import ComparePredictions from './pages/ComparePredictions';
 import GradePredictions from './components/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage'; 
+import CompareGroups from './pages/CompareGroups'; 
 
 function App() {
   return (
@@ -52,6 +53,17 @@ function App() {
             </LayoutWithSideBar>
           }
         />
+        <Route path="/comparepredictions" element={
+          <LayoutWithSideBar>
+            <ComparePredictions />
+          </LayoutWithSideBar>
+        } />
+
+        <Route path="/comparegroups" element={
+          <LayoutWithSideBar>
+            <CompareGroups />
+          </LayoutWithSideBar>
+        } />
       </Routes>
     </Router>
   );
