@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; 
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/LoginPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
@@ -9,6 +9,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const passwordInputRef = useRef(null);
+  const emailInputRef = useRef(null);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +34,7 @@ function LoginPage() {
       setTimeout(() => {
         setLoginAttempts(0);
         setIsBlocked(false);
-      }, 10000); // 10 segundos bloqueio
+      }, 10000); // 10 segundos de bloqueio
     }
   }, [loginAttempts]);
 
@@ -41,6 +42,7 @@ function LoginPage() {
     if (isBlocked) return;
 
     setLoading(true);
+    setError('');
     try {
       const response = await fetch("http://localhost:8000/auth/token/login/", {
         method: "POST",
@@ -52,7 +54,7 @@ function LoginPage() {
         const data = await response.json();
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
-        navigate('/initialpage');
+        navigate('/initialpage'); // mudar para a tua página seguinte
       } else {
         setLoginAttempts(prev => prev + 1);
         setError("Email or password invalid");
@@ -63,12 +65,19 @@ function LoginPage() {
     setLoading(false);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') handleLogin();
+  const handleKeyDown = (e, field) => {
+    if (e.key === 'Enter') {
+      if (field === 'email') {
+        passwordInputRef.current.focus();
+      } else {
+        handleLogin();
+      }
+    }
   };
 
   return (
-    <div className="login-page"
+    <div
+      className="login-page"
       style={{
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
@@ -100,25 +109,28 @@ function LoginPage() {
         )}
 
         <label htmlFor="email">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          placeholder="username@gmail.com"
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="input-wrapper">
+          <input
+            type="email"
+            id="email"
+            placeholder="username@gmail.com"
+            ref={emailInputRef}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, 'email')}
+          />
+        </div>
 
         <label htmlFor="password">Password</label>
         <div className="input-wrapper">
-          <input 
-            type={showPassword ? "text" : "password"} 
-            id="password" 
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
             placeholder="Password"
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
             ref={passwordInputRef}
-            onKeyDown={handleKeyDown}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, 'password')}
           />
           <button
             type="button"
@@ -129,9 +141,9 @@ function LoginPage() {
           </button>
         </div>
 
-        <span 
-          onClick={() => navigate('/forgotpassword')} 
-          className="forgot" 
+        <span
+          onClick={() => navigate('/forgotpassword')}
+          className="forgot"
           style={{ cursor: 'pointer' }}
         >
           Forgot Password?
