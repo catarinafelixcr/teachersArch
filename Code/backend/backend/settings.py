@@ -17,10 +17,13 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'rest_framework.authtoken',  # para autenticação com token
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # para o reset do email
+    'dj_rest_auth', 
 
     # Terceiros
     'rest_framework',
@@ -147,3 +150,10 @@ DEFAULT_FROM_EMAIL = 'teu.email@gmail.com'
 
 EMAIL_USE_LOCALTIME = True
 EMAIL_SUBJECT_PREFIX = '[TeacherSArch] '
+
+SITE_ID = 1
+
+DJANGO_REST_AUTH = {
+    'PASSWORD_RESET_CONFIRM_URL': 'reset-password-confirm/{uid}/{token}/',
+    'USE_JWT': True,  # ou False, se não estiveres a usar JWT
+}

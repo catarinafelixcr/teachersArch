@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 from .views import *
 
 router = DefaultRouter()
@@ -21,4 +22,5 @@ urlpatterns = [
     path('auth/token/login/', CustomLoginView.as_view(), name='custom_login'),
     path('api/password-reset/', password_reset_request, name='password_reset'),
     path('api/activate/<str:token>/', activate_account, name='activate_account'),
+    path('api/auth/', include('dj_rest_auth.urls')), 
 ]
