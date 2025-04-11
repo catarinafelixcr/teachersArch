@@ -8,9 +8,7 @@ import InsertRepositoryPage from './pages/InsertRepositoryPage';
 import ComparePredictions from './pages/ComparePredictions'; 
 import GradePredictions from './components/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
-import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage'; 
-import CompareGroups from './pages/CompareGroups';
-
+import CompareGroups from './pages/CompareGroups'; 
 
 function App() {
   return (
@@ -20,7 +18,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirmPage />} />
 
         <Route
           path="/initialpage"
@@ -59,6 +56,7 @@ function App() {
             <ComparePredictions />
           </LayoutWithSideBar>
         } />
+
         <Route path="/comparegroups" element={
           <LayoutWithSideBar>
             <CompareGroups />
@@ -66,7 +64,7 @@ function App() {
         } />
       </Routes>
     </Router>
-  )
+  );
 }
 
 export default App;
