@@ -203,24 +203,39 @@ const GradePredictions = () => {
 
       {/* Modal */}
       {selectedStudent && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Prediction Details</h2>
-            <p><strong>Name:</strong> {selectedStudent.name}</p>
-            <p><strong>Group:</strong> {selectedStudent.group}</p>
-            <p><strong>Predicted Grade:</strong> {selectedStudent.grade}%</p>
-            <p><strong>Confidence:</strong> {selectedStudent.confidence}%</p>
-            <p><strong>Date:</strong> {selectedStudent.date}</p>
-            <hr style={{ margin: '16px 0' }} />
-            <p><strong>Repository Activity:</strong> {selectedStudent.commits} commits</p>
-            <p><strong>Files Changed:</strong> {selectedStudent.filesChanged}</p>
-            <p><strong>Lines Added:</strong> +{selectedStudent.linesAdded}</p>
-            <p><strong>Lines Removed:</strong> -{selectedStudent.linesRemoved}</p>
-            <p><strong>Last Commit:</strong> {selectedStudent.lastCommit}</p>
-            <button onClick={handleCloseModal}>Close</button>
-          </div>
+      <div className="modal-overlay" onClick={handleCloseModal}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <h2>Prediction Details</h2>
+          <p><strong>Name:</strong> {selectedStudent.name}</p>
+          <p><strong>Group:</strong> {selectedStudent.group}</p>
+          <p><strong>Predicted Grade:</strong> {selectedStudent.grade}%</p>
+          <p><strong>Confidence:</strong> {selectedStudent.confidence}%</p>
+          <p><strong>Date:</strong> {selectedStudent.date}</p>
+          <hr style={{ margin: '16px 0' }} />
+
+          {(selectedStudent.commits === undefined ||
+            selectedStudent.filesChanged === undefined ||
+            selectedStudent.linesAdded === undefined ||
+            selectedStudent.linesRemoved === undefined ||
+            selectedStudent.lastCommit === undefined) ? (
+            <p style={{ fontStyle: 'italic', color: '#777' }}>
+              At the moment, there is no additional data available for this student.
+            </p>
+          ) : (
+            <>
+              <p><strong>Repository Activity:</strong> {selectedStudent.commits} commits</p>
+              <p><strong>Files Changed:</strong> {selectedStudent.filesChanged}</p>
+              <p><strong>Lines Added:</strong> +{selectedStudent.linesAdded}</p>
+              <p><strong>Lines Removed:</strong> -{selectedStudent.linesRemoved}</p>
+              <p><strong>Last Commit:</strong> {selectedStudent.lastCommit}</p>
+            </>
+          )}
+
+          <button onClick={handleCloseModal}>Close</button>
         </div>
-      )}
+      </div>
+    )}
+
     </div>
   );
 };
