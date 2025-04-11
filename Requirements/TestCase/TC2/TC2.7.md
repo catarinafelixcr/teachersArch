@@ -19,3 +19,5 @@
 - O sistema deve apresentar a distribuição gráfica das previsões de notas.
 
 **Actual Result**:
+
+    - Aprovado.

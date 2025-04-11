@@ -17,3 +17,5 @@
 - O sistema deve apresentar estatísticas globais (média prevista, desvio padrão, percentis).
 
 **Actual Result:**
+
+    - Aprovado.
