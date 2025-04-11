@@ -18,7 +18,7 @@
 ## Instalação
 
 # Backend 
-    - cd /backend
+    - cd \backend
 
 # Cria ambiente virtual (opcional, mas recomendado)
 python -m venv .venv
@@ -28,8 +28,10 @@ source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
 pip install -r requirements.txt
 
 pip install dj_rest_auth
-pip install rest_framework
-pip install corsheaders
+pip install django-allauth
+pip install djangorestframework
+pip install django-cors-headers
+pip install djangorestframework-simplejwt
 
 [pode ser possível ter que instalar mais alguma app que esteja em settings.py em /backend, na secção de installed_apps]
 
