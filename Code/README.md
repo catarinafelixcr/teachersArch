@@ -61,5 +61,4 @@ npm install
 # Inicia a aplicação React
 npm start
 
-
     - se der erro na página relacionado com SideBar.js basta colocar o nome do ficheiro na pasta /components para Sidebar.js ("b" minúsculo)
