@@ -16,4 +16,4 @@ UC.2.6. Visualizar a previsão da nota de um aluno
 **Extensions**:
 
 1a. Sem detalhes do aluno.
-- 1a1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."
+- 1a1. O sistema exibe uma mensagem equivalente a "De momento, não existem dados adicionais sobre este aluno."

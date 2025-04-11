@@ -9,10 +9,12 @@
 - Não existe histórico de previsões disponíveis no sistema.
 
 **Steps**:
-- Aceder à dashboard do sistema.
+- Aceder à pagina inicial do sistema.
 - Clicar na opção "Previsão de Notas".
 
 **Expected Result**:
-- O sistema deve exibir uma mensagem "Não existem previsões disponíveis."
+- O sistema deve exibir uma mensagem equivalente a "Não existem previsões disponíveis."
 
 **Actual Result:**
+
+- Aprovado

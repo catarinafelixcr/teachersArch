@@ -16,3 +16,5 @@
 - O sistema deve exibir os detalhes da previsão para o aluno selecionado.
 
 **Actual Result:**
+
+- Aprovado
