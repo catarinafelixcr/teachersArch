@@ -48,7 +48,7 @@ function InitialPage() {
           </div>
 
           <div className="insert-link-wrapper">
-            <button className="insert-link-button" onClick={() => navigate('/insertlink')}>
+            <button className="insert-link-button" onClick={() => navigate('/insertrepository')}>
               Insert Repository
             </button>
           </div>
