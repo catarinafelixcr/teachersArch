@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/ComparePredictions.css';
 
 const fullData = {
@@ -13,19 +14,32 @@ const fullData = {
     { name: 'João Costa', group: 'A', now: 95, before: 94, diff: 1, status: 'Improved' },
     { name: 'Beatriz Lopes', group: 'B', now: 65, before: 60, diff: 5, status: 'Improved' },
     { name: 'Rui Almeida', group: 'B', now: 50, before: 51, diff: -1, status: 'Slight Drop' }
+  ],
+  '2022-04-15': [
+    { name: 'Ana Martins', group: 'A', now: 81, before: 79, diff: 2, status: 'Improved' },
+    { name: 'João Costa', group: 'A', now: 94, before: 96, diff: -2, status: 'Slight Drop' },
+    { name: 'Beatriz Lopes', group: 'B', now: 60, before: 60, diff: 0, status: 'Unchanged' },
+    { name: 'Rui Almeida', group: 'B', now: 51, before: 54, diff: -3, status: 'Declined' }
+  ],
+  '2022-03-01': [
+    { name: 'Ana Martins', group: 'A', now: 79, before: '-', diff: '-', status: '-' },
+    { name: 'João Costa', group: 'A', now: 96, before: '-', diff: '-', status: '-' },
+    { name: 'Beatriz Lopes', group: 'B', now: 60, before: '-', diff: '-', status: '-' },
+    { name: 'Rui Almeida', group: 'B', now: 54, before: '-', diff: '-', status: '-' }
   ]
 };
 
 const getStats = (students) => {
-  if (students.length === 0) return { total: 0, avgNow: 0, avgBefore: 0, variation: '0%' };
+  const valid = students.filter(s => typeof s.now === 'number' && typeof s.before === 'number');
+  if (valid.length === 0) return { total: 0, avgNow: 0, avgBefore: 0, variation: '0%' };
 
   const avg = (arr) => arr.reduce((sum, s) => sum + s, 0) / arr.length;
-  const avgNow = avg(students.map(s => s.now));
-  const avgBefore = avg(students.map(s => s.before));
+  const avgNow = avg(valid.map(s => s.now));
+  const avgBefore = avg(valid.map(s => s.before));
   const variation = ((avgNow - avgBefore) / (avgBefore || 1)) * 100;
 
   return {
-    total: students.length,
+    total: valid.length,
     avgNow: avgNow.toFixed(1),
     avgBefore: avgBefore.toFixed(1),
     variation: `${variation > 0 ? '+' : ''}${variation.toFixed(1)}%`
@@ -33,6 +47,7 @@ const getStats = (students) => {
 };
 
 const ComparePredictions = () => {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState('2022-06-20');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedTrend, setSelectedTrend] = useState('');
@@ -153,12 +168,39 @@ const ComparePredictions = () => {
         <div><strong>Change</strong><p>{statsPrevious.variation}</p></div>
       </div>
 
+      <h3 className="info">Now Grade Comparison</h3>
+      <table className="students-table">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Now (2022-06-20)</th>
+            <th>Now ({selectedDate})</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredStudentsCurrent.map((studentCurrent, i) => {
+            const studentPrevious = filteredStudentsPrevious.find(s => s.name === studentCurrent.name);
+            return (
+              <tr key={i}>
+                <td>{studentCurrent.name}</td>
+                <td>{studentCurrent.now}</td>
+                <td>{studentPrevious ? studentPrevious.now : '-'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
       <div className="buttons-footer">
-        <button className="report-btn">Generate a Report</button>
-        <button className="back-btn">Back to Grade Predictions</button>
+        <div className="report-btn-wrapper">
+          <button className="report-btn">Generate a Report</button>
+        </div>
+        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
+          Back to Grade Predictions
+        </button>
       </div>
     </div>
   );
 };
 
-export default ComparePredictions;  
+export default ComparePredictions;

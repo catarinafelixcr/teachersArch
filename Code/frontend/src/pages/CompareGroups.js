@@ -109,7 +109,6 @@ const CompareGroups = () => {
         </div>
       </div>
 
-      <p className="footer-note">falta gráficos: comparar commits e assim tb!!!!!!!!!</p>
 
       <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
         Back to Grade Predictions
