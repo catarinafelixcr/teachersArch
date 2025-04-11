@@ -29,3 +29,5 @@
     - O sistema deve exibir a mensagem de erro: "Email ou password incorretos." (ou similar).
 
 **Actual Result:**
+
+    - Aprovado.

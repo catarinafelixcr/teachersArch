@@ -35,3 +35,5 @@
     - O sistema deve exibir a mensagem de erro: "Muitas tentativas falhadas. Tente novamente em 15 minutos ou redefina a password.".
 
 **Actual Results:**
+
+    - Aprovado.
