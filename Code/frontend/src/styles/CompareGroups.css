@@ -1,194 +1,72 @@
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #e7ecfc;
-  }
-  
-  /* ---------- BASE ---------- */
-  .compare-groups-page {
-    padding-top: 40px;
-    padding-right: 40px;
-    padding-bottom: 40px;
-    padding-left: 280px; /* ⬅ compensar a sidebar */
-    min-height: 100vh;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  
-  /* ---------- HEADER ---------- */
-  .compare-groups-page h1 {
-    text-align: center;
-    font-size: 36px;
-    margin-bottom: 16px;
-  }
-  
-  .compare-groups-page .highlight {
-    background-color: #1e3a8a;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 6px;
-  }
-  
-  .description {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-    font-size: 16px;
-    color: #333;
-    line-height: 1.6;
-  }
-  
-  /* ---------- SELECT BOX ---------- */
-  .instruction {
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: #1e3a8a;
-  }
-  
-  .group-select {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 30px;
-  }
-  
-  .group-select .react-select {
-    width: 300px;
-  }
-  
-  .group-select button {
-    background-color: #1e3a8a;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .group-select button:hover {
-    background-color: #002b7f;
-  }
-  
-  /* ---------- TABLE ---------- */
-  .table-container {
-    background-color: #f0f4ff;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 40px;
-  }
-  
-  .table-container h3.info {
-    color: #1e3a8a;
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
-  .table-container table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 15px;
-  }
-  
-  .table-container th,
-  .table-container td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .table-container th {
-    background-color: #e0e8f8;
-    color: #1e3a8a;
-    font-weight: 600;
-  }
-  
-  .note {
-    font-size: 14px;
-    color: #cc0000;
-    margin-top: 10px;
-  }
-  
-  /* ---------- CHARTS ---------- */
-  .charts-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-bottom: 30px;
-  }
-  
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #e7ecfc;
+}
+
+/* ---------- BASE ---------- */
+.compare-groups-page {
+  min-height: 100vh;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 40px 40px 40px 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- CHARTS ---------- */
+.charts-container {
+  margin-top: 30px;
+}
+
+.chart-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.chart {
+  flex: 1 1 48%;
+  min-width: 300px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  min-height: 300px; /* <- altura suficiente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.chart h4 {
+  margin-bottom: 16px;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+/* ---------- RESPONSIVO ---------- */
+@media (max-width: 768px) {
   .chart-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    flex-direction: column;
   }
-  
-  .chart {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    padding: 16px;
-    min-height: 200px;
-    text-align: center;
-    font-style: italic;
-    color: #999;
+
+  .group-select {
+    flex-direction: column;
   }
-  
-  /* ---------- FOOTER BUTTON ---------- */
-  .footer-note {
-    text-align: center;
-    font-size: 14px;
-    color: #222;
-    margin-bottom: 30px;
+
+  .group-select .react-select {
+    width: 100%;
   }
-  
-  .back-btn {
-    background-color: #3D4766;
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto;
-    transition: background-color 0.3s ease;
+
+  .compare-groups-page {
+    padding-left: 20px;
+    padding-right: 20px;
   }
-  
-  .back-btn:hover {
-    background-color: #2f364d;
-  }
-  
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width: 768px) {
-    .chart-row {
-      flex-direction: column;
-    }
-  
-    .group-select {
-      flex-direction: column;
-    }
-  
-    .group-select .react-select {
-      width: 100%;
-    }
-  
-    .compare-groups-page {
-      padding-left: 20px; /* reduz margem em mobile */
-      padding-right: 20px;
-    }
-  }
-  
+}

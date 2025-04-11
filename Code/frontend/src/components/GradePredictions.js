@@ -81,7 +81,9 @@ const GradePredictions = () => {
         <button onClick={() => navigate('/comparegroups')}>Compare Groups</button>
         <button onClick={() => navigate('/generate-report')}>Generate Report</button>
         <button onClick={() => navigate('/comparepredictions')}>Compare Predictions in Time</button>
-        <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Main Dashboard</button>
+        <button className="back-btn" onClick={() => navigate('/initialpage')}>
+          Back to Main Dashboard
+        </button>
       </div>
     </div>
   );
