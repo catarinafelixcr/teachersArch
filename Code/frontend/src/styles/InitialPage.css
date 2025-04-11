@@ -1,30 +1,39 @@
+/* =========================
+   LAYOUT BASE
+========================= */
 .dashboard-layout {
   display: flex;
 }
 
-/* Sidebar com largura fixa já está no Sidebar.css (width: 240px) */
-
-/* CONTEÚDO ao lado da sidebar */
-.dashboard-content {
-  flex: 1;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+* {
+  font-family: 'Inter', sans-serif;
 }
 
-/* Overlay azul translúcido */
+/* =========================
+   CONTEÚDO (ao lado da sidebar)
+========================= */
+.dashboard-content {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* =========================
+   OVERLAY AZUL TRANSLÚCIDO
+========================= */
 .dashboard-content .blue-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background: rgba(88, 130, 193, 0.6);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
   z-index: 0;
 }
 
@@ -33,6 +42,9 @@
   z-index: 1;
 }
 
+/* =========================
+   LOGO E TEXTO DE BOAS-VINDAS
+========================= */
 .dashboard-content .logo-area img {
   height: 80px;
   margin-left: 60px;
@@ -40,75 +52,78 @@
 }
 
 .dashboard-content .welcome-text {
+  color: #003465;
   font-size: 40px;
   font-weight: 600;
-  color: #003465;
-  margin-bottom: 8%; /* menos espaço abaixo */
-  margin-top: 0;       /* ou adiciona um margin-top se quiser espaço acima */
+  margin-bottom: 8%;
+  margin-top: 0;
   text-align: center;
 }
-/* Botão Insert Link */
+
+/* =========================
+   BOTÃO "INSERT LINK"
+========================= */
 .dashboard-content .insert-link-wrapper {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  margin-bottom: 5%;
+  margin: 20px 0 5%;
 }
 
 .dashboard-content .insert-link-button {
-  width: 350px;
-  padding: 12px 20px;
   background-color: #3D4766;
-  color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
-  font-size: 15px;
+  color: white;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 12px 20px;
   transition: background-color 0.2s ease;
+  width: 350px;
 }
 
 .dashboard-content .insert-link-button:hover {
   background-color: #1E3A8A;
 }
 
-/* Cartões da dashboard */
+/* =========================
+   CARTÕES DA DASHBOARD
+========================= */
 .dashboard-content .card-container {
   display: flex;
-  justify-content: center;
-  gap: 30px;
   flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
 }
 
 .dashboard-content .center-wrapper {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   flex-grow: 1;
-  padding: 100px 20px;
+  justify-content: center;
   margin-left: 220px;
+  padding: 100px 20px;
 }
 
 .dashboard-content .dashboard-card {
   background: rgba(30, 58, 138, 0.7);
   backdrop-filter: blur(10px);
-  width: 270px;       
-  padding: 20px;    
   border-radius: 20px;
-  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: white;
   cursor: pointer;
+  padding: 20px;
+  text-align: center;
   transition: transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 270px;
 }
 
 .dashboard-card:hover {
-  transform: translateY(-2px) scale(1.03);
-  background: rgba(255, 255, 255, 0.1); /* transparente */
-  backdrop-filter: blur(10px); /* efeito embaciado */
-  -webkit-backdrop-filter: blur(10px); /* compatibilidade Safari */
-  background: rgba(255, 255, 255, 0.35);
-    color: #1E3A8A;
+  background: rgba(255, 255, 255, 0.35); /* sobreescreve valor anterior */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  color: #1E3A8A;
+  transform: translateY(-2px) scale(1.03);
 }

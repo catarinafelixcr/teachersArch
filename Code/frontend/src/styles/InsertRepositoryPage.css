@@ -1,40 +1,39 @@
+/* =========================
+   RESET / GLOBAL
+========================= */
 * {
   font-family: 'Inter', sans-serif;
 }
 
-.insert-repo-layout {
-  display: flex;
-}
-
-.insert-repo-page {
-  margin-left: 240px;
-  width: calc(100% - 240px);
-  position: relative;
-  padding: 40px;
-  min-height: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
 .insert-repo-layout {
   display: flex;
   min-height: 100vh;
 }
 
-
-.insert-repo-header {
-  text-align: center;
-  margin-top: 100px; /* Adjust as necessary */
+.insert-repo-page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin-left: 240px;
+  min-height: 100%;
+  padding: 40px;
+  position: relative;
+  width: calc(100% - 240px);
 }
 
+/* =========================
+   OVERLAY TRANSLÚCIDO AZUL
+========================= */
 .blue-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  background: rgba(88, 130, 193, 0.6);
   bottom: 0;
-  background: rgba(88, 130, 193, 0.6); /* Blue with opacity */
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
   z-index: 0;
 }
 
@@ -43,77 +42,91 @@
   z-index: 1;
 }
 
+/* =========================
+   CABEÇALHO / TÍTULO / DESCRIÇÃO
+========================= */
+.insert-repo-header {
+  text-align: center;
+  margin-top: 100px;
+}
+
 .insert-repo-page h1 {
+  color: #1d1d1d;
   font-size: 36px;
   font-weight: 600;
-  color: #1d1d1d;
   margin-bottom: 20px;
 }
 
 .insert-repo-page .highlight {
   background-color: #1e3a8a;
+  border-radius: 4px;
   color: white;
   padding: 4px 8px;
-  border-radius: 4px;
 }
 
 .insert-repo-page .description {
-  font-size: 16px;
   color: #444;
-  max-width: 600px;
-  margin: 0 auto 40px; /* Centering the text */
+  font-size: 16px;
   line-height: 1.6;
-  margin-bottom: 8%;
+  margin: 0 auto 8%;
+  max-width: 600px;
+  text-align: center;
 }
 
+/* =========================
+   INPUTS DE REPOSITÓRIO
+========================= */
 .repo-inputs {
   display: flex;
-  justify-content: center;
-  gap: 90px;
   flex-wrap: wrap;
-  margin-top: 40px; /* Adjust space between text and input */
+  gap: 90px;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 .repo-block {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 15px;
   max-width: 600px;
   width: 100%;
 }
 
 .repo-block input {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
   background-color: #e9ecf5;
-  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   color: #333;
+  font-size: 14px;
+  padding: 10px 14px;
+  width: 100%;
 }
 
 .repo-block button {
   background-color: #1e3a8a;
-  color: white;
-  font-weight: bold;
-  padding: 12px;
   border: none;
-  width: 100%;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  font-weight: bold;
   margin-top: 16px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  width: 100%;
 }
 
 .repo-block button:hover {
   background-color: #002b7f;
 }
 
+/* =========================
+   TABELA DE AGRUPAMENTO
+========================= */
 .grouping-table {
+  color: #1d1d1d;
   margin-top: 60px;
   text-align: center;
-  color: #1d1d1d;
 }
 
 .grouping-table h1 {
@@ -121,63 +134,72 @@
   margin-bottom: 30px;
 }
 
+/* =========================
+   CONTROLES DE GRUPO
+========================= */
 .group-controls {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 30px;
   flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
 .group-controls input {
-  padding: 10px 12px;
-  border-radius: 6px;
   border: 1px solid #ccc;
+  border-radius: 6px;
   min-width: 250px;
+  padding: 10px 12px;
 }
 
 .group-controls button {
   background-color: #1e3a8a;
-  color: white;
-  font-weight: bold;
-  padding: 10px 18px;
   border: none;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
+  font-weight: bold;
+  padding: 10px 18px;
 }
 
 .group-controls button:hover {
   background-color: #002b7f;
 }
 
+/* =========================
+   BARRA DE PESQUISA
+========================= */
 .search-bar {
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: 8px;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
 .search-bar input {
-  padding: 8px 12px;
-  border-radius: 6px;
   border: 1px solid #ccc;
+  border-radius: 6px;
   min-width: 250px;
+  padding: 8px 12px;
 }
 
+/* =========================
+   TABELA DE ESTUDANTES
+========================= */
 .student-table {
-  margin: 0 auto;
-  border-collapse: collapse;
-  width: 60%;
   background-color: rgba(255, 255, 255, 0.9);
+  border-collapse: collapse;
   border-radius: 8px;
+  margin: 0 auto;
   overflow: hidden;
+  width: 60%;
 }
 
 .student-table th,
 .student-table td {
-  padding: 12px;
   border-bottom: 1px solid #ddd;
+  padding: 12px;
 }
 
 .student-table th {
@@ -189,14 +211,17 @@
   background-color: #f1f1f1;
 }
 
+/* =========================
+   MENSAGEM DE ERRO
+========================= */
 .repo-error-message {
-  font-size: 15px;
   color: #821313;
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
   padding: 12px;
   border-radius: 6px;
   text-align: center;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 500;
 }

@@ -1,4 +1,6 @@
-/* ========== RESET & BASE ========== */
+/* =========================
+   RESET & BASE
+========================= */
 * {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
@@ -11,7 +13,9 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ========== ANIMATION ========== */
+/* =========================
+   ANIMAÇÃO
+========================= */
 @keyframes zoomIn {
   from {
     opacity: 0;
@@ -23,23 +27,27 @@ html, body {
   }
 }
 
-/* ========== LAYOUT PRINCIPAL ========== */
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
 .login-page {
-  min-height: 100vh;
-  background-size: cover;
   background-position: center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* ========== TOPO ========== */
+/* =========================
+   TOPO / NAVEGAÇÃO
+========================= */
 .login-page .top-bar {
+  align-items: center;
+  color: #000;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-right: 5%;
   padding: 8px 16px;
-  color: #000;
 }
 
 .login-page .logo-area img {
@@ -55,61 +63,60 @@ html, body {
 
 .login-page .nav-links a {
   color: #003465;
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
-/* ========== LOGIN BOX ========== */
+/* =========================
+   CAIXA DE LOGIN
+========================= */
 .login-box {
-  min-width: 600px;
-  margin: 5% auto;
+  animation: zoomIn 0.3s ease-out;
   background: rgba(88, 130, 193, 0.4);
   backdrop-filter: blur(10px);
-  padding: 40px;
   border-radius: 20px;
-  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 5% auto;
+  min-width: 600px;
+  padding: 40px;
   position: relative;
-  animation: zoomIn 0.3s ease-out;
+  text-align: center;
 }
 
 .login-box h2 {
+  color: #002b7f;
   font-size: 35px;
   margin-bottom: 20px;
-  color: #002b7f;
 }
 
 .login-box label {
-  display: block;
-  text-align: left;
-  margin-top: 16px;
-  margin-bottom: 6px;
-  font-weight: 500;
   color: #002b7f;
+  display: block;
   font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  margin-top: 16px;
   padding-left: 5%;
+  text-align: left;
 }
 
-/* ========== INPUTS ========== */
+/* =========================
+   INPUTS
+========================= */
 .input-wrapper {
+  margin: 0 auto 10px auto;
   position: relative;
   width: 30%;
-  margin: 0 auto 10px auto;
 }
 
 .input-wrapper input {
-  width: 100%;
-  padding: 10px 40px 10px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  box-sizing: border-box;
+  padding: 10px 40px 10px 10px;
+  width: 100%;
 }
 
 .toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   color: #003465;
@@ -117,27 +124,33 @@ html, body {
   font-size: 0.8rem;
   font-weight: 500;
   padding: 0;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-/* ========== OUTROS ELEMENTOS ========== */
+/* =========================
+   OUTROS ELEMENTOS
+========================= */
 .login-box .forgot {
-  margin-top: 20px;
-  display: block;
-  text-align: center;
-  font-size: 12px;
   color: #333;
+  display: block;
+  font-size: 12px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .login-box .sign-in {
-  width: 30%;
-  margin: 15px auto 10px;
   background-color: #003465;
-  color: white;
   border: none;
-  padding: 10px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
   font-weight: bold;
+  margin: 15px auto 10px;
+  padding: 10px;
+  width: 30%;
 }
 
 .login-box .register-text {
@@ -147,25 +160,27 @@ html, body {
 
 .login-box .register-text span {
   color: #003465;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: bold;
 }
 
-/* ========== BOTÃO VOLTAR ========== */
+/* =========================
+   BOTÃO VOLTAR
+========================= */
 .back-button {
   background-color: #3D4766;
+  border: none;
   border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   color: white;
+  cursor: pointer;
   font-size: 16px;
   font-weight: bold;
   padding: 6px 10px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 20px;
   left: 20px;
+  transition: background-color 0.2s ease;
 }
 
 .back-button:hover {
@@ -177,41 +192,44 @@ html, body {
 }
 
 .arrow-icon {
-  width: 18px;
   height: 18px;
   object-fit: contain;
+  width: 18px;
 }
 
-/* ========== MENSAGENS ========== */
+/* =========================
+   MENSAGENS
+========================= */
 .activation-success {
-  color: #155724;
-  padding: 12px;
+  background: none;
   border-radius: 6px;
-  margin-bottom: 16px;
+  color: #155724;
   font-weight: bold;
+  margin: 0 auto 16px;
+  padding: 12px;
   width: 60%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .error-message {
-  color: #721c24;
-  padding: 12px;
+  background: none;
   border-radius: 6px;
+  color: #721c24;
   font-size: 0.9rem;
   font-weight: 500;
-  width: 60%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  padding: 12px;
   text-align: center;
+  width: 60%;
 }
 
-/* ========== RESPONSIVO ========== */
+/* =========================
+   RESPONSIVO
+========================= */
 @media (max-width: 768px) {
   .login-box {
     min-width: unset;
-    width: 90%;
     padding: 30px 20px;
+    width: 90%;
   }
 
   .input-wrapper,
@@ -227,8 +245,8 @@ html, body {
   }
 
   .login-page .top-bar {
-    flex-direction: column;
     align-items: flex-start;
+    flex-direction: column;
     padding: 12px 20px;
   }
 
@@ -237,8 +255,8 @@ html, body {
   }
 
   .back-button {
-    top: 10px;
     left: 10px;
     padding: 6px;
+    top: 10px;
   }
 }
