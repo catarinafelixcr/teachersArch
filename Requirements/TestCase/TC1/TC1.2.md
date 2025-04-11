@@ -26,7 +26,7 @@
 
     - O sistema deve permanecer na página de login.
 
-    - O sistema deve exibir a mensagem de erro: "Email ou password incorretos." (ou similar).
+    - O sistema deve exibir uma mensagem de erro equivalente a: "Email ou password incorretos." (ou similar).
 
 **Actual Result:**
 

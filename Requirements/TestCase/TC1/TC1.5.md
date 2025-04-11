@@ -8,18 +8,18 @@
 
     - O sistema deve estar operacional.
 
-    - A página de login deve conter o link "Esqueci-me da password".
+    - A página de login deve conter o link "Forgot Password".
 
 **Steps:**
 
     - Aceder à página de login do sistema.
 
-    - Localizar e clicar no link "Esqueci-me da password".
+    - Localizar e clicar no link "Forgot Password".
 
 **Expected Results:**
 
     - O sistema deve redirecionar o utilizador para a página de recuperação de password (ex: página para inserir o email e solicitar a redefinição).
 
-    - A URL da página deve ser a esperada para a recuperação de password.
+    - O professor fornece o seu @ e receberá um email para resetar a password.
 
 **Actual Results:** 
