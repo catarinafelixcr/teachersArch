@@ -20,3 +20,5 @@
 - O sistema deve permitir que o professor selecione filtros para identificar os alunos que melhoraram ou pioraram.
 
 **Actual Result**: 
+
+    - Aprovado.

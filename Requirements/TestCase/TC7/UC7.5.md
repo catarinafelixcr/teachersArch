@@ -19,3 +19,5 @@ Expected Result:
 - O registo não deve ser concluído.
 
 **Actual Results:**
+
+    - Aprovado.

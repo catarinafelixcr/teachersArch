@@ -17,3 +17,5 @@
 - Devem ser exibidas estatísticas do grupo, como a média, o desvio padrão e os percentis.
 
 **Actual Result:**
+
+    - Aprovado.
