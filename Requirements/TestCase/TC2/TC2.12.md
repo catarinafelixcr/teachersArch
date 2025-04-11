@@ -1,22 +1,34 @@
-**Test Case ID:** TC2.12
+**Test Case ID**: TC2.12
 
-**Test Case Description:** Verificar o comportamento do sistema quando não há dados de previsão atuais disponíveis para comparação com previsões passadas.
+**Test Case Title**: Filtrar previsões por tendência (melhoria, descida, etc.)
 
-**Related Use Cases:** UC2.4
+**Test Case Description**  
+Verificar se o sistema filtra corretamente os alunos com base na tendência da sua evolução (status) ao longo do tempo, como *Improved*, *Declined*, *Slight Drop* ou *Unchanged*.
+
+**Related Use Cases**: UC2.4 – Comparar a previsão em dois momentos distintos
 
 **Pre-conditions**:
-- O professor deve estar autenticado.
-- O sistema tem armazenado previsões anteriores.
-- Não existem dados de previsão atuais disponíveis no sistema.
+- O professor está autenticado no sistema.
+- Existem dados de previsões atuais e anteriores.
+- A funcionalidade de comparação está ativa (existem pelo menos 2 datas disponíveis).
+
 
 **Steps**:
-- Aceder à dashboard do sistema.
-- Clicar na opção "Previsão de Notas".
-- Clicar na opção "Comparar Previsões".
-- Selecionar uma data para a previsão anterior a ser comparada.
+1. Aceder à página inicial do sistema.
+2. Clicar na opção **"Previsão de Notas"**.
+3. Clicar na opção **"Comparar Previsões"**.
+4. No campo **"Select a tendency"**, escolher uma das opções disponíveis:
+   - *Improved*
+   - *Declined*
+   - *Slight Drop*
+   - *Unchanged*
+5. Os valores mudam consoante o selecionado
 
-**Expected Result:**
-- O sistema deve exibir uma mensagem: "Não é possível comparar as previsões porque não existem dados de previsão após a data data. Por favor atualize a base de dados para comparar."
-- O sistema desabilita a opção de "Comparar Previsões" se não houver dados atuais.
 
-**Actual Result**:
+**Expected Result**:
+- O sistema deve atualizar a tabela ao mostrar apenas os alunos cujo campo “Status” corresponde à tendência selecionada.
+- A tabela deve estar correta tanto para a previsão atual quanto para a anterior.
+
+**Status**:
+
+- Aprovado

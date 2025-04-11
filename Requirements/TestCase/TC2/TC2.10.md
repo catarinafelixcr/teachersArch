@@ -10,7 +10,7 @@
 - O sistema deve ter armazenado as previsões atuais e anteriores.
 
 **Steps**:
-- Aceder à dashboard do sistema.
+- Aceder à pagina inical.
 - Clicar na opção "Previsão de Notas".
 - Clicar na opção "Comparar Previsões".
 - Selecionar uma data para a previsão anterior a ser comparada.

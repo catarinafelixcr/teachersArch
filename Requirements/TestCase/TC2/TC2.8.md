@@ -16,3 +16,5 @@
 - O sistema deve exibir uma mensagem: "Nenhum grupo disponível para comparação. Verifique se há alunos corretamente associados a grupos."
 
 **Actual Result**: 
+
+- Aprovado
