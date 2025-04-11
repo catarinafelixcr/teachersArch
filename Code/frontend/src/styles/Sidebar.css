@@ -36,7 +36,7 @@
     flex-direction: column;
     gap: 12px;
     padding: 0 20px;
-    margin-top: -300px; 
+    margin-top: 70px; 
   }
   
   .sidebar-nav button {
@@ -87,3 +87,25 @@
     color: white;
   }
   
+  .sidebar-extra {
+    margin-top: 100px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .sidebar-extra button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .sidebar-extra button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }  

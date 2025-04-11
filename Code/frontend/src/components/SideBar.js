@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
-import { FaHome, FaChartLine, FaUserGraduate, FaUsers, FaDatabase } from 'react-icons/fa';
+import {
+  FaHome, FaChartLine, FaUserGraduate, FaUsers, FaDatabase,
+  FaQuestionCircle, FaInfoCircle
+} from 'react-icons/fa';
 import logo from '../assets/logo-white.png';
 import '../styles/Sidebar.css';
 
@@ -21,6 +24,11 @@ function Sidebar() {
         <button onClick={() => navigate('/performance-categoria')}><FaUsers /> Performance Forecast by Category</button>
         <button onClick={() => navigate('/insertrepository')}><FaDatabase /> Insert Repository</button>
       </nav>
+
+      <div className="sidebar-extra">
+        <button onClick={() => alert('Help page coming soon!')}><FaQuestionCircle /> Help</button>
+        <button onClick={() => alert('About page coming soon!')}><FaInfoCircle /> About</button>
+      </div>
 
       <div className="sidebar-footer">
         <div className="footer-setting">
