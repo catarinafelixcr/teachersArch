@@ -16,7 +16,7 @@ function Sidebar() {
 
       <nav className="sidebar-nav">
         <button onClick={() => navigate('/initialpage')}><FaHome /> Home</button>
-        <button onClick={() => navigate('/previsao-notas')}><FaChartLine /> Prediction of Grades</button>
+        <button onClick={() => navigate('/gradepredictions')}><FaChartLine /> Prediction of Grades</button>
         <button onClick={() => navigate('/alunos-risco')}><FaUserGraduate /> Student at Risk</button>
         <button onClick={() => navigate('/performance-categoria')}><FaUsers /> Performance Forecast by Category</button>
         <button onClick={() => navigate('/insertrepository')}><FaDatabase /> Insert Repository</button>
