@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Plot from 'react-plotly.js';
 import '../styles/ComparePredictions.css';
 
 const fullData = {
@@ -37,7 +38,6 @@ const fullData = {
   ]
 };
 
-
 const getStats = (students) => {
   const valid = students.filter(s => typeof s.now === 'number' && typeof s.before === 'number');
   if (valid.length === 0) return { total: 0, avgNow: 0, avgBefore: 0, variation: '0%' };
@@ -63,45 +63,36 @@ const ComparePredictions = () => {
   const [selectedDate, setSelectedDate] = useState(datesAvailable[1] || '');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedTrend, setSelectedTrend] = useState('');
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   if (!hasPreviousData) {
     return (
       <div className="compare-page">
-        <h1>
-          <strong>Compare</strong> Predictions <span className="highlight-box">Over the Time</span>
-        </h1>
+        <h1><strong>Compare</strong> Predictions <span className="highlight-box">Over the Time</span></h1>
         <p className="description" style={{ color: '#b00', fontStyle: 'italic', marginTop: '20px' }}>
           Não existem previsões registadas anteriormente. É necessário mais do que uma previsão para realizar comparações ao longo do tempo.
         </p>
-        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
-          Back to Grade Predictions
-        </button>
+        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>Back to Grade Predictions</button>
       </div>
     );
   }
 
-  const filteredStudentsCurrent = fullData[datesAvailable[0]].filter(student => {
-    return (
-      (!selectedGroup || student.group === selectedGroup) &&
-      (!selectedTrend || student.status === selectedTrend)
-    );
-  });
+  const filteredStudentsCurrent = fullData[datesAvailable[0]].filter(student =>
+    (!selectedGroup || student.group === selectedGroup) &&
+    (!selectedTrend || student.status === selectedTrend)
+  );
 
-  const filteredStudentsPrevious = fullData[selectedDate]?.filter(student => {
-    return (
-      (!selectedGroup || student.group === selectedGroup) &&
-      (!selectedTrend || student.status === selectedTrend)
-    );
-  }) || [];
+  const filteredStudentsPrevious = fullData[selectedDate]?.filter(student =>
+    (!selectedGroup || student.group === selectedGroup) &&
+    (!selectedTrend || student.status === selectedTrend)
+  ) || [];
 
   const statsCurrent = getStats(filteredStudentsCurrent);
   const statsPrevious = getStats(filteredStudentsPrevious);
 
   return (
     <div className="compare-page">
-      <h1>
-        <strong>Compare</strong> Predictions <span className="highlight-box">Over the Time</span>
-      </h1>
+      <h1><strong>Compare</strong> Predictions <span className="highlight-box">Over the Time</span></h1>
       <p className="description">
         Use this page to analyze the evolution of students' grade predictions. Select a previous date to compare
         with the most recent predictions and identify performance trends over time. You can also filter by group or trend.
@@ -111,7 +102,7 @@ const ComparePredictions = () => {
         <label>
           Date of previous prediction:
           <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}>
-            {datesAvailable.slice(1).map((date) => (
+            {datesAvailable.slice(1).map(date => (
               <option key={date} value={date}>{date}</option>
             ))}
           </select>
@@ -145,7 +136,7 @@ const ComparePredictions = () => {
         </thead>
         <tbody>
           {filteredStudentsCurrent.map((s, i) => (
-            <tr key={i}>
+            <tr key={i} onClick={() => setSelectedStudent(s)} style={{ cursor: 'pointer' }}>
               <td>{s.name}</td>
               <td>{s.group}</td>
               <td>{s.now}</td>
@@ -236,6 +227,36 @@ const ComparePredictions = () => {
           Back to Grade Predictions
         </button>
       </div>
+
+      {selectedStudent && (
+        <div className="modal-overlay" onClick={() => setSelectedStudent(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Prediction History: {selectedStudent.name}</h2>
+            <p><strong>Group:</strong> {selectedStudent.group}</p>
+            <Plot
+              data={[
+                {
+                  x: datesAvailable,
+                  y: datesAvailable.map(date => {
+                    const entry = fullData[date].find(s => s.name === selectedStudent.name);
+                    return entry ? entry.now : null;
+                  }),
+                  type: 'scatter',
+                  mode: 'lines+markers',
+                  marker: { color: '#3c66f4' },
+                }
+              ]}
+              layout={{ title: 'Grade Over Time', height: 300 }}
+              config={{ responsive: true }}
+              useResizeHandler
+              style={{ width: '100%', height: '100%' }}
+            />
+            <button onClick={() => setSelectedStudent(null)} style={{ marginTop: '16px' }}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
