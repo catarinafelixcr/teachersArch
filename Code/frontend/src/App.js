@@ -6,7 +6,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import InitialPage from './pages/InitialPage';
 import InsertRepositoryPage from './pages/InsertRepositoryPage';
 import ComparePredictions from './pages/ComparePredictions'; 
-import GradePredictions from './components/GradePredictions';
+import GradePredictions from './pages/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import CompareGroups from './pages/CompareGroups'; 
 
