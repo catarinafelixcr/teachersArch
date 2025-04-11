@@ -15,7 +15,7 @@
 - Selecionar dois ou mais grupos.
 
 **Expected Result:**
-- O sistema deve exibir estatísticas comparativas dos grupos (média, desvio padrão, variação).
+- O sistema deve exibir estatísticas comparativas dos grupos (média, desvio padrão).
 - O sistema deve apresentar a distribuição gráfica das previsões de notas.
 
 **Actual Result**:

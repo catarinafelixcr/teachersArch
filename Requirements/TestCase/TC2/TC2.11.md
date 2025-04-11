@@ -10,12 +10,15 @@
 - Não existem previsões armazenadas para a data selecionada.
 
 **Steps**:
-- Aceder à dashboard do sistema.
+- Aceder à pagina inicial do sistema.
 - Clicar na opção "Previsão de Notas".
 - Clicar na opção "Comparar Previsões".
-- Selecionar uma data para a qual não existem previsões passadas.
+- Não existem opções de dadas passadas.
 
 **Expected Result:**
-- O sistema deve exibir uma mensagem: "Não existem previsões registadas para a data selecionada."
+- O sistema deve exibir uma mensagem equivalente a: "Não existem previsões registadas anteriormente."
+- O sistema desabilita a opção de "Comparar Previsões" se não houver dados atuais.
 
 **Actual Result**: 
+
+- Aprovado
