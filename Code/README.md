@@ -1,10 +1,10 @@
-# Nome do Projeto
+# Nome do Projeto - TeachersArch — PECD 2025
 
-    - Webstite de apoio ao Professor 
+    - Website de apoio ao Professor 
 
 ## Demonstração
 
-[localhost:3000/]
+[localhost:3000/](http://localhost:3000)
 
     - alterar o que vem à frente da barra com a página que quer visualizar
 
@@ -14,6 +14,7 @@
 - **Frontend:** React.js
 - **Backend:** Python,Django REST Framework
 - **Ferramentas:** django-cors-headers
+- **Plotly.js** (gráficos)
 
 ## Instalação
 
@@ -39,7 +40,24 @@ pip install django-allauth
 
 [pode ser possível ter que instalar mais alguma app que esteja em settings.py em /backend, na secção de installed_apps]
 
+# Base de Dados - PostgreSQL
+
+Certifica-te de que tens o PostgreSQL instalado e a base de dados criada com os seguintes dados:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pecd',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+
 # Aplica migrações
+python manage.py makemigrations # criar as tabelas da BD
 python manage.py migrate
 
 # Inicia o servidor Django

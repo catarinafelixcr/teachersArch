@@ -64,6 +64,7 @@ function LoginPage() {
         const data = await response.json();
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
+        localStorage.setItem('userToken', 'true');
         navigate('/initialpage');
       } else {
         setLoginAttemptsByEmail(prev => {
@@ -137,7 +138,7 @@ function LoginPage() {
         </div>
         <div className="nav-links">
           <a href="#">Help</a>
-          <a href="#">About</a>
+          <a href="/about">About</a>
         </div>
       </header>
 

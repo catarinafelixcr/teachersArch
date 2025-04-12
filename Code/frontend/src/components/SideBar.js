@@ -7,9 +7,35 @@ import {
 } from 'react-icons/fa';
 import logo from '../assets/logo-white.png';
 import '../styles/Sidebar.css';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 function Sidebar() {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    confirmAlert({
+      title: 'Log out',
+      message: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userToken');
+            navigate('/login');
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ]
+    });
+  };
+  
 
   return (
     <div className="sidebar">
@@ -36,8 +62,13 @@ function Sidebar() {
         </div>
         <div className="footer-user">
           <p>Nome</p>
-          <span className="username">nomeProfessor</span>
-          <FiLogOut className="logout-icon" />
+          <span className="username">{localStorage.getItem('professorName') || 'Teacher'}</span>
+          <FiLogOut
+            className="logout-icon"
+            onClick={handleLogout}
+            title="Terminar sessão"
+            style={{ cursor: 'pointer' }}
+          />
         </div>
       </div>
     </div>

@@ -26,6 +26,7 @@ function InitialPage() {
       if (data.name) {
         const first = data.name.split(' ')[0];
         setFirstName(first);
+        localStorage.setItem('professorName', first);
       }
     })
     .catch(err => {

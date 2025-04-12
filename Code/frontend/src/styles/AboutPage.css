@@ -1,0 +1,150 @@
+/* =========================
+   BASE E LAYOUT
+========================= */
+* {
+    font-family: 'Inter', sans-serif;
+  }
+  
+.about-page {
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 200vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* =========================
+     TOPO / NAVBAR
+  ========================= */
+  .about-page .top-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    margin-right: 5%;
+    align-items: center;
+    color: #000;
+  }
+  
+  .about-page .logo-area img {
+    height: 80px;
+    margin-left: 60px;
+    margin-top: 20px;
+  }
+  
+  .about-page .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .about-page .nav-links a {
+    color: #003465;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* =========================
+     CAIXA PRINCIPAL
+  ========================= */
+  .about-box {
+    animation: zoomIn 0.3s ease-out;
+    background: rgba(88, 130, 193, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 5% auto;
+    padding: 40px;
+    width: 75%;
+    text-align: center;
+    position: relative;
+  }
+  
+  /* =========================
+     TÍTULO E TEXTO
+  ========================= */
+  .about-box h2 {
+    font-size: 32px;
+    color: #002b7f;
+    margin-bottom: 40px;
+  }
+  
+  .about-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #222;
+    margin-bottom: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: justify;
+  }
+  
+  /* =========================
+     BOTÃO "SURPRISE ME"
+  ========================= */
+  .about-box .surprise-button {
+    background-color: #003465;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .about-box .surprise-button:hover {
+    background-color: #001f3f;
+  }
+  
+  /* =========================
+     MENSAGEM
+  ========================= */
+  .about-box .fun-fact {
+    padding: 16px;
+    border-radius: 8px;
+    color: #065a08;
+    text-align: center;
+  }
+  
+  /* =========================
+     BOTÃO VOLTAR
+  ========================= */
+  .back-button {
+    background-color: #3D4766;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  
+  .back-button:hover {
+    background-color: #2c3550;
+  }
+  
+  .arrow-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+  
+  /* =========================
+     ANIMAÇÃO
+  ========================= */
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

@@ -10,6 +10,8 @@ import GradePredictions from './pages/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import CompareGroups from './pages/CompareGroups'; 
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage';
+import PrivateRoute from './components/PrivateRoute';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   return (
@@ -20,45 +22,33 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirmPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/initialpage" element={
+          <PrivateRoute>
+            <InitialPage />
+          </PrivateRoute>
+        } />
 
-        <Route
-          path="/initialpage"
-          element={
-            <LayoutWithSideBar>
-              <InitialPage />
-            </LayoutWithSideBar>
-          }
-        />
-        <Route
-          path="/insertrepository"
-          element={
-            <LayoutWithSideBar>
-              <InsertRepositoryPage />
-            </LayoutWithSideBar>
-          }
-        />
-        <Route
-          path="/gradepredictions"
-          element={
-            <LayoutWithSideBar>
-              <GradePredictions />
-            </LayoutWithSideBar>
-          }
-        />
-        <Route
-          path="/compare-predictions"
-          element={
-            <LayoutWithSideBar>
-              <ComparePredictions />
-            </LayoutWithSideBar>
-          }
-        />
+        <Route path="/insertrepository" element={
+          <LayoutWithSideBar>
+            <InsertRepositoryPage />
+          </LayoutWithSideBar>
+        } />
+        <Route path="/gradepredictions" element={
+          <LayoutWithSideBar>
+            <GradePredictions />
+          </LayoutWithSideBar>
+        } />
+        <Route path="/compare-predictions" element={
+          <LayoutWithSideBar>
+            <ComparePredictions />
+          </LayoutWithSideBar>
+        } />
         <Route path="/comparepredictions" element={
           <LayoutWithSideBar>
             <ComparePredictions />
           </LayoutWithSideBar>
         } />
-
         <Route path="/comparegroups" element={
           <LayoutWithSideBar>
             <CompareGroups />
