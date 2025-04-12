@@ -12,7 +12,7 @@
 ## Tecnologias utilizadas
 
 - **Frontend:** React.js
-- **Backend:** Python,Django REST Framework
+- **Backend:** Python, Django REST Framework, pgADMIN
 - **Ferramentas:** django-cors-headers
 - **Plotly.js** (gráficos)
 
@@ -40,9 +40,9 @@ pip install django-allauth
 
 [pode ser possível ter que instalar mais alguma app que esteja em settings.py em /backend, na secção de installed_apps]
 
-# Base de Dados - PostgreSQL
+# Base de Dados - pgADMIN
 
-Certifica-te de que tens o PostgreSQL instalado e a base de dados criada com os seguintes dados:
+Certifica-te de que tens o PostgreSQL e o pgADMIN instalado e a base de dados criada com os seguintes dados:
 
 DATABASES = {
     'default': {
