@@ -65,6 +65,7 @@ function ForgotPasswordPage() {
         <div className="nav-links">
           <a href="#">Help</a>
           <a href="#">About</a>
+          <a href="/">Homepage</a>
         </div>
       </header>
 

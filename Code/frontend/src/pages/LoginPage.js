@@ -41,7 +41,6 @@ function LoginPage() {
     }
   }, [location.search]);
 
-  // ✅ Lógica de login
   const handleLogin = async () => {
     const now = Date.now();
     const unblockTime = blockedEmails[email];

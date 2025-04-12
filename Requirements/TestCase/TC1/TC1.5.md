@@ -1,6 +1,6 @@
 **Test case ID:** TC1.5
 
-**Test case description:** Verificar se o link "Esqueci-me da password" está funcional e redireciona para a página de recuperação de password.
+**Test case description:**Verificar se o link "Forgot Password" está funcional, redireciona para a página de recuperação, permite inserir email, e inicia corretamente o processo de redefinição de password com envio de email.
 
 **Related Use Cases:** UC1.1 - Login com email e password, Extensão 3a3.
 
@@ -8,18 +8,33 @@
 
     - O sistema deve estar operacional.
 
+    - A conta do utilizador (professor) deve existir na base de dados.
+
     - A página de login deve conter o link "Forgot Password".
+
+    - O servidor SMTP deve estar configurado corretamente.
+
+
 
 **Steps:**
 
     - Aceder à página de login do sistema.
 
-    - Localizar e clicar no link "Forgot Password".
+    - Clicar no link "Forgot Password".
+
+    - Introduzir um email válido de um professor registado.
+
+    - Submeter o pedido de redefinição.
+
 
 **Expected Results:**
 
-    - O sistema deve redirecionar o utilizador para a página de recuperação de password (ex: página para inserir o email e solicitar a redefinição).
+    - O professor é redirecionado para a página onde pode introduzir o email.
+    - Ao submeter o email, o sistema exibe uma mensagem do tipo: "Se existir uma conta com este email, enviámos instruções para redefinir a password."
+    - O email é enviado com um link de redefinição que contém o ID e o token do utilizador.
+    -  link enviado é funcional e leva à página correta de nova password 
 
-    - O professor fornece o seu @ e receberá um email para resetar a password.
 
 **Actual Results:** 
+
+- Aprovado

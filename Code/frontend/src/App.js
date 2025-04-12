@@ -9,6 +9,7 @@ import ComparePredictions from './pages/ComparePredictions';
 import GradePredictions from './pages/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import CompareGroups from './pages/CompareGroups'; 
+import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirmPage />} />
 
         <Route
           path="/initialpage"

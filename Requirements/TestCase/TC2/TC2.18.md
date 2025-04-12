@@ -1,6 +1,6 @@
 **Test case ID**: TC2.18
 
-**Test case description**: Verificar se o sistema exibe uma mensagem adequada quando não existem dados adicionais sobre o aluno.
+**Test case Description**: Verificar se o sistema exibe uma mensagem adequada quando não existem dados adicionais sobre o aluno.
 
 **Related Use Cases**: UC2.6
 

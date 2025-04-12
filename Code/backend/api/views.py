@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import redirect
+from django.contrib.auth.forms import PasswordResetForm
 
 
 class UtilizadorViewSet(viewsets.ModelViewSet):
@@ -159,48 +160,46 @@ def activate_account(request, token):
 # Função de recuperação de senha
 @api_view(['POST'])
 def password_reset_request(request):
+    from django.utils.http import urlsafe_base64_encode
+    from django.utils.encoding import force_bytes
+    from django.contrib.auth.tokens import default_token_generator
+
     email = request.data.get("email")
 
     if not email:
         return Response({"error": "Email é obrigatório."}, status=400)
 
-    try:
-        user = User.objects.filter(email=email).first()
-        if not user:
-            return Response({"error": "Nenhuma conta com esse email."}, status=404)
-    except User.MultipleObjectsReturned:
-        return Response({"error": "Mais de um usuário encontrado com esse email."}, status=400)
+    user = Utilizador.objects.filter(email=email).first()
+    if not user:
+        return Response({"success": "Se existir uma conta com esse email, enviámos instruções."})
 
-    # Gera uid e token seguros
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
 
-    # Gera link para o frontend
     reset_link = f"http://localhost:3000/reset-password/{uid}/{token}/"
-    print("🔗 Link de reset gerado:", reset_link)  # Apenas para testes locais
-
-    # Nome para exibir no email (se houver)
-    user_display_name = user.get_full_name() or user.username or "User"
-
-    # Mensagem personalizada
     subject = 'Password Recovery - TeacherSArch'
     message = f"""
-Hello {user_display_name},
+    Hello {user.name},
 
-We received a request to reset your password.
+    We received a request to reset your password.
 
-Click the link below to set a new password:
-{reset_link}
+    Click the link below to set a new one:
+    {reset_link}
 
-If you didn’t request this, please ignore this email.
+    If this wasn't you, you can ignore this email.
 
-—
-TeacherSArch Team
-"""
+    — TeacherSArch Team
+    """
 
-    send_mail(subject, message, 'projetopecd@gmail.com', [user.email])
+    send_mail(
+        subject,
+        message,
+        'projetopecd@gmail.com',
+        [user.email],
+        fail_silently=False
+    )
 
-    return Response({"success": "Recovery instructions sent to your email."})
+    return Response({"success": "Se existir uma conta com esse email, enviámos instruções."})
 
 
 # Função para confirmar a redefinição da senha

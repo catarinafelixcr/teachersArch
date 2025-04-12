@@ -1,5 +1,6 @@
 from django.db import models
 from uuid import uuid4
+from django.contrib.auth.hashers import make_password
 
 class Utilizador(models.Model):
     id = models.BigIntegerField(primary_key=True)
@@ -8,6 +9,20 @@ class Utilizador(models.Model):
     email = models.CharField(max_length=512, unique=True)
     is_active = models.BooleanField(default=False)  # ADICIONEI AQUI --> se o prof confirmou o email --> permite bloquear o acesso até o utilizador confirmar o registo
     activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True)  # E AQUI!! --> usado para gerar o link de verificação. Depois de ativar, é removido
+    last_login = models.DateTimeField(null=True, blank=True) # ADICIONEI AQUI --> para guardar a data do último login do utilizador
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    def get_email_field_name(self):
+        return 'email'
+    
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        from django.contrib.auth.hashers import check_password
+        return check_password(raw_password, self.password) 
 
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
