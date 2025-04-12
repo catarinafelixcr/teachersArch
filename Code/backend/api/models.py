@@ -3,7 +3,7 @@ from uuid import uuid4
 from django.contrib.auth.hashers import make_password
 
 class Utilizador(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=512, null=True, blank=True)
     password = models.CharField(max_length=512)
     email = models.CharField(max_length=512, unique=True)

@@ -23,6 +23,7 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirmPage />} />
         <Route path="/about" element={<AboutPage />} />
+
         <Route path="/initialpage" element={
           <PrivateRoute>
             <InitialPage />
@@ -30,30 +31,37 @@ function App() {
         } />
 
         <Route path="/insertrepository" element={
-          <LayoutWithSideBar>
-            <InsertRepositoryPage />
-          </LayoutWithSideBar>
+          <PrivateRoute>
+            <LayoutWithSideBar>
+              <InsertRepositoryPage />
+            </LayoutWithSideBar>
+          </PrivateRoute>
         } />
+
         <Route path="/gradepredictions" element={
-          <LayoutWithSideBar>
-            <GradePredictions />
-          </LayoutWithSideBar>
+          <PrivateRoute>
+            <LayoutWithSideBar>
+              <GradePredictions />
+            </LayoutWithSideBar>
+          </PrivateRoute>
         } />
-        <Route path="/compare-predictions" element={
-          <LayoutWithSideBar>
-            <ComparePredictions />
-          </LayoutWithSideBar>
-        } />
+
         <Route path="/comparepredictions" element={
-          <LayoutWithSideBar>
-            <ComparePredictions />
-          </LayoutWithSideBar>
+          <PrivateRoute>
+            <LayoutWithSideBar>
+              <ComparePredictions />
+            </LayoutWithSideBar>
+          </PrivateRoute>
         } />
+        
         <Route path="/comparegroups" element={
-          <LayoutWithSideBar>
-            <CompareGroups />
-          </LayoutWithSideBar>
+          <PrivateRoute>
+            <LayoutWithSideBar>
+              <CompareGroups />
+            </LayoutWithSideBar>
+          </PrivateRoute>
         } />
+
       </Routes>
     </Router>
   );

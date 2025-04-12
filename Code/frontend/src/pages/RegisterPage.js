@@ -10,7 +10,6 @@ function RegisterPage() {
 
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
-  const [teacherid, setTeacherid] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -24,7 +23,6 @@ function RegisterPage() {
 
   const fullnameRef = useRef(null);
   const emailRef = useRef(null);
-  const teacherIdRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
 
@@ -47,12 +45,6 @@ function RegisterPage() {
       newErrors.email = 'Email is required.';
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim())) {
       newErrors.email = 'Enter a valid email address.';
-    }
-
-    if (!teacherid.trim()) {
-      newErrors.teacherid = 'Teacher ID is required.';
-    } else if (!/^\d+$/.test(teacherid.trim())) {
-      newErrors.teacherid = 'Teacher ID must be a number.';
     }
 
     if (!password) {
@@ -80,7 +72,7 @@ function RegisterPage() {
     const response = await fetch('http://localhost:8000/api/register/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fullname, email, teacherid, password })
+      body: JSON.stringify({ fullname, email, password })
     });
     setLoading(false);
 
@@ -91,16 +83,11 @@ function RegisterPage() {
       const errorData = await response.json();
       const newErrors = {};
 
-      if (errorData.email || errorData.teacherid) {
-        setGlobalError('You already have an account with this email address or teacher ID.');
+      if (errorData.email) {
+        setGlobalError('You already have an account with this email address.');
+        newErrors.email = 'This email is already registered.';
       }
 
-      if (errorData.email) {
-        newErrors.email = 'This email is already registered.'; 
-      }
-      if (errorData.teacherid) {
-        newErrors.teacherid = 'This teacher ID is already in use.'; 
-      }
       setErrors(newErrors);
     }
   };
@@ -132,7 +119,7 @@ function RegisterPage() {
           <div className="global-error-box">
             <p>{globalError}</p>
             <button onClick={() => navigate('/forgotpassword')} className="recover-btn">
-            Password recovery
+              Password recovery
             </button>
           </div>
         )}
@@ -162,25 +149,10 @@ function RegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={errors.email ? 'input-error' : (!errors.email && email) ? 'input-ok' : ''}
-            onKeyDown={(e) => e.key === 'Enter' && teacherIdRef.current.focus()}
-          />
-        </div>
-        {errors.email && <p className="error-text">{errors.email}</p>}
-
-        <label htmlFor="teacherid">Teacher’s ID</label>
-        <div className="input-wrapper">
-          <input
-            ref={teacherIdRef}
-            type="number"
-            id="teacherid"
-            placeholder="Teacher's institution ID"
-            value={teacherid}
-            onChange={(e) => setTeacherid(e.target.value)}
-            className={errors.teacherid ? 'input-error' : (!errors.teacherid && teacherid) ? 'input-ok' : ''}
             onKeyDown={(e) => e.key === 'Enter' && passwordRef.current.focus()}
           />
         </div>
-        {errors.teacherid && <p className="error-text">{errors.teacherid}</p>}
+        {errors.email && <p className="error-text">{errors.email}</p>}
 
         <label htmlFor="password">Password</label>
         <div className="input-wrapper">

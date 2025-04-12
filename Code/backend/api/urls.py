@@ -25,5 +25,4 @@ urlpatterns = [
     path('api/password-reset/confirm/', reset_password_confirm, name='password_reset_confirm'),
     path('api/password-reset/', password_reset_request, name='password_reset'),
     path('api/profile/', get_profile),
-
 ]

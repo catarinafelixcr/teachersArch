@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/InsertRepositoryPage.css';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/SideBar';
 import background from '../assets/background-dei.jpg';
 // import { Search } from 'lucide-react'; // Commented out for now
 

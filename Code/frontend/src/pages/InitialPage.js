@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'; 
 import '../styles/InitialPage.css';
 import background from '../assets/background-dei.jpg';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/SideBar';
 import { useNavigate } from 'react-router-dom';
 
 function InitialPage() {
@@ -10,7 +10,12 @@ function InitialPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('access');
-    if (!token) return;
+    if (!token) {
+      console.log("No token found.");
+      return;
+    }
+
+    console.log("Fetching profile...");
 
     fetch('http://localhost:8000/api/profile/', {
       method: 'GET',
@@ -19,19 +24,29 @@ function InitialPage() {
       }
     })
     .then(res => {
-      if (!res.ok) throw new Error('Unauthorized or fetch error');
+      console.log("Profile response status:", res.status);
       return res.json();
     })
     .then(data => {
+      console.log("Profile data received:", data);
       if (data.name) {
         const first = data.name.split(' ')[0];
         setFirstName(first);
         localStorage.setItem('professorName', first);
+      } else {
+        console.warn("No name found in profile response.");
       }
     })
     .catch(err => {
       console.error('Failed to fetch profile:', err);
     });
+  }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('professorName');
+    if (stored) {
+      setFirstName(stored);
+    }
   }, []);
 
   return (
@@ -40,8 +55,6 @@ function InitialPage() {
 
       <div className="dashboard-content" style={{ backgroundImage: `url(${background})` }}>
         <div className="blue-overlay"></div>
-
-        {/* HEADER removido — logo já está na sidebar */}
 
         <div className="center-wrapper">
           <div className="welcome-text">

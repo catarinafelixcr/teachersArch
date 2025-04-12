@@ -23,7 +23,7 @@ function HomePage() {
       </div>
         <div className="links">
         <a href="#">Help</a>
-        <a href="#">About</a>
+        <a href="/about">About</a>
         <Link to="/login" className="nav-button login-link">Login</Link>
         <Link to="/signup" className="nav-button signup-link">Sign Up</Link>
         </div>

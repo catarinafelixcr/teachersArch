@@ -6,15 +6,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from django.core.mail import send_mail
 from uuid import uuid4
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import redirect
-from django.contrib.auth.forms import PasswordResetForm
+from rest_framework import status
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from .serializers import UtilizadorProfileSerializer
 
 
 class UtilizadorViewSet(viewsets.ModelViewSet):
@@ -65,9 +65,6 @@ class CustomLoginView(TokenObtainPairView):
 # ----------------------------
 # Endpoint de Registo (POST)
 # ----------------------------
-from django.db import IntegrityError
-from rest_framework import status
-
 @api_view(['POST'])
 def register_teacher(request):
     data = request.data
@@ -75,21 +72,14 @@ def register_teacher(request):
     name = data.get('fullname')
     email = data.get('email')
     password = data.get('password')
-    teacher_id_raw = data.get('teacherid')
 
-    try:
-        utilizador_id = int(teacher_id_raw)
-    except (TypeError, ValueError):
-        return Response({'teacherid': 'O ID do professor deve ser um número.'}, status=400)
-
-    if not all([name, email, password, utilizador_id]):
+    if not all([name, email, password]):
         return Response({'error': 'Todos os campos são obrigatórios.'}, status=400)
 
     activation_token = str(uuid4())
 
     try:
         utilizador = Utilizador.objects.create(
-            id=utilizador_id,
             name=name,
             email=email,
             password=make_password(password),
@@ -126,20 +116,16 @@ def register_teacher(request):
         errors = {}
         if 'email' in str(e):
             errors['email'] = 'Este email já está registado.'
-        if 'utilizador_pkey' in str(e) or 'id' in str(e):
-            errors['teacherid'] = 'Este ID de professor já está em uso.'
-
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_profile(request):
     user = request.user
-    return Response({
-        'id': user.id,
-        'name': user.name,
-        'email': user.email
-    })
+    serializer = UtilizadorProfileSerializer(user)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def activate_account(request, token):
@@ -149,21 +135,12 @@ def activate_account(request, token):
         user.activation_token = None  # token usado, remove
         user.save()
         return redirect('http://localhost:3000/login?activated=true')
-
     except Utilizador.DoesNotExist:
         return Response({'error': 'Token inválido ou já usado.'}, status=400)
 
 
-# --------------------------------------------
-# Endpoint de Recuperação da Password (POST)
-# --------------------------------------------
-# Função de recuperação de senha
 @api_view(['POST'])
 def password_reset_request(request):
-    from django.utils.http import urlsafe_base64_encode
-    from django.utils.encoding import force_bytes
-    from django.contrib.auth.tokens import default_token_generator
-
     email = request.data.get("email")
 
     if not email:
@@ -202,12 +179,8 @@ def password_reset_request(request):
     return Response({"success": "Se existir uma conta com esse email, enviámos instruções."})
 
 
-# Função para confirmar a redefinição da senha
 @api_view(['POST'])
 def reset_password_confirm(request):
-    from django.utils.http import urlsafe_base64_decode
-    from django.contrib.auth.tokens import default_token_generator
-
     uidb64 = request.data.get("uid")
     token = request.data.get("token")
     new_password = request.data.get("new_password")

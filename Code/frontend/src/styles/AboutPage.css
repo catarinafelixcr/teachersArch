@@ -55,7 +55,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin: 5% auto;
     padding: 40px;
-    width: 75%;
+    width: 65%;
     text-align: center;
     position: relative;
   }
@@ -147,4 +147,5 @@
       transform: scale(1);
     }
   }
+  
   
