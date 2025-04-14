@@ -25,29 +25,11 @@
 }
 
 /* =========================
-   OVERLAY TRANSLÚCIDO AZUL
-========================= */
-.blue-overlay {
-  background: rgba(88, 130, 193, 0.6);
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 0;
-}
-
-.insert-repo-page > *:not(.blue-overlay) {
-  position: relative;
-  z-index: 1;
-}
-
-/* =========================
    CABEÇALHO / TÍTULO / DESCRIÇÃO
 ========================= */
 .insert-repo-header {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 10%;
 }
 
 .insert-repo-page h1 {
@@ -81,7 +63,7 @@
   flex-wrap: wrap;
   gap: 90px;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .repo-block {
@@ -131,7 +113,8 @@
 
 .grouping-table h1 {
   font-size: 28px;
-  margin-bottom: 30px;
+  margin-top: 15%;
+  color: black;
 }
 
 /* =========================
@@ -142,7 +125,6 @@
   flex-wrap: wrap;
   gap: 16px;
   justify-content: center;
-  margin-bottom: 30px;
 }
 
 .group-controls input {
@@ -224,4 +206,190 @@
   padding: 12px;
   border-radius: 6px;
   text-align: center;
+}
+
+/* =========================
+   NOVO: DUAS COLUNAS PARA AGRUPAMENTO
+========================= */
+.two-column-groups {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 8%;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.left-column h2,
+.right-column h2 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+.student-list,
+.selected-students ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.student-list li,
+.selected-students li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.student-list li span,
+.selected-students li span {
+  font-weight: 500;
+  color: #1d1d1d;
+}
+
+.student-list button,
+.selected-students button {
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.student-list button:hover,
+.selected-students button:hover {
+  background-color: #002b7f;
+}
+
+.group-name-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.save-group-button {
+  background-color: #1e3a8a;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 16px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.save-group-button:hover {
+  background-color: #002b7f;
+}
+
+/* =========================
+   GRUPOS CRIADOS VISUALIZAÇÃO
+========================= */
+.group-list {
+  margin-top: 50px;
+  text-align: center;
+  color: #1d1d1d;
+}
+
+.group-list h3 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.group-card {
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  margin: 15px;
+  padding: 20px 30px;
+  text-align: left;
+  width: 280px;
+}
+
+.group-card h4 {
+  margin-bottom: 10px;
+  color: #1e3a8a;
+}
+
+.group-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.group-card li {
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+
+
+.clickable-student {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 6px;
+}
+
+.student-item:hover {
+  background-color: #e2e8f0;
+}
+
+.student-item.selected {
+  background-color: #dbeafe;
+  font-weight: bold;
+}
+
+.student-toggle-button {
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Camada para efeito embaciado */
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 240px; /* respeita a sidebar */
+  width: calc(100% - 240px);
+  height: 100vh;
+  backdrop-filter: blur(3px);
+  z-index: 0;
+}
+
+/* Garante que o conteúdo fica à frente */
+.insert-repo-page {
+  position: relative;
+  z-index: 1;
 }
