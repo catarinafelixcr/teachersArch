@@ -1,3 +1,10 @@
+/* =========================
+   RESET / BASE
+========================= */
+* {
+  font-family: 'Inter', sans-serif;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -5,117 +12,123 @@ html, body {
   overflow: hidden; /* impede scroll vertical */
 }
 
-
+/* =========================
+   NAVBAR
+========================= */
 .home-page .navbar {
-    background-color: transparent;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 60px;
-  }
-  
-  .home-page .navbar .links a {
-    color: #003465;
-    margin-left: 20px;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  /* Botões Sign Up */
-  .home-page .navbar .links .nav-button.signup-link {
-    color: white;
-    background-color: #003465;
-    /*border: 1px solid #003465;*/
-    padding: 8px 16px;
-    border-radius: 3px;
-    font-weight: semibold;
-    text-decoration: none;
-    margin-left: 10px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  
-  .home-page .navbar .links .nav-button:hover {
-    background-color: white;
-    color: #003465;
-  }
-  
-  /* Centraliza a .card */
-  .home-page .hero {
-    height: calc(100vh - 80px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Card visual */
+  align-items: center;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 60px;
+  padding: 10px;
+}
+
+.home-page .navbar .links a {
+  color: #003465;
+  font-weight: bold;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+/* Botão "Sign Up" */
+.home-page .navbar .links .nav-button.signup-link {
+  background-color: #003465;
+  border-radius: 3px;
+  color: white;
+  font-weight: semibold;
+  margin-left: 10px;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.home-page .navbar .links .nav-button:hover {
+  background-color: white;
+  color: #003465;
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+.home-page .hero {
+  align-items: center;
+  display: flex;
+  height: calc(100vh - 80px);
+  justify-content: center;
+}
+
+/* =========================
+   CARD VISUAL
+========================= */
 .home-page .card {
-    width: 60%;
-    margin: -190px auto 10px auto;
-    display: block;
-    background: rgb(88, 130, 193, 0.4);
-    backdrop-filter: blur(10px);
-    padding: 90px;
-    border-radius: 20px;
-    text-align: center;
-    color: black;
-    margin: -5% auto 10px auto;
-    animation: zoomIn 0.5s ease-out;
+  animation: zoomIn 0.5s ease-out;
+  backdrop-filter: blur(10px);
+  background: rgba(88, 130, 193, 0.4);
+  border-radius: 20px;
+  color: black;
+  display: block;
+  margin: -5% auto 10px auto;
+  padding: 90px;
+  text-align: center;
+  width: 60%;
 }
-  
+
 .home-page .card .highlight {
-    color: white;
-    font-weight: 500;
+  color: white;
+  font-weight: 500;
 }
-  
+
+/* =========================
+   TEXTOS INTERNOS
+========================= */
 .home-page .hello {
-    font-weight: 700;
-    letter-spacing: 1px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
-  
+
 .home-page .teacher {
-    font-weight: 500;
-    letter-spacing: 1px;
-    background-color: #003465;
-    color: white; 
-    padding: 3px 8px;                 /* espaço interno */
+  background-color: #003465;
+  color: white;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 3px 8px;
 }
-  
+
 .home-page .subtext {
-    font-weight: 600;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
-  
 
+/* =========================
+   LOGO
+========================= */
 .home-page .logo-area img {
-    height: 80px;
-    margin-left: 60px;
-    margin-top: 2   0px;
-}
-  
-* {
-    font-family: 'Inter', sans-serif;
+  height: 80px;
+  margin-left: 60px;
+  margin-top: 20px;
 }
 
-
-
-/* para por ex. telemoveis: */
-
+/* =========================
+   RESPONSIVO
+========================= */
 @media (max-width: 768px) {
   .home-page .card {
-    width: 90%;
     padding: 40px 20px;
+    width: 90%;
   }
 
   .home-page .navbar {
-    flex-direction: column;
     align-items: flex-start;
+    flex-direction: column;
     margin-right: 0;
   }
 }
 
-
+/* =========================
+   ANIMAÇÕES
+========================= */
 @keyframes zoomIn {
   from {
     opacity: 0;

@@ -8,24 +8,47 @@ const groupOptions = [
   { value: 'A', label: 'Group A' },
   { value: 'B', label: 'Group B' },
   { value: 'C', label: 'Group C' },
-  { value: 'D', label: 'Group D' },
-  { value: 'E', label: 'Group E' },
 ];
 
-const chartData = [
-  { group: 'A', grade: 82, confidence: 90 },
-  { group: 'B', grade: 69, confidence: 80 },
-  { group: 'C', grade: 58, confidence: 72 },
+const allGroupData = [
+  { group: 'A', grades: [94, 87], confidence: [96, 92] },
+  { group: 'B', grades: [65, 42], confidence: [89, 75] },
+  { group: 'C', grades: [28, 73], confidence: [68, 82] },
 ];
 
 const CompareGroups = () => {
   const [selectedGroups, setSelectedGroups] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [warning, setWarning] = useState('');
   const navigate = useNavigate();
 
   const handleCompare = () => {
-    console.log('Comparing groups:', selectedGroups.map(g => g.value));
-    // Aqui vais carregar dados reais, gráficos, etc.
+    const selected = selectedGroups.map(g => g.value);
+
+    if (selected.length < 2) {
+      setFilteredData([]);
+      setWarning("Please select at least two groups to compare grade predictions.");
+      return;
+    }
+
+    const result = allGroupData.filter(d => selected.includes(d.group));
+    setFilteredData(result);
+    setWarning('');
   };
+
+  if (groupOptions.length === 0 || allGroupData.length === 0) {
+    return (
+      <div className="compare-groups-page">
+        <h1><strong>Compare</strong> Predictions by <span className="highlight">Group</span></h1>
+        <p className="description" style={{ color: '#b00', fontStyle: 'italic', marginTop: '20px' }}>
+          Nenhum grupo disponível para comparação. Verifique se há alunos corretamente associados a grupos.
+        </p>
+        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
+          Back to Grade Predictions
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="compare-groups-page">
@@ -50,6 +73,12 @@ const CompareGroups = () => {
         <button onClick={handleCompare}>Compare</button>
       </div>
 
+      {warning && (
+        <div style={{ color: 'red', marginTop: '10px', fontStyle: 'italic' }}>
+          {warning}
+        </div>
+      )}
+
       <div className="table-container">
         <h3 className="info">-&gt; Comparative Table</h3>
         <table>
@@ -64,51 +93,79 @@ const CompareGroups = () => {
             </tr>
           </thead>
           <tbody>
-            <tr><td>A</td><td>82</td><td>9.4</td><td>65</td><td>94</td><td>14</td></tr>
-            <tr><td>B</td><td>69</td><td>12.3</td><td>42</td><td>89</td><td>12</td></tr>
-            <tr><td>C</td><td>58</td><td>15.8</td><td>28</td><td>73</td><td>11</td></tr>
+            {filteredData.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '20px', fontStyle: 'italic', color: '#888' }}>
+                  Please select at least two groups to compare.
+                </td>
+              </tr>
+            ) : (
+              filteredData.map((groupData, idx) => {
+                const grades = groupData.grades;
+                const mean = Math.round(grades.reduce((a, b) => a + b, 0) / grades.length);
+                const stdDev = Math.round(Math.sqrt(grades.map(g => Math.pow(g - mean, 2)).reduce((a, b) => a + b, 0) / grades.length));
+                const min = Math.min(...grades);
+                const max = Math.max(...grades);
+                return (
+                  <tr key={idx}>
+                    <td>{groupData.group}</td>
+                    <td>{mean}</td>
+                    <td>{stdDev}</td>
+                    <td>{min}</td>
+                    <td>{max}</td>
+                    <td>{grades.length}</td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
-        <p className="note">* Note: Group C includes predictions with confidence below 70%.</p>
       </div>
 
-      <div className="charts-container">
-        <div className="chart-row">
-          <div className="chart">
-            <h4>Predicted Grades by Group</h4>
-            <Plot
-              data={[{
-                x: chartData.map(d => d.group),
-                y: chartData.map(d => d.grade),
-                type: 'bar',
-                marker: { color: '#3c66f4' },
-              }]}
-              layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
-              useResizeHandler
-              style={{ width: '100%', height: '100%' }}
-              config={{ responsive: true }}
-            />
-          </div>
+      {filteredData.length > 0 && (
+        <div className="charts-container">
+          <div className="chart-row">
+            <div className="chart">
+              <h4>Predicted Grades by Group</h4>
+              <Plot
+                data={[{
+                  x: filteredData.map(d => d.group),
+                  y: filteredData.map(d => {
+                    const sum = d.grades.reduce((a, b) => a + b, 0);
+                    return Math.round(sum / d.grades.length);
+                  }),
+                  type: 'bar',
+                  marker: { color: '#3c66f4' },
+                }]}
+                layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
+                useResizeHandler
+                style={{ width: '100%', height: '100%' }}
+                config={{ responsive: true }}
+              />
+            </div>
 
-          <div className="chart">
-            <h4>Confidence by Group</h4>
-            <Plot
-              data={[{
-                x: chartData.map(d => d.group),
-                y: chartData.map(d => d.confidence),
-                type: 'scatter',
-                mode: 'lines+markers',
-                marker: { color: '#8884d8' },
-              }]}
-              layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
-              useResizeHandler
-              style={{ width: '100%', height: '100%' }}
-              config={{ responsive: true }}
-            />
+            <div className="chart">
+              <h4>Confidence by Group</h4>
+              <Plot
+                data={[{
+                  x: filteredData.map(d => d.group),
+                  y: filteredData.map(d => {
+                    const sum = d.confidence.reduce((a, b) => a + b, 0);
+                    return Math.round(sum / d.confidence.length);
+                  }),
+                  type: 'scatter',
+                  mode: 'lines+markers',
+                  marker: { color: '#8884d8' },
+                }]}
+                layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
+                useResizeHandler
+                style={{ width: '100%', height: '100%' }}
+                config={{ responsive: true }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-
+      )}
 
       <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
         Back to Grade Predictions

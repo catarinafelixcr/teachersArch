@@ -63,6 +63,10 @@ class AlunoGitlabactPrevisaoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UtilizadorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilizador
+        fields = ['id', 'name', 'email']
 
 class CustomTokenObtainPairSerializer(serializers.Serializer):
     email = serializers.EmailField()

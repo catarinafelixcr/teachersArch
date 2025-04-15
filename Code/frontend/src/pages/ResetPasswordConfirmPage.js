@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // <--- usa os parâmetros da rota
+import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/ResetPasswordConfirmPage.css';
 import background from '../assets/background-dei.jpg';
 import logo from '../assets/logo.png';
-import arrowIcon from '../assets/arrow-white.png';
 
 function ResetPasswordConfirmPage() {
   const navigate = useNavigate();
-  const { uid, token } = useParams(); // <--- obtém uid e token da URL
+  const { uid, token } = useParams();
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -60,9 +59,14 @@ function ResetPasswordConfirmPage() {
       });
 
       if (response.ok) {
-        setMessage('Password has been successfully reset.');
+        setMessage('Password has been successfully reset. Redirecting to login...');
         setNewPassword('');
         setConfirmPassword('');
+
+        // Espera 2 segundos e redireciona para login
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
         const data = await response.json();
         setError(data?.detail || 'An error occurred. Please try again.');
@@ -95,14 +99,11 @@ function ResetPasswordConfirmPage() {
         <div className="nav-links">
           <a href="#">Help</a>
           <a href="#">About</a>
+          <a href="/">Homepage</a>
         </div>
       </header>
 
       <div className="forgot-box">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <img src={arrowIcon} alt="Back" className="arrow-icon" />
-        </button>
-
         <h2>Set New Password</h2>
         <p className="instruction">Please enter and confirm your new password</p>
 

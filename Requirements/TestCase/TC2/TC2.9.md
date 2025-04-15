@@ -18,3 +18,5 @@
 - O sistema deve exibir uma mensagem de erro ou aviso: "Selecione pelo menos dois grupos para comparar as previsões de notas."
 
 **Actual Result**: 
+
+    - Aprovado.

@@ -11,7 +11,7 @@ UC2.3. Comparar a previsão de notas entre grupos
 **Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já treinadas pelo modelo de Machine Learning. Os alunos devem estar corretamente associados a um grupo.
 
 **Main Success Scenario**:  
-1. O professor acede à dashboard;
+1. O professor acede à pagina inicial;
 2. Seleciona a opção "Previsão de Notas";
 3. O sistema exibe o histórico das previsões para todos os alunos;
 4. O professor seleciona a opção "Comparar notas de grupos";

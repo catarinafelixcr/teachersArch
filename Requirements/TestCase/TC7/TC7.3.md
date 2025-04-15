@@ -19,5 +19,5 @@
 - O registo não deve ser concluído.
 
 **Actual Results:**
-Válido.
-Não deixa avançar.
+
+    - Aprovado.

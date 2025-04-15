@@ -33,3 +33,5 @@
     - Não deve ser exibida nenhuma mensagem de erro.
 
 **Actual Result:**
+
+    - Aprovado.

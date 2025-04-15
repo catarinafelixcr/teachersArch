@@ -1,41 +1,60 @@
+/* =========================
+   BASE
+========================= */
 .compare-page {
   background-color: #f3f5ff;
-  padding: 40px 60px;
-  padding-left: 280px;
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
   min-height: 100vh;
-  box-sizing: border-box;
   overflow-y: auto;
+  padding: 40px 60px;
+  padding-left: 280px;
 }
 
+/* =========================
+   TÍTULO E DESCRIÇÃO
+========================= */
 .compare-page h1 {
+  align-items: center;
+  display: flex;
   font-size: 32px;
   font-weight: bold;
+  gap: 10px;
+  justify-content: center;
+  text-align: center;
 }
 
+.compare-page .description {
+  color: #444;
+  margin: 20px 0;
+  max-width: 700px;
+  text-align: center;
+}
+
+/* =========================
+   DESTAQUE
+========================= */
 .highlight-box {
-  background-color: #002b7f; 
-  color: white;
-  padding: 6px 12px;
+  background-color: #002b7f;
   border-radius: 8px;
+  color: white;
   font-size: 22px;
   font-weight: 600;
   margin-left: 10px;
-}
-.description {
-  margin: 20px 0;
-  color: #444;
-  max-width: 700px;
+  padding: 6px 12px;
 }
 
+/* =========================
+   CONTROLES E FILTROS
+========================= */
 .controls-box {
+  align-items: flex-end;
+  background-color: #e2ebff;
+  border-radius: 12px;
   display: flex;
   gap: 20px;
-  align-items: flex-end; 
-  background-color: #e2ebff;
-  padding: 20px;
-  border-radius: 12px;
   margin-bottom: 30px;
+  padding: 20px;
 }
 
 .controls-box label,
@@ -43,84 +62,93 @@
   font-size: 14px;
 }
 
+.filter-btn {
+  background-color: #cfe0ff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 10px 0 20px;
+  padding: 10px 15px;
+}
+
+/* =========================
+   RESUMO
+========================= */
 .summary-box {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
   background-color: white;
-  padding: 25px;
   border-radius: 12px;
-  margin-bottom: 30px;
-  text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 30px;
+  padding: 25px;
+  text-align: center;
 }
 
 .summary-box div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 10px 5px;
   font-size: 14px;
   font-weight: 500;
+  justify-content: center;
+  padding: 10px 5px;
 }
 
 .summary-box p {
+  color: #3c66f4;
   font-size: 18px;
   font-weight: bold;
-  color: #3c66f4;
   margin: 4px 0 0;
 }
 
-.filter-btn {
-  background-color: #cfe0ff;
-  border: none;
-  padding: 10px 15px;
-  margin: 10px 0 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
+/* =========================
+   TABELA DE ALUNOS
+========================= */
 .students-table {
-  width: 100%;
-  border-collapse: collapse;
   background-color: white;
+  border-collapse: collapse;
   border-radius: 10px;
-  overflow: hidden;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
 }
 
 .students-table th,
 .students-table td {
+  border-bottom: 1px solid #eee;
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #eee;
 }
 
 .students-table th {
   background-color: #f0f4ff;
 }
 
+/* =========================
+   RODAPÉ / BOTÕES
+========================= */
 .buttons-footer {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-top: 30px;
   padding: 0 20px;
 }
 
 .report-btn-wrapper {
-  flex: 1;
   display: flex;
+  flex: 1;
   justify-content: center;
 }
 
 .report-btn,
 .back-btn {
-  padding: 12px 20px;
   border: none;
   border-radius: 12px;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: bold;
+  padding: 12px 20px;
 }
 
 .report-btn {
@@ -131,18 +159,4 @@
 .back-btn {
   background-color: #2e2e2e;
   color: white;
-}
-
-
-.compare-page h1,
-.compare-page .description {
-  text-align: center;
-}
-
-/* Garante que o highlight-box no título não desalinhe */
-.compare-page h1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
 }

@@ -1,30 +1,39 @@
+/* =========================
+   LAYOUT BASE
+========================= */
 .dashboard-layout {
   display: flex;
 }
 
-/* Sidebar com largura fixa já está no Sidebar.css (width: 240px) */
-
-/* CONTEÚDO ao lado da sidebar */
-.dashboard-content {
-  flex: 1;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+* {
+  font-family: 'Inter', sans-serif;
 }
 
-/* Overlay azul translúcido */
+/* =========================
+   CONTEÚDO (ao lado da sidebar)
+========================= */
+.dashboard-content {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* =========================
+   OVERLAY AZUL TRANSLÚCIDO
+========================= */
 .dashboard-content .blue-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background: rgba(88, 130, 193, 0.6);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
   z-index: 0;
 }
 
@@ -33,93 +42,88 @@
   z-index: 1;
 }
 
-/* Top bar com logo e links Help/About */
-.dashboard-content .top-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 16px;
-  align-items: center;
-  color: #000;
-}
-
+/* =========================
+   LOGO E TEXTO DE BOAS-VINDAS
+========================= */
 .dashboard-content .logo-area img {
   height: 80px;
   margin-left: 60px;
   margin-top: 0;
 }
 
-.dashboard-content .nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.dashboard-content .nav-links a {
-  color: #003465;
-  margin-bottom: 4px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
 .dashboard-content .welcome-text {
-  position: absolute;
-  top: 200px;
-  left: calc(50% + 120px); /* compensa metade da sidebar (240px / 2) */
-  transform: translateX(-50%);
+  color: #003465;
   font-size: 40px;
   font-weight: 600;
-  color: #003465;
-  z-index: 1;
+  margin-bottom: 8%;
+  margin-top: 0;
+  text-align: center;
 }
-/* Botão Insert Link */
+
+/* =========================
+   BOTÃO "INSERT LINK"
+========================= */
 .dashboard-content .insert-link-wrapper {
   display: flex;
-  justify-content: flex-start; /* ← Alinha à esquerda */
-  margin-left: 715px;            /* ajusta conforme a margem desejada */
-  margin-top: 290px;
+  justify-content: center;
+  margin: 20px 0 5%;
 }
 
 .dashboard-content .insert-link-button {
-  width: 350px;
-  padding: 12px 20px;
   background-color: #3D4766;
-  color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
-  font-size: 15px;
+  color: white;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 12px 20px;
   transition: background-color 0.2s ease;
+  width: 350px;
 }
 
 .dashboard-content .insert-link-button:hover {
   background-color: #1E3A8A;
 }
 
-/* Cartões da dashboard */
+/* =========================
+   CARTÕES DA DASHBOARD
+========================= */
 .dashboard-content .card-container {
   display: flex;
-  justify-content: flex-start; /* ← Alinha à esquerda */
-  margin-left: 400px;            /* igual ao botão */
-  margin-top: 100px;
-  gap: 30px;
   flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.dashboard-content .center-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  margin-left: 220px;
+  padding: 100px 20px;
 }
 
 .dashboard-content .dashboard-card {
   background: rgba(30, 58, 138, 0.7);
   backdrop-filter: blur(10px);
-  width: 270px;        /* ← aqui defines a largura */
-  padding: 20px;       /* ← aqui defines o espaço interno */
   border-radius: 20px;
-  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: white;
   cursor: pointer;
+  padding: 20px;
+  text-align: center;
   transition: transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 270px;
 }
 
 .dashboard-card:hover {
-  background: white;
-  color: #003465;
-  opacity: 0.8; 
+  background: rgba(255, 255, 255, 0.35); /* sobreescreve valor anterior */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  color: #1E3A8A;
+  transform: translateY(-2px) scale(1.03);
 }
