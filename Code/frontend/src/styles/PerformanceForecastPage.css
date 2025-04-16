@@ -12,7 +12,6 @@ html, body {
     width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
-    display: flex;
   }
   
   /* Fundo com imagem fixa */
@@ -39,12 +38,12 @@ html, body {
     pointer-events: none;
   }
   
-  /* Conteúdo que rola por cima do fundo */
+  /* Conteúdo principal */
   .forecast-main-content {
     position: relative;
     z-index: 2;
     padding: 2rem 1rem 4rem;
-    max-width: calc(100% - 240px); /* margem para sidebar */
+    max-width: calc(100% - 240px); /* largura total menos a sidebar */
     margin-left: 240px; /* compensação da sidebar */
     color: white;
   }
@@ -115,7 +114,7 @@ html, body {
     background-color: #F44336;
   }
   
-  /* Gráficos */
+  /* Placeholder de gráficos */
   .forecast-charts-section {
     display: flex;
     justify-content: center;
@@ -233,5 +232,25 @@ html, body {
   .categoria-muitobaixo {
     background-color: #f44336;
     color: white;
+  }
+  
+  /* Pie Chart */
+  .forecast-piechart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    z-index: 2;
+    position: relative;
+  }
+  
+  /* Barplots */
+  .forecast-barcharts-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    z-index: 2;
+    position: relative;
   }
   
