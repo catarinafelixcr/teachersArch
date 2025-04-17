@@ -12,6 +12,7 @@ import CompareGroups from './pages/CompareGroups';
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage';
 import PrivateRoute from './components/PrivateRoute';
 import AboutPage from './pages/AboutPage';
+import PerformanceForecastPage from './pages/PerformanceForecastPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPasswordConfirmPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/performanceforecast" element={<PerformanceForecastPage />} />
 
         <Route path="/initialpage" element={
           <PrivateRoute>
