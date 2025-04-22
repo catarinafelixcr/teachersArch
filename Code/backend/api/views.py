@@ -17,6 +17,7 @@ from django.contrib.auth.tokens import default_token_generator
 from .serializers import UtilizadorProfileSerializer
 
 
+
 class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
     serializer_class = UtilizadorSerializer
@@ -75,6 +76,10 @@ def register_teacher(request):
 
     if not all([name, email, password]):
         return Response({'error': 'Todos os campos são obrigatórios.'}, status=400)
+    
+    if Utilizador.objects.filter(email=email).exists():
+        return Response({'email': 'Este email já está registado.'}, status=400)
+
 
     activation_token = str(uuid4())
 
@@ -150,10 +155,14 @@ def password_reset_request(request):
     if not user:
         return Response({"success": "Se existir uma conta com esse email, enviámos instruções."})
 
+    token = str(uuid4())
     uid = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
+    user.activation_token = token
+    user.save()
 
     reset_link = f"http://localhost:3000/reset-password/{uid}/{token}/"
+    #print(f"RESET LINK: {reset_link}")
+
     subject = 'Password Recovery - TeacherSArch'
     message = f"""
     Hello {user.name},
@@ -181,23 +190,18 @@ def password_reset_request(request):
 
 @api_view(['POST'])
 def reset_password_confirm(request):
-    uidb64 = request.data.get("uid")
     token = request.data.get("token")
     new_password = request.data.get("new_password")
 
-    if not all([uidb64, token, new_password]):
+    if not all([token, new_password]):
         return Response({"error": "Todos os campos são obrigatórios."}, status=400)
 
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = Utilizador.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, Utilizador.DoesNotExist):
-        return Response({"error": "Utilizador inválido."}, status=400)
-
-    if not default_token_generator.check_token(user, token):
+    user = Utilizador.objects.filter(activation_token=token).first()
+    if not user:
         return Response({"error": "Token inválido ou expirado."}, status=400)
 
     user.set_password(new_password)
+    user.activation_token = None  # invalida o token
     user.save()
 
-    return Response({"success": "Password updated successfully."})
+    return Response({"success": "Password atualizada com sucesso."})
