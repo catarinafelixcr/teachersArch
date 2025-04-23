@@ -119,3 +119,17 @@ The TeacherSArch Team
         """
 
         send_mail(subject, message, from_email, [to_email])
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'  # aqui está a magia
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Adicionar info extra ao token, se quiseres
+        token['email'] = user.email
+        return token

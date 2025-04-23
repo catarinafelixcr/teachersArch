@@ -60,49 +60,20 @@ function LoginPage() {
         body: JSON.stringify({ email, password })
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+      console.log("🔐 Resposta do login JWT:", data);
+
+      if (response.ok && data.access) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        
         localStorage.setItem('userToken', 'true');
+        console.log("✅ access_token guardado:", data.access);
         navigate('/initialpage');
       } else {
-        setLoginAttemptsByEmail(prev => {
-          const attempts = prev[email] ? prev[email] + 1 : 1;
-
-          if (attempts >= 5) {
-            const blockUntil = Date.now() + 30000;
-            setBlockedEmails(prev => ({
-              ...prev,
-              [email]: blockUntil
-            }));
-
-            // Limpa bloqueio após 30 segundos
-            setTimeout(() => {
-              setBlockedEmails(prev => {
-                const updated = { ...prev };
-                delete updated[email];
-                return updated;
-              });
-
-              setLoginAttemptsByEmail(prev => {
-                const updated = { ...prev };
-                delete updated[email];
-                return updated;
-              });
-
-              setError('');
-            }, 30000);
-          }
-
-          return { ...prev, [email]: attempts };
-        });
-
-        setError("Email or password invalid");
+        setError("Credenciais inválidas ou token ausente");
       }
     } catch (err) {
-      setError("Email or password invalid");
+      setError("Erro de rede ou servidor");
     }
 
     setLoading(false);

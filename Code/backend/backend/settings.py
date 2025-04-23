@@ -162,3 +162,5 @@ DJANGO_REST_AUTH = {
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'api.serializers.auth.CustomPasswordResetSerializer'
 }
+
+AUTH_USER_MODEL = 'api.Utilizador'
