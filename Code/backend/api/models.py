@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
 
 
-# It's highly recommended to create a custom manager for a custom user model
 class UtilizadorManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a User with the given email and password."""
@@ -78,9 +78,18 @@ class Project(models.Model):
     repo_url = models.CharField(max_length=512)
 
 class AlunoGitlabAct(models.Model):
-    utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True)
-    student_num = models.BigIntegerField()
+    #utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True)
+    # acho que não faz sentido ser OneToOne, porque um Utilizador (que representa um estudante aqui) pode ter 
+    # muitos registos AlunoGitlabAct (por exemplo, um para cada grupo em que participa, 
+    # ou talvez até registos de diferentes momentos no tempo se a lógica evoluir).
+    # cada registo AlunoGitlabAct pertence a um e apenas um Utilizador (o estudante cuja atividade está a ser registada).
+    utilizador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gitlab_activities')
+    
+    id = models.BigAutoField(primary_key=True) # antigo student_num --> mas automatico!!
+    #student_num = models.BigIntegerField()
     group = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+
+    # métricas:
     mention_handle = models.BooleanField()
     interval = models.BooleanField(null=True, blank=True)
     total_commits = models.BigIntegerField()
@@ -101,9 +110,16 @@ class AlunoGitlabAct(models.Model):
     merges_to_main_branch = models.BigIntegerField()
 
     class Meta:
+        # a combinação de um utilizador e um grupo deve ser única.
         unique_together = (
-            ("student_num", "group"),
+            ("utilizador", "group"),
         )
+    
+    def __str__(self):
+        try:
+            return f"Activity for {self.utilizador.email} in Group '{self.group.group_name}'"
+        except: 
+            return f"Activity record {self.id}"
 
 class Previsao(models.Model):
     prevision_id = models.BigAutoField(primary_key=True)

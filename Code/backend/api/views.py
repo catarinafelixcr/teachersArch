@@ -24,6 +24,11 @@ from .models import Utilizador, Teacher, Grupo, AlunoGitlabAct, TeacherGrupo
 from .utils.extract import extract_from_gitlab
 from django.views.decorators.csrf import csrf_exempt
 
+import logging
+import traceback
+
+logger = logging.getLogger(__name__)
+
 
 class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
@@ -252,57 +257,103 @@ def extract_students(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_groups(request):
+    logger.info(f"Tentativa de salvar grupos pelo utilizador: {request.user.email}")
     try:
         data = request.data
+        logger.debug(f"Dados recebidos para save_groups: {data}")
+
         repo_url = data.get("repo_url")
-        groups = data.get("groups", {})
+        groups_data = data.get("groups", {})
         metrics = data.get("metrics", {})
 
-        teacher = Teacher.objects.get(utilizador=request.user)
+        if not repo_url or not groups_data:
+             logger.warning("Pedido save_groups recebido sem repo_url ou groups.")
+             return JsonResponse({"error": "Missing repository URL or groups data."}, status=400)
 
-        for group_name, handles in groups.items():
-            grupo, _ = Grupo.objects.get_or_create(group_name=group_name)
+        try:
+            # 'request.user' é o Professor autenticado
+            teacher = Teacher.objects.get(utilizador=request.user)
+            logger.info(f"Teacher encontrado: {teacher.utilizador.email}")
+        except Teacher.DoesNotExist:
+            logger.error(f"Erro: Utilizador {request.user.email} tentou salvar grupos mas não é um Teacher.")
+            return JsonResponse({"error": "User is not registered as a teacher."}, status=403)
+
+        saved_count = 0
+        updated_count = 0
+
+        for group_name, handles in groups_data.items():
+            logger.debug(f"Processando grupo: {group_name} com handles: {handles}")
+            grupo, created = Grupo.objects.get_or_create(group_name=group_name)
+            if created:
+                logger.info(f"Grupo '{group_name}' criado.")
+
             TeacherGrupo.objects.get_or_create(teacher=teacher, grupo=grupo)
+            logger.debug(f"Associação Teacher-Grupo garantida para {group_name}.")
 
             for handle in handles:
+                logger.debug(f"Processando handle: {handle} para o grupo {group_name}")
                 try:
-                    utilizador = Utilizador.objects.get(email__startswith=handle)
+                    # Encontrar o Utilizador que representa o Aluno
+                    # Ajuste a busca conforme necessário (ex: handle + '@')
+                    utilizador_aluno = Utilizador.objects.get(email__startswith=handle + '@')
+                    logger.debug(f"Utilizador (Aluno) encontrado para handle '{handle}': {utilizador_aluno.email}")
+
                 except Utilizador.DoesNotExist:
+                    logger.warning(f"Utilizador (Aluno) com handle '{handle}' não encontrado. Ignorando.")
                     continue
+                except Utilizador.MultipleObjectsReturned:
+                     logger.error(f"Múltiplos Utilizadores (Alunos) encontrados para handle '{handle}'. Ignorando.")
+                     continue
 
                 metric_data = metrics.get(handle, {})
-                AlunoGitlabAct.objects.get_or_create(
-                    utilizador=utilizador,
-                    group=grupo,
-                    defaults={
-                        "student_num": 0,
-                        "mention_handle": True,
-                        "interval": 1,
+                if not metric_data:
+                    logger.warning(f"Não foram encontradas métricas para o handle '{handle}'. Usando defaults.")
+
+                # --- PONTO CHAVE DA ALTERAÇÃO ---
+                # Usar update_or_create com as chaves corretas (utilizador_aluno, group)
+                # e sem 'student_num' nos defaults.
+                aluno_act, created = AlunoGitlabAct.objects.update_or_create(
+                    utilizador=utilizador_aluno, # <-- Chave: O aluno
+                    group=grupo,                # <-- Chave: O grupo
+                    defaults={ # Campos a definir ou atualizar
+                        # REMOVIDO 'student_num'
+                        "mention_handle": True, # Rever se este valor deve vir dos dados
+                        "interval": 1,          # Rever tipo e origem deste valor
                         "total_commits": metric_data.get("total_commits", 0),
                         "sum_lines_added": metric_data.get("sum_lines_added", 0),
                         "sum_lines_deleted": metric_data.get("sum_lines_deleted", 0),
-                        "sum_lines_per_commit": metric_data.get("sum_lines_per_commit", 0),
+                        "sum_lines_per_commit": metric_data.get("sum_lines_per_commit", 0), # Rever tipo (int/float)
                         "active_days": metric_data.get("active_days", 0),
-                        "last_minute_commits": metric_data.get("last_minute_commits", 0) > 0,
+                        "last_minute_commits": bool(metric_data.get("last_minute_commits", 0) > 0),
                         "total_merge_requests": metric_data.get("total_merge_requests", 0),
                         "merged_requests": metric_data.get("merged_requests", 0),
                         "review_comments_given": metric_data.get("review_comments_given", 0),
                         "review_comments_received": metric_data.get("review_comments_received", 0),
                         "total_issues_created": metric_data.get("total_issues_created", 0),
                         "total_issues_assigned": metric_data.get("total_issues_assigned", 0),
-                        "issues_resolved": metric_data.get("issues_resolved", False),
-                        "issue_participation": metric_data.get("issue_participation", False),
+                        "issues_resolved": bool(metric_data.get("issues_resolved", False)),
+                        "issue_participation": bool(metric_data.get("issue_participation", False)),
                         "branches_created": metric_data.get("branches_created", 0),
                         "merges_to_main_branch": metric_data.get("merges_to_main_branch", 0),
                     }
                 )
+                # --- FIM DO PONTO CHAVE ---
 
-        return JsonResponse({"status": "ok"})
+                if created:
+                    logger.info(f"AlunoGitlabAct CRIADO para {utilizador_aluno.email} no grupo {group_name}")
+                    saved_count += 1
+                else:
+                    logger.info(f"AlunoGitlabAct ATUALIZADO para {utilizador_aluno.email} no grupo {group_name}")
+                    updated_count += 1
+
+        logger.info(f"Processamento save_groups concluído. {saved_count} criados, {updated_count} atualizados.")
+        return JsonResponse({"status": "ok", "created": saved_count, "updated": updated_count})
 
     except Exception as e:
-        traceback.print_exc()
-        return JsonResponse({"error": str(e)}, status=500)
-    
+        logger.exception(f"ERRO NÃO TRATADO em save_groups para utilizador {request.user.email}:")
+        return JsonResponse({"error": f"An internal server error occurred. Check server logs. Error: {str(e)}"}, status=500)
+
+
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
 

@@ -11,6 +11,8 @@ function InsertRepositoryPage() {
   const [groupInput, setGroupInput] = useState('');
   const [selectedGroupStudents, setSelectedGroupStudents] = useState([]);
   const [groups, setGroups] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(4);
 
   const groupSectionRef = useRef(null);
 
@@ -32,6 +34,18 @@ function InsertRepositoryPage() {
     }
 
     setErrorMessage('');
+    setIsLoading(true);
+    setCountdown(3);
+
+    let interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === 1) {
+          clearInterval(interval);
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     fetch('http://localhost:8000/api/extract_students/', {
       method: 'POST',
       headers: {
@@ -40,13 +54,13 @@ function InsertRepositoryPage() {
       },
       body: JSON.stringify({ repo_url: trimmedLink }),
     })
-    
       .then((res) => res.json())
       .then((data) => {
+        setIsLoading(false);
         if (data.students) {
           const extractedHandles = Object.keys(data.students);
           setStudents(extractedHandles);
-          setStudentMetrics(data.students); // guardar métricas completas
+          setStudentMetrics(data.students);
           setTimeout(() => {
             groupSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, 100);
@@ -56,6 +70,7 @@ function InsertRepositoryPage() {
       })
       .catch((err) => {
         console.error(err);
+        setIsLoading(false);
         setErrorMessage('Error fetching students.');
       });
   };
@@ -109,15 +124,16 @@ function InsertRepositoryPage() {
       return;
     }
 
-    fetch('/api/save_groups/', {
+    fetch('http://localhost:8000/api/save_groups/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}` // 👈 Token JWT
       },
       body: JSON.stringify({
         repo_url: repoLink,
         groups: groups,
-        metrics: studentMetrics, // incluir métricas
+        metrics: studentMetrics,
       }),
     })
       .then((res) => res.json())
@@ -129,10 +145,10 @@ function InsertRepositoryPage() {
         }
       })
       .catch((err) => {
-        console.error(err);
-        alert('Network error while saving groups.');
+        console.error("Detailed error saving groups:", err);
+        alert(`Error saving groups: ${err.message}`);
       });
-  };
+    };
 
   return (
     <div
@@ -169,10 +185,15 @@ function InsertRepositoryPage() {
               }}
             />
             <button onClick={handleSubmit}>Submit GitLab Link</button>
-            {errorMessage && (
-              <div className="repo-error-message">{errorMessage}</div>
-            )}
+            {errorMessage && <div className="repo-error-message">{errorMessage}</div>}
           </div>
+
+          {isLoading && (
+            <div className="loading-message">
+              <p>Fetching students... Please wait {countdown > 0 ? `${countdown}s` : ''}</p>
+              <div className="spinner"></div>
+            </div>
+          )}
         </div>
 
         {students.length > 0 && (
