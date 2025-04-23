@@ -1,14 +1,62 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class Utilizador(models.Model):
+
+# It's highly recommended to create a custom manager for a custom user model
+class UtilizadorManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        """Creates and saves a User with the given email and password."""
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password) # Use the inherited method
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Creates and saves a superuser with the given email and password."""
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True) # Superusers should be active by default
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        # Ensure required fields (like 'name' if it's in REQUIRED_FIELDS) are handled
+        # The createsuperuser command will prompt for fields in REQUIRED_FIELDS
+        return self.create_user(email, password, **extra_fields)
+
+
+class Utilizador(AbstractBaseUser, PermissionsMixin): # Inherit from AbstractBaseUser and PermissionsMixin
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=512, null=True, blank=True)
-    password = models.CharField(max_length=512)
-    email = models.CharField(max_length=512, unique=True)
-    is_active = models.BooleanField(default=False)
-    activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
-    last_login = models.DateTimeField(null=True, blank=True)
+    # 'password' field is provided by AbstractBaseUser
+    # 'last_login' field is provided by AbstractBaseUser
+    email = models.EmailField( # Use EmailField for better validation
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=False) # Keep this for activation flow
+    activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True, db_index=True) # Add db_index
+
+    # Add fields required by Django admin/auth system
+    is_staff = models.BooleanField(default=False) # Required for admin access
+    # is_superuser is provided by PermissionsMixin
+    # groups and user_permissions fields are provided by PermissionsMixin
+
+    objects = UtilizadorManager() # Link the custom manager
+
+    # --- THE FIX ---
+    USERNAME_FIELD = 'email' # Tell Django to use 'email' for login/identification
+    REQUIRED_FIELDS = ['name'] # Fields prompted for when using createsuperuser (besides email/password)
+
+    def __str__(self):
+        return self.email
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

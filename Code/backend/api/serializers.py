@@ -76,21 +76,26 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         email = attrs.get("email")
         password = attrs.get("password")
 
+        print(f"Attempting login for email: {email}")
         try:
             user = Utilizador.objects.get(email=email)
+            print(f"User found: {user.email}, Active: {getattr(user, 'is_active', False)}") # Check is_active directly
         except Utilizador.DoesNotExist:
+            print("User lookup failed.")
             raise AuthenticationFailed("Email inválido")
 
         if not check_password(password, user.password):
+            print("Password check failed.")
             raise AuthenticationFailed("Password inválida")
         
         if not getattr(user, 'is_active', True):  # Default para True por segurança em dev
+            print("Account not active check failed.")
             raise AuthenticationFailed("Account not activated. Please check your email.")
 
 
         # Criar tokens manualmente
         refresh = RefreshToken.for_user(user)
-
+        print("Token generation successful.", refresh)
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
