@@ -1,4 +1,3 @@
-# Caminho base do projeto
 from pathlib import Path
 import os
 
@@ -25,13 +24,15 @@ INSTALLED_APPS = [
     'django.contrib.sites', # para o reset do email
     'dj_rest_auth', 
 
-    # Terceiros
+    # outros
     'rest_framework',
     'corsheaders',
 
     # App do projeto
     'api',
 ]
+
+INSTALLED_APPS += ['django_extensions']
 
 # ---------------------
 # MIDDLEWARES
@@ -118,7 +119,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
-#  Para desenvolvimento apenas — em produção usa apenas CORS_ALLOWED_ORIGINS !!!!!!!!!!!!!!!!!!!!!!!
+#  Para desenvolvimento apenas — em produção usa apenas CORS_ALLOWED_ORIGINS !!!!!!!!!!!!!!!!!!!!
 CORS_ALLOW_ALL_ORIGINS = True
 
 # ---------------------

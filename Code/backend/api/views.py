@@ -15,7 +15,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from .serializers import UtilizadorProfileSerializer
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+import json
+from .models import Utilizador, Teacher, Grupo, AlunoGitlabAct, TeacherGrupo
 
+from .utils.extract import extract_from_gitlab
+from django.views.decorators.csrf import csrf_exempt
 
 
 class UtilizadorViewSet(viewsets.ModelViewSet):
@@ -205,3 +212,93 @@ def reset_password_confirm(request):
     user.save()
 
     return Response({"success": "Password atualizada com sucesso."})
+
+# ----------------------------
+# API Views protegidas (autenticadas)
+# ----------------------------
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
+import traceback
+
+from .models import Utilizador, Teacher, Grupo, AlunoGitlabAct, TeacherGrupo
+from .utils.extract import extract_from_gitlab
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def extract_students(request):
+    try:
+        print("🔔 View extract_students chamada")
+        data = request.data
+        print("📥 Dados recebidos:", data)
+
+        repo_url = data.get("repo_url")
+        if not repo_url:
+            return JsonResponse({"error": "Missing repo_url"}, status=400)
+
+        students_data = extract_from_gitlab(repo_url)
+        return JsonResponse({"students": students_data}, status=200)
+
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_groups(request):
+    try:
+        data = request.data
+        repo_url = data.get("repo_url")
+        groups = data.get("groups", {})
+        metrics = data.get("metrics", {})
+
+        teacher = Teacher.objects.get(utilizador=request.user)
+
+        for group_name, handles in groups.items():
+            grupo, _ = Grupo.objects.get_or_create(group_name=group_name)
+            TeacherGrupo.objects.get_or_create(teacher=teacher, grupo=grupo)
+
+            for handle in handles:
+                try:
+                    utilizador = Utilizador.objects.get(email__startswith=handle)
+                except Utilizador.DoesNotExist:
+                    continue
+
+                metric_data = metrics.get(handle, {})
+                AlunoGitlabAct.objects.get_or_create(
+                    utilizador=utilizador,
+                    group=grupo,
+                    defaults={
+                        "student_num": 0,
+                        "mention_handle": True,
+                        "interval": 1,
+                        "total_commits": metric_data.get("total_commits", 0),
+                        "sum_lines_added": metric_data.get("sum_lines_added", 0),
+                        "sum_lines_deleted": metric_data.get("sum_lines_deleted", 0),
+                        "sum_lines_per_commit": metric_data.get("sum_lines_per_commit", 0),
+                        "active_days": metric_data.get("active_days", 0),
+                        "last_minute_commits": metric_data.get("last_minute_commits", 0) > 0,
+                        "total_merge_requests": metric_data.get("total_merge_requests", 0),
+                        "merged_requests": metric_data.get("merged_requests", 0),
+                        "review_comments_given": metric_data.get("review_comments_given", 0),
+                        "review_comments_received": metric_data.get("review_comments_received", 0),
+                        "total_issues_created": metric_data.get("total_issues_created", 0),
+                        "total_issues_assigned": metric_data.get("total_issues_assigned", 0),
+                        "issues_resolved": metric_data.get("issues_resolved", False),
+                        "issue_participation": metric_data.get("issue_participation", False),
+                        "branches_created": metric_data.get("branches_created", 0),
+                        "merges_to_main_branch": metric_data.get("merges_to_main_branch", 0),
+                    }
+                )
+
+        return JsonResponse({"status": "ok"})
+
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({"error": str(e)}, status=500)

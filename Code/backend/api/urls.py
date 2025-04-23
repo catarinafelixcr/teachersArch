@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from django.urls import path, include
 from .views import *
+from . import views
 
 router = DefaultRouter()
 router.register(r'utilizadores', UtilizadorViewSet)
@@ -17,7 +17,8 @@ router.register(r'aluno_previsao', AlunoGitlabactPrevisaoViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/extract_students/', views.extract_students, name='extract_students'),
+    path('api/save_groups/', views.save_groups, name='save_groups'),
     path('api/register/', register_teacher),
     path('auth/token/login/', CustomLoginView.as_view(), name='custom_login'),
     path('api/activate/<str:token>/', activate_account, name='activate_account'),
@@ -25,4 +26,6 @@ urlpatterns = [
     path('api/password-reset/confirm/', reset_password_confirm, name='password_reset_confirm'),
     path('api/password-reset/', password_reset_request, name='password_reset'),
     path('api/profile/', get_profile),
+
+    path('', include(router.urls)),
 ]

@@ -6,10 +6,11 @@ import background from '../assets/background-dei.jpg';
 function InsertRepositoryPage() {
   const [repoLink, setRepoLink] = useState('');
   const [students, setStudents] = useState([]);
+  const [studentMetrics, setStudentMetrics] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [groupInput, setGroupInput] = useState('');
   const [selectedGroupStudents, setSelectedGroupStudents] = useState([]);
-  const [groups, setGroups] = useState({}); // { groupName: [students] }
+  const [groups, setGroups] = useState({});
 
   const groupSectionRef = useRef(null);
 
@@ -31,28 +32,38 @@ function InsertRepositoryPage() {
     }
 
     setErrorMessage('');
-
-    // Simulated fetch of contributors
-    setStudents([
-      'Ana Silva',
-      'Bruno Costa',
-      'Carla Mendes',
-      'Daniel Rocha',
-      'Eduarda Pinto',
-    ]);
-
-    // Scroll to group section
-    setTimeout(() => {
-      groupSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+    fetch('http://localhost:8000/api/extract_students/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      body: JSON.stringify({ repo_url: trimmedLink }),
+    })
+    
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.students) {
+          const extractedHandles = Object.keys(data.students);
+          setStudents(extractedHandles);
+          setStudentMetrics(data.students); // guardar métricas completas
+          setTimeout(() => {
+            groupSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        } else {
+          setErrorMessage('No students found.');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setErrorMessage('Error fetching students.');
+      });
   };
 
   const addOrRemoveStudent = (student) => {
-    if (selectedGroupStudents.includes(student)) {
-      setSelectedGroupStudents(selectedGroupStudents.filter((s) => s !== student));
-    } else {
-      setSelectedGroupStudents([...selectedGroupStudents, student]);
-    }
+    setSelectedGroupStudents((prev) =>
+      prev.includes(student) ? prev.filter((s) => s !== student) : [...prev, student]
+    );
   };
 
   const handleCreateGroup = () => {
@@ -92,8 +103,35 @@ function InsertRepositoryPage() {
   const studentsInGroups = Object.values(groups).flat();
   const ungroupedStudents = students.filter((s) => !studentsInGroups.includes(s));
 
-  const handlePredict = () => {
-    alert('Prediction triggered! (Future implementation here)');
+  const handleSaveGroups = () => {
+    if (!repoLink.trim()) {
+      alert("Repository link is required to save groups.");
+      return;
+    }
+
+    fetch('/api/save_groups/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        repo_url: repoLink,
+        groups: groups,
+        metrics: studentMetrics, // incluir métricas
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'ok') {
+          alert('Groups saved successfully!');
+        } else {
+          alert('Error saving groups.');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Network error while saving groups.');
+      });
   };
 
   return (
@@ -106,11 +144,10 @@ function InsertRepositoryPage() {
         backgroundAttachment: 'fixed',
       }}
     >
-
       <Sidebar />
-      <div className="blur-overlay"></div> {/* camada para o blur */}
-      <div className="insert-repo-page">
+      <div className="blur-overlay"></div>
 
+      <div className="insert-repo-page">
         <div className="insert-repo-header">
           <h1>
             Insert <span className="highlight">Repository Link</span>
@@ -161,7 +198,7 @@ function InsertRepositoryPage() {
                         <button
                           className="student-toggle-button"
                           onClick={(e) => {
-                            e.stopPropagation(); // impede o clique no botão de também ativar o <li>
+                            e.stopPropagation();
                             addOrRemoveStudent(student);
                           }}
                         >
@@ -171,7 +208,6 @@ function InsertRepositoryPage() {
                     );
                   })}
                 </ul>
-
               </div>
 
               <div className="right-column">
@@ -220,8 +256,8 @@ function InsertRepositoryPage() {
             )}
 
             <div style={{ marginTop: '50px', textAlign: 'center' }}>
-              <button className="save-group-button" onClick={handlePredict}>
-                Predict Data
+              <button className="save-group-button" onClick={handleSaveGroups}>
+                Save Groups
               </button>
             </div>
           </div>
