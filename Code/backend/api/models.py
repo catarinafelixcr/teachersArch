@@ -3,6 +3,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
 
+from django.utils import timezone
+from datetime import timedelta
+
+
 
 class UtilizadorManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -65,9 +69,20 @@ class Utilizador(AbstractBaseUser, PermissionsMixin): # Inherit from AbstractBas
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)
 
+    activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True, db_index=True)
+    token_expiry = models.DateTimeField(null=True, blank=True)  # Campo para expiração do token
+
+    def set_activation_token(self, token):
+        self.activation_token = token
+        self.token_expiry = timezone.now() + timedelta(hours=24)  # Expira após 24 horas
+        self.save()
+
+    def is_token_expired(self):
+        return self.token_expiry and timezone.now() > self.token_expiry
+
 class Teacher(models.Model):
     utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True)
-    link_gitlab = models.CharField(max_length=512, unique=True)
+    link_gitlab = models.CharField(max_length=512, unique=True, null=True, blank=True)
 
 class Grupo(models.Model):
     group_id = models.BigAutoField(primary_key=True)

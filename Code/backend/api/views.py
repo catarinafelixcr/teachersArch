@@ -20,6 +20,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 import json
 from .models import Utilizador, Teacher, Grupo, AlunoGitlabAct, TeacherGrupo
+from django.db import IntegrityError
 
 from .utils.extract import extract_from_gitlab
 from django.views.decorators.csrf import csrf_exempt
@@ -92,10 +93,10 @@ def register_teacher(request):
     if Utilizador.objects.filter(email=email).exists():
         return Response({'email': 'Este email já está registado.'}, status=400)
 
-
     activation_token = str(uuid4())
 
     try:
+        # Cria o utilizador
         utilizador = Utilizador.objects.create(
             name=name,
             email=email,
@@ -104,12 +105,13 @@ def register_teacher(request):
             activation_token=activation_token
         )
 
+        # Cria o Teacher automaticamente assim que o utilizador for criado
         Teacher.objects.create(
             utilizador=utilizador,
-            teacher_name=name,
             link_gitlab=None
         )
 
+        # Enviar email de ativação
         activation_url = f"http://localhost:8000/api/activate/{activation_token}/"
 
         send_mail(
@@ -135,6 +137,42 @@ def register_teacher(request):
             errors['email'] = 'Este email já está registado.'
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from api.models import Utilizador, Teacher
+
+@api_view(['DELETE'])
+def delete_user_by_email(request, email):
+    try:
+        # Encontre o usuário pelo e-mail
+        usuario = Utilizador.objects.get(email=email)
+
+        # Apague o registro de Teacher relacionado
+        Teacher.objects.filter(utilizador=usuario).delete()
+
+        # Apague o registro do Utilizador
+        usuario.delete()
+
+        return Response({"success": f"User {email} and related records have been deleted."})
+    except Utilizador.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+
+@api_view(['GET'])
+def activate_account(request, token):
+    try:
+        user = Utilizador.objects.get(activation_token=token)
+
+        # Verificar se o token expirou
+        if user.is_token_expired():
+            return Response({'error': 'Token de ativação expirado.'}, status=400)
+
+        user.is_active = True
+        user.activation_token = None  # Token usado, remove
+        user.save()
+
+        return redirect('http://localhost:3000/login?activated=true')
+    except Utilizador.DoesNotExist:
+        return Response({'error': 'Token inválido ou já usado.'}, status=400)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
