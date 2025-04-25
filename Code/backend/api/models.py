@@ -81,7 +81,7 @@ class Utilizador(AbstractBaseUser, PermissionsMixin): # Inherit from AbstractBas
         return self.token_expiry and timezone.now() > self.token_expiry
 
 class Teacher(models.Model):
-    utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True)
+    utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
     link_gitlab = models.CharField(max_length=512, unique=True, null=True, blank=True)
 
 class Grupo(models.Model):
@@ -98,15 +98,14 @@ class AlunoGitlabAct(models.Model):
     # muitos registos AlunoGitlabAct (por exemplo, um para cada grupo em que participa, 
     # ou talvez até registos de diferentes momentos no tempo se a lógica evoluir).
     # cada registo AlunoGitlabAct pertence a um e apenas um Utilizador (o estudante cuja atividade está a ser registada).
-    utilizador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gitlab_activities')
+    #utilizador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gitlab_activities')
     
     id = models.BigAutoField(primary_key=True) # antigo student_num --> mas automatico!!
     #student_num = models.BigIntegerField()
     group = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    handle = models.CharField(max_length=128)
 
     # métricas:
-    mention_handle = models.BooleanField()
-    interval = models.BooleanField(null=True, blank=True)
     total_commits = models.BigIntegerField()
     sum_lines_added = models.BigIntegerField()
     sum_lines_deleted = models.BigIntegerField()
@@ -125,10 +124,7 @@ class AlunoGitlabAct(models.Model):
     merges_to_main_branch = models.BigIntegerField()
 
     class Meta:
-        # a combinação de um utilizador e um grupo deve ser única.
-        unique_together = (
-            ("utilizador", "group"),
-        )
+        unique_together = (("group", "handle"),)
     
     def __str__(self):
         try:

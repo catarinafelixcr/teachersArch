@@ -17,4 +17,3 @@ admin.site.register(PrevisaoGrupo)
 admin.site.register(GrupoProject)
 admin.site.register(TeacherGrupo)
 admin.site.register(AlunoGitlabactPrevisao)
-
