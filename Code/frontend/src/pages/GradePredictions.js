@@ -1,177 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/GradePredictions.css';
+import Sidebar from '../components/SideBar';
 
-const students = [
-  {
-    name: 'Ana Martins',
-    group: 'A',
-    grade: 87,
-    confidence: 92,
-    date: '2025-03-25',
-    commits: 42,
-    filesChanged: 18,
-    linesAdded: 530,
-    linesRemoved: 120,
-    lastCommit: '2025-03-22',
-    codeQuality: 'B+',
-    projectStatus: 'Finalized'
-  },
-  {
-    name: 'João Costa',
-    group: 'A',
-    grade: 94,
-    confidence: 96,
-    date: '2025-03-25',
-    commits: 55,
-    filesChanged: 23,
-    linesAdded: 680,
-    linesRemoved: 140,
-    lastCommit: '2025-03-24',
-    codeQuality: 'A',
-    projectStatus: 'Finalized'
-  },
-  {
-    name: 'Beatriz Lopes',
-    group: 'B',
-    grade: 65,
-    confidence: 89,
-    date: '2025-03-24',
-    commits: 28,
-    filesChanged: 15,
-    linesAdded: 320,
-    linesRemoved: 60,
-    lastCommit: '2025-03-21',
-    codeQuality: 'B',
-    projectStatus: 'In Progress'
-  },
-  {
-    name: 'Rui Almeida',
-    group: 'B',
-    grade: 42,
-    confidence: 75,
-    date: '2025-03-24',
-    commits: 19,
-    filesChanged: 10,
-    linesAdded: 190,
-    linesRemoved: 40,
-    lastCommit: '2025-03-19',
-    codeQuality: 'C',
-    projectStatus: 'In Progress'
-  },
-  {
-    name: 'Sofia Pereira',
-    group: 'C',
-    grade: 28,
-    confidence: 68,
-    date: '2025-03-23',
-    commits: 11,
-    filesChanged: 6,
-    linesAdded: 110,
-    linesRemoved: 30,
-    lastCommit: '2025-03-18',
-    codeQuality: 'C-',
-    projectStatus: 'Incomplete'
-  },
-  {
-    name: 'Tiago Carvalho',
-    group: 'C',
-    grade: 73,
-    confidence: 82,
-    date: '2025-03-23',
-    commits: 36,
-    filesChanged: 16,
-    linesAdded: 450,
-    linesRemoved: 100,
-    lastCommit: '2025-03-21',
-    codeQuality: 'B',
-    projectStatus: 'Finalized'
-  }
-];
-
-const GradePredictions = () => {
-  const [selectedGroup, setSelectedGroup] = useState('All');
+function GradePredictions() {
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [predictions, setPredictions] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const navigate = useNavigate();
 
-  const filteredStudents =
-    selectedGroup === 'All'
-      ? students
-      : students.filter((s) => s.group === selectedGroup);
+  useEffect(() => {
+    fetch('http://localhost:8000/api/groups/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setGroups(data.groups || []));
+  }, []);
 
-  const handleViewDetails = (student) => {
-    setSelectedStudent(student);
-  };
+  useEffect(() => {
+    if (!selectedGroup) return;
+    fetch(`http://localhost:8000/api/group_predictions/${selectedGroup}/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setPredictions(data.predictions || []));
+  }, [selectedGroup]);
 
-  const handleCloseModal = () => {
-    setSelectedStudent(null);
-  };
+  const handleViewDetails = (student) => setSelectedStudent(student);
+  const handleCloseModal = () => setSelectedStudent(null);
 
-  const total = filteredStudents.length;
-  const lowConfidenceCount = filteredStudents.filter(s => s.confidence < 70).length;
-
+  const total = predictions.length;
   const average = total > 0
-    ? Math.round(filteredStudents.reduce((sum, s) => sum + s.grade, 0) / total)
+    ? (predictions.reduce((sum, s) => sum + s.predicted_grade, 0) / total).toFixed(1)
     : null;
-
   const stdDev = total > 1
-    ? Math.round(
-        Math.sqrt(
-          filteredStudents
-            .map(s => s.grade)
-            .reduce((acc, val, _, arr) => {
-              const mean = arr.reduce((a, b) => a + b) / arr.length;
-              return acc + Math.pow(val - mean, 2);
-            }, 0) / total
-        )
-      )
+    ? Math.sqrt(
+        predictions.map(s => s.predicted_grade).reduce((acc, val, _, arr) => {
+          const mean = arr.reduce((a, b) => a + b) / arr.length;
+          return acc + Math.pow(val - mean, 2);
+        }, 0) / total
+      ).toFixed(1)
     : null;
 
   return (
     <div className="insert-repo-page">
+      <Sidebar />
       <h1>Students' Grade <span className="highlight">Predictions</span></h1>
 
       <select onChange={(e) => setSelectedGroup(e.target.value)}>
-        <option value="All">Select Group</option>
-        <option value="A">Group A</option>
-        <option value="B">Group B</option>
-        <option value="C">Group C</option>
+        <option value="">Select Group</option>
+        {groups.map((group, idx) => (
+          <option key={idx} value={group}>{group}</option>
+        ))}
       </select>
 
-      <h3 className="info">-&gt; History of grades <span title="Histórico de previsões">&#9432;</span></h3>
+      <h3 className="info">→ History of grades <span title="Histórico de previsões">ℹ️</span></h3>
 
       <div className="grade-table">
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
+              <th>Handle</th>
               <th>Group</th>
-              <th>Predicted Grade (%)</th>
-              <th>Confidence (%)</th>
-              <th>Inserted On</th>
-              <th>Actions</th>
+              <th>Predicted Grade</th>
+              <th>At Risk</th>
+              <th>Date</th>
+              <th>Details</th>
             </tr>
           </thead>
           <tbody>
-            {filteredStudents.length === 0 ? (
+            {predictions.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '20px', fontStyle: 'italic', color: '#888' }}>
+                <td colSpan="6" style={{ textAlign: 'center', fontStyle: 'italic' }}>
                   No grade predictions available.
                 </td>
               </tr>
             ) : (
-              filteredStudents.map((s, idx) => (
+              predictions.map((p, idx) => (
                 <tr key={idx}>
-                  <td>{s.name}</td>
-                  <td>{s.group}</td>
-                  <td>{s.grade}</td>
-                  <td>{s.confidence}</td>
-                  <td>{s.date}</td>
-                  <td>
-                    <button onClick={() => handleViewDetails(s)}>
-                      View details
-                    </button>
-                  </td>
+                  <td>{p.handle}</td>
+                  <td>{selectedGroup}</td>
+                  <td>{p.predicted_grade}</td>
+                  <td>{p.risk ? 'Yes' : 'No'}</td>
+                  <td>{new Date(p.registered_at).toLocaleDateString()}</td>
+                  <td><button onClick={() => handleViewDetails(p)}>View</button></td>
                 </tr>
               ))
             )}
@@ -179,65 +96,38 @@ const GradePredictions = () => {
         </table>
       </div>
 
-      <h3 className="info">-&gt; Statistic Prediction Overview <span title="Resumo estatístico">&#9432;</span></h3>
-
+      <h3 className="info">→ Statistic Overview</h3>
       <div className="stats-box">
-        <div>
-          <p><strong>Total Predictions:</strong> {total}</p>
-          <p><strong>Low Confidence (&lt;70%):</strong> {lowConfidenceCount}</p>
-        </div>
-        <div>
-          <p><strong>Average Predicted Grade:</strong> {average !== null ? `${average}%` : 'N/A'}</p>
-          <p><strong>Standard Deviation:</strong> {stdDev !== null ? `${stdDev}%` : 'N/A'}</p>
-        </div>
+        <p><strong>Total Predictions:</strong> {total}</p>
+        <p><strong>Average Grade:</strong> {average ?? 'N/A'}</p>
+        <p><strong>Standard Deviation:</strong> {stdDev ?? 'N/A'}</p>
       </div>
 
       <div className="button-group">
         <button onClick={() => navigate('/comparegroups')}>Compare Groups</button>
         <button onClick={() => navigate('/generate-report')}>Generate Report</button>
-        <button onClick={() => navigate('/comparepredictions')}>Compare Predictions in Time</button>
-        <button className="back-btn" onClick={() => navigate('/initialpage')}>
-          Back to Main Dashboard
-        </button>
+        <button onClick={() => navigate('/comparepredictions')}>Compare Over Time</button>
+        <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
       </div>
 
-      {/* Modal */}
       {selectedStudent && (
-      <div className="modal-overlay" onClick={handleCloseModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <h2>Prediction Details</h2>
-          <p><strong>Name:</strong> {selectedStudent.name}</p>
-          <p><strong>Group:</strong> {selectedStudent.group}</p>
-          <p><strong>Predicted Grade:</strong> {selectedStudent.grade}%</p>
-          <p><strong>Confidence:</strong> {selectedStudent.confidence}%</p>
-          <p><strong>Date:</strong> {selectedStudent.date}</p>
-          <hr style={{ margin: '16px 0' }} />
-
-          {(selectedStudent.commits === undefined ||
-            selectedStudent.filesChanged === undefined ||
-            selectedStudent.linesAdded === undefined ||
-            selectedStudent.linesRemoved === undefined ||
-            selectedStudent.lastCommit === undefined) ? (
-            <p style={{ fontStyle: 'italic', color: '#777' }}>
-              At the moment, there is no additional data available for this student.
-            </p>
-          ) : (
-            <>
-              <p><strong>Repository Activity:</strong> {selectedStudent.commits} commits</p>
-              <p><strong>Files Changed:</strong> {selectedStudent.filesChanged}</p>
-              <p><strong>Lines Added:</strong> +{selectedStudent.linesAdded}</p>
-              <p><strong>Lines Removed:</strong> -{selectedStudent.linesRemoved}</p>
-              <p><strong>Last Commit:</strong> {selectedStudent.lastCommit}</p>
-            </>
-          )}
-
-          <button onClick={handleCloseModal}>Close</button>
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h2>Details for {selectedStudent.handle}</h2>
+            <p><strong>Commits:</strong> {selectedStudent.metrics.total_commits}</p>
+            <p><strong>Lines Added:</strong> {selectedStudent.metrics.sum_lines_added}</p>
+            <p><strong>Lines Deleted:</strong> {selectedStudent.metrics.sum_lines_deleted}</p>
+            <p><strong>Lines/Commit:</strong> {selectedStudent.metrics.sum_lines_per_commit}</p>
+            <p><strong>Active Days:</strong> {selectedStudent.metrics.active_days}</p>
+            <p><strong>Merge Requests:</strong> {selectedStudent.metrics.total_merge_requests}</p>
+            <p><strong>Comments Given:</strong> {selectedStudent.metrics.review_comments_given}</p>
+            <p><strong>Comments Received:</strong> {selectedStudent.metrics.review_comments_received}</p>
+            <button onClick={handleCloseModal}>Close</button>
+          </div>
         </div>
-      </div>
-    )}
-
+      )}
     </div>
   );
-};
+}
 
 export default GradePredictions;

@@ -365,3 +365,87 @@ from .serializers import MyTokenObtainPairSerializer
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def group_history(request, group_name):
+    try:
+        grupo = Grupo.objects.get(group_name=group_name)
+        registos = AlunoGitlabAct.objects.filter(group=grupo).order_by('-data_registo')
+
+        data = []
+        for r in registos:
+            data.append({
+                "handle": r.handle,
+                "total_commits": r.total_commits,
+                "sum_lines_added": r.sum_lines_added,
+                "sum_lines_deleted": r.sum_lines_deleted,
+                "sum_lines_per_commit": r.sum_lines_per_commit,
+                "active_days": r.active_days,
+                "last_minute_commits": r.last_minute_commits,
+                "total_merge_requests": r.total_merge_requests,
+                "merged_requests": r.merged_requests,
+                "review_comments_given": r.review_comments_given,
+                "review_comments_received": r.review_comments_received,
+                "total_issues_created": r.total_issues_created,
+                "total_issues_assigned": r.total_issues_assigned,
+                "issues_resolved": r.issues_resolved,
+                "issue_participation": r.issue_participation,
+                "branches_created": r.branches_created,
+                "merges_to_main_branch": r.merges_to_main_branch,
+                "data_registo": r.data_registo,
+            })
+
+        return Response({"group": group_name, "records": data})
+
+    except Grupo.DoesNotExist:
+        return Response({"error": f"O grupo '{group_name}' não existe."}, status=404)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_group_predictions(request, group_name):
+    try:
+        grupo = Grupo.objects.get(group_name=group_name)
+        alunos = AlunoGitlabAct.objects.filter(group=grupo)
+
+        response_data = []
+
+        for aluno in alunos:
+            # Mock de previsão (podes substituir por chamadas ao modelo de ML)
+            previsao = {
+                "handle": aluno.handle,
+                "predicted_grade": round(min(20, max(0, aluno.total_commits / 5 + aluno.active_days)), 1),
+                "risk": aluno.total_commits < 10,
+                "registered_at": aluno.data_registo,
+                "metrics": {
+                    "total_commits": aluno.total_commits,
+                    "sum_lines_added": aluno.sum_lines_added,
+                    "sum_lines_deleted": aluno.sum_lines_deleted,
+                    "sum_lines_per_commit": aluno.sum_lines_per_commit,
+                    "active_days": aluno.active_days,
+                    "last_minute_commits": aluno.last_minute_commits,
+                    "total_merge_requests": aluno.total_merge_requests,
+                    "merged_requests": aluno.merged_requests,
+                    "review_comments_given": aluno.review_comments_given,
+                    "review_comments_received": aluno.review_comments_received,
+                    "total_issues_created": aluno.total_issues_created,
+                    "total_issues_assigned": aluno.total_issues_assigned,
+                    "issues_resolved": aluno.issues_resolved,
+                    "issue_participation": aluno.issue_participation,
+                    "branches_created": aluno.branches_created,
+                    "merges_to_main_branch": aluno.merges_to_main_branch,
+                }
+            }
+
+            response_data.append(previsao)
+
+        return Response({"group": group_name, "predictions": response_data})
+
+    except Grupo.DoesNotExist:
+        return Response({"error": f"O grupo '{group_name}' não existe."}, status=404)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_groups(request):
+    grupos = Grupo.objects.values_list('group_name', flat=True).distinct()
+    return Response({"groups": list(grupos)})
