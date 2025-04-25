@@ -122,6 +122,7 @@ class AlunoGitlabAct(models.Model):
     issue_participation = models.BooleanField()
     branches_created = models.BigIntegerField()
     merges_to_main_branch = models.BigIntegerField()
+    data_registo = models.DateTimeField(default=timezone.now)  
 
     class Meta:
         unique_together = (("group", "handle"),)
@@ -133,12 +134,17 @@ class AlunoGitlabAct(models.Model):
             return f"Activity record {self.id}"
 
 class Previsao(models.Model):
+    aluno_gitlabact = models.ForeignKey(AlunoGitlabAct, on_delete=models.CASCADE, related_name='previsoes')
     prevision_id = models.BigAutoField(primary_key=True)
-    prev_category = models.CharField(max_length=255)
+    prev_category = models.CharField(max_length=55)
     student = models.ForeignKey(Utilizador, on_delete=models.CASCADE)
     prev_grade = models.BigIntegerField()
     faling_risk = models.BooleanField()
-    prev_date = models.DateField()
+    prev_date = models.DateTimeField(auto_now_add=True)
+
+    
+    def __str__(self):
+        return f"{self.aluno_gitlabact.handle} → {self.prev_grade} ({self.prev_category})"
 
     class Meta:
         unique_together = (("prev_date", "student"),)
