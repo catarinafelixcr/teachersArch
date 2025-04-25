@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../styles/InsertRepositoryPage.css';
 import Sidebar from '../components/SideBar';
 import background from '../assets/background-dei.jpg';
@@ -11,51 +11,81 @@ function InsertRepositoryPage() {
   const [groupInput, setGroupInput] = useState('');
   const [selectedGroupStudents, setSelectedGroupStudents] = useState([]);
   const [groups, setGroups] = useState({});
+  const [existingGroups, setExistingGroups] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [countdown, setCountdown] = useState(4);
+  const [toast, setToast] = useState({ visible: false, message: '', type: '' });
 
   const groupSectionRef = useRef(null);
+  const toastTimeout = useRef(null);
+
+  const showToast = (message, type = 'success') => {
+    if (toastTimeout.current) clearTimeout(toastTimeout.current);
+    setToast({ visible: true, message, type });
+    toastTimeout.current = setTimeout(() => {
+      setToast({ ...toast, visible: false });
+    }, 3000);
+  };
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/groups/', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        setExistingGroups(data.groups || []);
+      })
+      .catch(err => console.error('Error fetching existing groups', err));
+  }, []);
+
+  useEffect(() => {
+    if (groupInput.trim()) {
+      const matchingGroups = existingGroups.filter(group => 
+        group.toLowerCase().includes(groupInput.toLowerCase())
+      );
+      setSuggestions(matchingGroups);
+    } else {
+      setSuggestions([]);
+    }
+  }, [groupInput, existingGroups]);
+
+  const handleSuggestionClick = (suggestion) => {
+    setGroupInput(suggestion);
+    setSuggestions([]);
+  };
 
   const handleSubmit = () => {
     const trimmedLink = repoLink.trim();
-
     if (!trimmedLink) {
       setErrorMessage('Please enter a repository link before submitting.');
       setStudents([]);
       return;
     }
-
-    const isValidGitLabLink = /^https:\/\/gitlab\.com\/.+/.test(trimmedLink);
-
-    if (!isValidGitLabLink) {
+    if (!/^https:\/\/gitlab\.com\/.+/.test(trimmedLink)) {
       setErrorMessage('The repository link must be a valid GitLab URL starting with https://gitlab.com/');
       setStudents([]);
       return;
     }
-
     setErrorMessage('');
     setIsLoading(true);
     setCountdown(3);
 
     let interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === 1) {
-          clearInterval(interval);
-        }
+      setCountdown(prev => {
+        if (prev === 1) clearInterval(interval);
         return prev - 1;
       });
     }, 1000);
 
     fetch('http://localhost:8000/api/extract_students/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
       body: JSON.stringify({ repo_url: trimmedLink }),
     })
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         setIsLoading(false);
         if (data.students) {
           const extractedHandles = Object.keys(data.students);
@@ -68,7 +98,7 @@ function InsertRepositoryPage() {
           setErrorMessage('No students found.');
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         setIsLoading(false);
         setErrorMessage('Error fetching students.');
@@ -76,124 +106,100 @@ function InsertRepositoryPage() {
   };
 
   const addOrRemoveStudent = (student) => {
-    setSelectedGroupStudents((prev) =>
-      prev.includes(student) ? prev.filter((s) => s !== student) : [...prev, student]
+    setSelectedGroupStudents(prev =>
+      prev.includes(student) ? prev.filter(s => s !== student) : [...prev, student]
     );
   };
 
   const handleCreateGroup = () => {
-    if (!groupInput.trim() || selectedGroupStudents.length === 0) {
-      alert('Please provide a group name and select at least one student.');
+    if (!groupInput.trim()) {
+      showToast('Please provide a group name.', 'error');
       return;
     }
-
+    if (selectedGroupStudents.length === 0) {
+      showToast('Please select at least one student.', 'error');
+      return;
+    }
+    const groupExists = groups[groupInput] !== undefined;
+    const actionText = groupExists ? 'update' : 'create';
     const confirmSave = window.confirm(
-      `Are you sure you want to ${groups[groupInput] ? 'update' : 'create'} the group "${groupInput}" with ${selectedGroupStudents.length} student(s)?`
+      `Are you sure you want to ${actionText} the group "${groupInput}" with ${selectedGroupStudents.length} student(s)?`
     );
-
     if (!confirmSave) return;
 
-    setGroups((prev) => ({
-      ...prev,
-      [groupInput]: selectedGroupStudents,
-    }));
-
-    alert(`Group "${groupInput}" saved.`);
-
+    setGroups(prev => ({ ...prev, [groupInput]: selectedGroupStudents }));
+    showToast(`Group "${groupInput}" saved successfully.`);
     setGroupInput('');
     setSelectedGroupStudents([]);
+    setSuggestions([]);
   };
 
   const handleRemoveGroup = (groupName) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the group "${groupName}"?`);
     if (!confirmDelete) return;
-
-    setGroups((prev) => {
+    setGroups(prev => {
       const updated = { ...prev };
       delete updated[groupName];
       return updated;
     });
+    showToast(`Group "${groupName}" deleted.`, 'info');
   };
 
   const studentsInGroups = Object.values(groups).flat();
-  const ungroupedStudents = students.filter((s) => !studentsInGroups.includes(s));
+  const ungroupedStudents = students.filter(s => !studentsInGroups.includes(s));
 
   const handleSaveGroups = () => {
     if (!repoLink.trim()) {
-      alert("Repository link is required to save groups.");
+      showToast('Repository link is required to save groups.', 'error');
       return;
     }
-
+    setIsSaving(true);
     fetch('http://localhost:8000/api/save_groups/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}` // 👈 Token JWT
-      },
-      body: JSON.stringify({
-        repo_url: repoLink,
-        groups: groups,
-        metrics: studentMetrics,
-      }),
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
+      body: JSON.stringify({ repo_url: repoLink, groups, metrics: studentMetrics }),
     })
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
+        setIsSaving(false);
         if (data.status === 'ok') {
-          alert('Groups saved successfully!');
+          showToast('Groups saved successfully!');
         } else {
-          alert('Error saving groups.');
+          showToast('Error saving groups.', 'error');
         }
       })
-      .catch((err) => {
-        console.error("Detailed error saving groups:", err);
-        alert(`Error saving groups: ${err.message}`);
+      .catch(err => {
+        setIsSaving(false);
+        console.error('Detailed error saving groups:', err);
+        showToast(`Error saving groups: ${err.message}`, 'error');
       });
-    };
+  };
 
   return (
-    <div
-      className="insert-repo-layout"
-      style={{
-        backgroundImage: `linear-gradient(rgba(30, 58, 138, 0.4)), url(${background})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
-    >
+    <div className="insert-repo-layout" style={{ backgroundImage: `linear-gradient(rgba(30, 58, 138, 0.4)), url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
       <Sidebar />
       <div className="blur-overlay"></div>
 
+      {toast.visible && (
+        <div className={`toast-message ${toast.type}`}>
+          {toast.message}
+          <button className="close-toast" onClick={() => setToast({ ...toast, visible: false })}>×</button>
+        </div>
+      )}
+
       <div className="insert-repo-page">
         <div className="insert-repo-header">
-          <h1>
-            Insert <span className="highlight">Repository Link</span>
-          </h1>
-          <p className="description">
-            Enter the GitLab repository link you want to analyze. The system will fetch the necessary data from the specified repository.
-          </p>
+          <h1>Insert <span className="highlight">Repository Link</span></h1>
+          <p className="description">Enter the GitLab repository link you want to analyze. The system will fetch the necessary data from the specified repository.</p>
         </div>
 
         <div className="repo-inputs">
           <div className="repo-block">
-            <input
-              type="text"
-              placeholder="https://gitlab.com/dei-uc/pecd2025"
-              value={repoLink}
-              onChange={(e) => setRepoLink(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleSubmit();
-              }}
-            />
+            <input type="text" placeholder="https://gitlab.com/dei-uc/pecd2025" value={repoLink} onChange={(e) => setRepoLink(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }} />
             <button onClick={handleSubmit}>Submit GitLab Link</button>
             {errorMessage && <div className="repo-error-message">{errorMessage}</div>}
           </div>
-
-          {isLoading && (
-            <div className="loading-message">
-              <p>Fetching students... Please wait {countdown > 0 ? `${countdown}s` : ''}</p>
-              <div className="spinner"></div>
-            </div>
-          )}
+          {isLoading && <div className="loading-message"><p>Fetching students... Please wait {countdown > 0 ? `${countdown}s` : ''}</p><div className="spinner"></div></div>}
         </div>
 
         {students.length > 0 && (
@@ -207,53 +213,36 @@ function InsertRepositoryPage() {
                 <h2>Available Students</h2>
                 <p><strong>Ungrouped:</strong> {ungroupedStudents.length} student(s)</p>
                 <ul className="student-list">
-                  {students.map((student, idx) => {
-                    const isSelected = selectedGroupStudents.includes(student);
-                    return (
-                      <li
-                        key={idx}
-                        className={`student-item ${isSelected ? 'selected' : ''}`}
-                        onClick={() => addOrRemoveStudent(student)}
-                      >
-                        <span>{student}</span>
-                        <button
-                          className="student-toggle-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            addOrRemoveStudent(student);
-                          }}
-                        >
-                          {isSelected ? '❌' : '➕'}
-                        </button>
-                      </li>
-                    );
-                  })}
+                  {students.map((student, idx) => (
+                    <li key={idx} className={`student-item ${selectedGroupStudents.includes(student) ? 'selected' : ''}`} onClick={() => addOrRemoveStudent(student)}>
+                      <span>{student}</span>
+                      <button className="student-toggle-button" onClick={(e) => { e.stopPropagation(); addOrRemoveStudent(student); }}>{selectedGroupStudents.includes(student) ? '❌' : '➕'}</button>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               <div className="right-column">
                 <h2>Create / Edit Group</h2>
-                <input
-                  type="text"
-                  placeholder="Group name"
-                  value={groupInput}
-                  onChange={(e) => setGroupInput(e.target.value)}
-                  className="group-name-input"
-                />
+                <div className="autocomplete-container">
+                  <input type="text" placeholder="Group name" value={groupInput} onChange={(e) => setGroupInput(e.target.value)} className="group-name-input" />
+                  {suggestions.length > 0 && (
+                    <ul className="autocomplete-suggestions">
+                      {suggestions.map((suggestion, idx) => (
+                        <li key={idx} onClick={() => handleSuggestionClick(suggestion)}>{suggestion}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
                 <div className="selected-students">
                   <h4>Selected Students ({selectedGroupStudents.length})</h4>
                   <ul>
                     {selectedGroupStudents.map((student, idx) => (
-                      <li key={idx}>
-                        <span>{student}</span>
-                        <button onClick={() => addOrRemoveStudent(student)}>❌</button>
-                      </li>
+                      <li key={idx}><span>{student}</span><button onClick={() => addOrRemoveStudent(student)}>❌</button></li>
                     ))}
                   </ul>
                 </div>
-                <button className="save-group-button" onClick={handleCreateGroup}>
-                  Create / Update Group
-                </button>
+                <button className="save-group-button" onClick={handleCreateGroup}>Create / Update Group</button>
               </div>
             </div>
 
@@ -267,9 +256,7 @@ function InsertRepositoryPage() {
                       <button onClick={() => handleRemoveGroup(groupName)} className="delete-group-button">❌</button>
                     </div>
                     <ul>
-                      {members.map((student, i) => (
-                        <li key={i}>{student}</li>
-                      ))}
+                      {members.map((student, i) => (<li key={i}>{student}</li>))}
                     </ul>
                   </div>
                 ))}
@@ -277,8 +264,8 @@ function InsertRepositoryPage() {
             )}
 
             <div style={{ marginTop: '50px', textAlign: 'center' }}>
-              <button className="save-group-button" onClick={handleSaveGroups}>
-                Save Groups
+              <button className={`save-group-button ${isSaving ? 'saving' : ''}`} onClick={handleSaveGroups} disabled={isSaving}>
+                {isSaving ? 'Saving...' : 'Save Groups'}
               </button>
             </div>
           </div>

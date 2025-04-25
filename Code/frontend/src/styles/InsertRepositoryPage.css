@@ -419,3 +419,121 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
+/* Toast Messages */
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 250px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-message.success {
+  background-color: #4CAF50;
+  border-left: 5px solid #2E7D32;
+}
+
+.toast-message.error {
+  background-color: #F44336;
+  border-left: 5px solid #C62828;
+}
+
+.toast-message.info {
+  background-color: #2196F3;
+  border-left: 5px solid #1565C0;
+}
+
+.close-toast {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0 0 15px;
+  margin-left: 10px;
+}
+
+/* Autocomplete */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-top: none;
+  z-index: 99;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  color: #333;
+}
+
+.autocomplete-suggestions li:hover {
+  background-color: #e9f2ff;
+}
+
+/* Button Loading State */
+.save-group-button.saving {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.save-group-button.saving:hover {
+  background-color: #666;
+}
+
+/* Spinner for saving */
+.save-group-button.saving::after {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

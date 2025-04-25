@@ -65,7 +65,7 @@ function GradePredictions() {
         <table>
           <thead>
             <tr>
-              <th>Handle</th>
+              <th>Student</th>
               <th>Group</th>
               <th>Predicted Grade</th>
               <th>At Risk</th>
