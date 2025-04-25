@@ -292,6 +292,8 @@ def extract_students(request):
         traceback.print_exc()
         return JsonResponse({"error": str(e)}, status=500)
 
+from api.utils.extract import extract_from_gitlab  # certifica-te que importa o novo
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_groups(request):
@@ -302,34 +304,22 @@ def save_groups(request):
         groups_data = data.get("groups", {})
         metrics = data.get("metrics", {})
 
-        print("👀 Grupos recebidos do frontend:")
-        for group_name, handles in groups_data.items():
-            print(f" - {group_name} → {handles}")
-
         if not repo_url or not groups_data:
             logger.warning("Pedido save_groups recebido sem repo_url ou groups.")
             return JsonResponse({"error": "Missing repository URL or groups data."}, status=400)
 
-        try:
-            teacher = Teacher.objects.get(utilizador=request.user)
-            logger.info(f"Teacher encontrado: {teacher.utilizador.email}")
-        except Teacher.DoesNotExist:
-            logger.error(f"Utilizador {request.user.email} tentou salvar grupos mas não é um Teacher.")
-            return JsonResponse({"error": "User is not registered as a teacher."}, status=403)
+        teacher = Teacher.objects.get(utilizador=request.user)
 
         saved_count = 0
 
         for group_name, handles in groups_data.items():
-            grupo, created = Grupo.objects.get_or_create(group_name=group_name)
-            if created:
-                logger.info(f"Grupo '{group_name}' criado.")
+            grupo, _ = Grupo.objects.get_or_create(group_name=group_name)
             TeacherGrupo.objects.get_or_create(teacher=teacher, grupo=grupo)
 
             for handle in handles:
                 metric_data = metrics.get(handle, {})
-                if not metric_data:
-                    logger.warning(f"⚠️ Métricas ausentes para o handle '{handle}'. Usando defaults.")
 
+                # Cria novo registo SEM apagar os antigos
                 AlunoGitlabAct.objects.create(
                     group=grupo,
                     handle=handle,
@@ -351,10 +341,12 @@ def save_groups(request):
                     merges_to_main_branch=metric_data.get("merges_to_main_branch", 0),
                 )
                 saved_count += 1
-                logger.info(f"✅ Registro criado para '{handle}' no grupo '{group_name}'")
 
         return JsonResponse({"status": "ok", "created": saved_count})
 
+    except Teacher.DoesNotExist:
+        logger.error(f"Utilizador {request.user.email} tentou salvar grupos mas não é um Teacher.")
+        return JsonResponse({"error": "User is not registered as a teacher."}, status=403)
     except Exception as e:
         logger.exception(f"ERRO em save_groups para {request.user.email}")
         return JsonResponse({"error": f"Ocorreu um erro interno: {str(e)}"}, status=500)
