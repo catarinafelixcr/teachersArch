@@ -85,108 +85,104 @@ function GradePredictions() {
         format: 'a4',
       });
   
-      // Document constants
       const pageHeight = doc.internal.pageSize.height;
       const pageWidth = doc.internal.pageSize.width;
-      const margin = 20; // Increased margin for better spacing
-      
-      // Colors
-      const primaryColor = [41, 128, 185]; // Blue
-      const secondaryColor = [52, 73, 94]; // Dark blue-gray
-      const accentColor = [39, 174, 96]; // Green
-      const grayColor = [149, 165, 166]; // Light gray
-      const lightBackground = [245, 247, 250]; // Very light blue-gray
-      
-      // Date formatting
+      const margin = 20;
+  
+      const primaryColor = [41, 128, 185];
+      const secondaryColor = [52, 73, 94];
+      const accentColor = [39, 174, 96];
+      const grayColor = [149, 165, 166];
+      const lightBackground = [245, 247, 250];
+  
       const today = new Date();
       const displayDate = today.toLocaleDateString('en-GB');
       const fileDate = today.toLocaleDateString('en-GB').replace(/\//g, '-');
   
       // ===== HEADER =====
-      // Add colored header bar
-      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.setFillColor(30, 58, 138);
       doc.rect(0, 0, pageWidth, 30, 'F');
-      
-      // Title
-      doc.setFontSize(24);
-      doc.setFont('helvetica', 'bold');
+  
+      doc.setFontSize(15);
+      doc.setFont('arial', 'bold');
       doc.setTextColor(255, 255, 255);
       doc.text('Grade Predictions Report', margin, 20);
-      
-      // Subtitle line
+  
+      // Logo no header
+      if (logo) {
+        doc.addImage(logo, 'PNG', pageWidth - margin - 25, 5, 40, 20);
+      }
+  
       let yPos = 40;
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      doc.setFont('arial', 'normal');
       doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
       doc.text(`Group: ${selectedGroup}`, margin, yPos);
-      
-      // Add horizontal divider
+  
       yPos += 5;
-      doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
+      doc.setDrawColor(30, 58, 138);
       doc.setLineWidth(0.5);
       doc.line(margin, yPos, pageWidth - margin, yPos);
-      
-      // Document metadata
+  
       yPos += 10;
       doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
+      doc.setFont('arial', 'normal');
       doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
       doc.text(`Generated on: ${displayDate}`, margin, yPos);
       doc.text(`Sort order: ${sortOption.replace('-', ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase())}`, pageWidth - margin, yPos, { align: 'right' });
   
       // ===== STATISTICS SECTION =====
       yPos += 15;
+      const statsStartY = yPos;
+      const statsHeight = 50; // reduzido
       doc.setFillColor(lightBackground[0], lightBackground[1], lightBackground[2]);
-      doc.rect(margin, yPos, pageWidth - (margin * 2), 45, 'F');
-      
-      // Stats header
+      doc.rect(margin, statsStartY, pageWidth - (margin * 2), statsHeight, 'F');
+  
       yPos += 10;
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.setFont('arial', 'bold');
       doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
       doc.text('Summary Statistics', margin + 5, yPos);
-      
-      // Stats grid - first row
-      yPos += 12;
+  
+      yPos += 10;
       const statsColumnWidth = (pageWidth - (margin * 2) - 10) / 3;
-      
+  
       doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont('arial', 'bold');
       doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
       doc.text('TOTAL PREDICTIONS', margin + 5, yPos);
       doc.text('AVERAGE GRADE', margin + 5 + statsColumnWidth, yPos);
       doc.text('STANDARD DEVIATION', margin + 5 + (statsColumnWidth * 2), yPos);
-      
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
+  
+      yPos += 6;
+      doc.setFontSize(12);
+      doc.setFont('arial', 'bold');
       doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-      yPos += 7;
       doc.text(`${total}`, margin + 5, yPos);
       doc.text(`${average ?? 'N/A'}`, margin + 5 + statsColumnWidth, yPos);
       doc.text(`${stdDev ?? 'N/A'}`, margin + 5 + (statsColumnWidth * 2), yPos);
-      
-      // Stats grid - second row
+  
       yPos += 12;
       doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont('arial', 'bold');
       doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
       doc.text('HIGHEST PREDICTED GRADE', margin + 5, yPos);
       doc.text('LOWEST PREDICTED GRADE', margin + 5 + statsColumnWidth * 1.5, yPos);
-      
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
+  
+      yPos += 6;
+      doc.setFontSize(12);
+      doc.setFont('arial', 'bold');
       doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-      yPos += 7;
       doc.text(`${highest ?? 'N/A'}`, margin + 5, yPos);
       doc.text(`${lowest ?? 'N/A'}`, margin + 5 + statsColumnWidth * 1.5, yPos);
   
       // ===== STUDENT DATA TABLE =====
-      yPos += 15;
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      yPos += 20;
+      doc.setFontSize(13);
+      doc.setFont('arial', 'bold');
+      doc.setTextColor(30, 58, 138);
       doc.text('Student Predictions', margin, yPos);
-      
+  
       yPos += 5;
       autoTable(doc, {
         startY: yPos,
@@ -199,8 +195,8 @@ function GradePredictions() {
         margin: { top: yPos, left: margin, right: margin, bottom: 40 },
         styles: {
           fontSize: 10,
-          cellPadding: 5,
-          font: 'helvetica',
+          cellPadding: 3,
+          font: 'arial',
           lineColor: [220, 220, 220],
           lineWidth: 0.1,
         },
@@ -222,48 +218,49 @@ function GradePredictions() {
         alternateRowStyles: {
           fillColor: [248, 250, 252],
         },
+        didParseCell: (data) => {
+          if (data.section === 'body' && data.column.index === 1) {
+            const grade = parseFloat(data.cell.text);
+            if (grade >= 10) {
+              data.cell.styles.textColor = [39, 174, 96];
+              data.cell.styles.textColor = [231, 76, 60];
+            }
+          }
+        },
         didDrawPage: (data) => {
-          // Footer on each page
-          const footerY = pageHeight - 10;
-          
-          // Add page number
+          const footerY = pageHeight - 15;
+  
           doc.setFontSize(9);
-          doc.setFont('helvetica', 'normal');
+          doc.setFont('arial', 'normal');
           doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
           doc.text(`Page ${data.pageNumber}`, pageWidth - margin, footerY, { align: 'right' });
-          
-          // Add footer text
+  
           doc.setFontSize(9);
-          doc.setFont('helvetica', 'italic');
-          doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+          doc.setFont('arial', 'italic');
           doc.text('Generated automatically by the Grade Prediction System', margin, footerY);
-          
-          // Add line above footer
+  
           doc.setDrawColor(220, 220, 220);
           doc.setLineWidth(0.1);
           doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
         },
       });
   
-      // Add logo/watermark on each page if needed
-      // For example, you could add a small watermark in the background
-      
-      // ===== SAVE PDF =====
       const filename = `GradePredictions_${selectedGroup}_${fileDate}.pdf`;
       doc.save(filename);
       showToast('PDF report generated successfully!', 'success');
+  
     } catch (error) {
       console.error('Error generating PDF:', error);
       showToast('Error generating PDF report. Check console for details.', 'error');
     }
   };
-
+  
   const showToast = (message, type = 'info') => {
     const toast = document.createElement('div');
     toast.className = `toast-message ${type}`;
     toast.innerHTML = `
       <span>${message}</span>
-      <button class="close-toast">&times;</button>
+      <button class="close-toast">&arial;</button>
     `;
   
     toast.querySelector('.close-toast').addEventListener('click', () => {
@@ -449,8 +446,6 @@ function GradePredictions() {
             <p><strong>Group:</strong> {selectedGroup}</p>
             {/* Display calculated stats in the modal for confirmation */}
             <p><strong>Total Predictions:</strong> {total}</p>
-            <p><strong>Average Grade:</strong> {average ?? 'N/A'}</p>
-            <p><strong>Highest/Lowest:</strong> {highest ?? 'N/A'} / {lowest ?? 'N/A'}</p>
             <p><strong>Order:</strong> {sortOption.replace('-', ' ').toUpperCase()}</p>
             <p><strong>Preview (First 5):</strong></p>
             <ul>

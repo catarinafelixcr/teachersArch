@@ -350,41 +350,83 @@ td:last-child button:hover {
 }
 
 .modal-content {
-  background-color: rgba(255, 255, 255, 0.893);
-  padding: 24px 32px;
-  border-radius: 16px;
-  max-width: 400px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 32px 40px;
+  border-radius: 20px;
+  max-width: 600px;
   width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
   text-align: left;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .modal-content h2 {
   margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 22px;
+  margin-bottom: 20px;
+  font-size: 24px;
   color: #1e3a8a;
+  font-weight: 700;
 }
 
 .modal-content p {
-  margin: 8px 0;
+  margin: 10px 0;
+  font-size: 16px;
 }
 
-.modal-content button {
-  margin-top: 20px;
-  padding: 10px 18px;
+.modal-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-content ul li {
+  background-color: #f0f4ff;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #1e3a8a;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-button {
   background-color: #1e3a8a;
   color: white;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
 }
 
-.modal-content button:hover {
+.confirm-button:hover {
   background-color: #163176;
 }
+
+.cancel-button {
+  background-color: #e0e8f8;
+  color: #1e3a8a;
+  border: none;
+}
+
+.cancel-button:hover {
+  background-color: #d0d8f0;
+}
+
 
 /* =========================
    RESPONSIVIDADE
