@@ -1,7 +1,6 @@
 import React from 'react';
 import '../styles/PerformanceForecastPage.css';
 import background from '../assets/background-dei.jpg';
-import logo from '../assets/logo.png';
 import Sidebar from '../components/SideBar';
 import { useNavigate } from 'react-router-dom';
 import Plot from 'react-plotly.js';

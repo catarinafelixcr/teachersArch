@@ -18,7 +18,6 @@ function LoginPage() {
   const [activated, setActivated] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [loginAttemptsByEmail, setLoginAttemptsByEmail] = useState({});
   const [blockedEmails, setBlockedEmails] = useState({});
 
   useEffect(() => {

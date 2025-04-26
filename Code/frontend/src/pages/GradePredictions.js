@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import '../styles/GradePredictions.css';
 import Sidebar from '../components/SideBar';
+import logo from '../assets/logo-white.png';
 
 function GradePredictions() {
   const [groups, setGroups] = useState([]);
@@ -13,6 +16,8 @@ function GradePredictions() {
   const [sortOption, setSortOption] = useState('name-asc');
   const [showGeneralInfo, setShowGeneralInfo] = useState(false);
   const [showStatsInfo, setShowStatsInfo] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +61,221 @@ function GradePredictions() {
     setSearchTerm('');
     setPredictions([]);
   };
+
+  const handleGenerateReport = () => {
+    if (!selectedGroup) {
+      showToast('Please select a group before generating a report.', 'error');
+      return;
+    }
+    setShowReportModal(true);
+  };
+
+  const confirmGeneratePDF = () => {
+    setShowReportModal(false);
+  
+    try {
+      if (sortedPredictions.length === 0) {
+        showToast('No predictions available to generate report.', 'error');
+        return;
+      }
+  
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+  
+      // Document constants
+      const pageHeight = doc.internal.pageSize.height;
+      const pageWidth = doc.internal.pageSize.width;
+      const margin = 20; // Increased margin for better spacing
+      
+      // Colors
+      const primaryColor = [41, 128, 185]; // Blue
+      const secondaryColor = [52, 73, 94]; // Dark blue-gray
+      const accentColor = [39, 174, 96]; // Green
+      const grayColor = [149, 165, 166]; // Light gray
+      const lightBackground = [245, 247, 250]; // Very light blue-gray
+      
+      // Date formatting
+      const today = new Date();
+      const displayDate = today.toLocaleDateString('en-GB');
+      const fileDate = today.toLocaleDateString('en-GB').replace(/\//g, '-');
+  
+      // ===== HEADER =====
+      // Add colored header bar
+      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.rect(0, 0, pageWidth, 30, 'F');
+      
+      // Title
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text('Grade Predictions Report', margin, 20);
+      
+      // Subtitle line
+      let yPos = 40;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      doc.text(`Group: ${selectedGroup}`, margin, yPos);
+      
+      // Add horizontal divider
+      yPos += 5;
+      doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
+      doc.setLineWidth(0.5);
+      doc.line(margin, yPos, pageWidth - margin, yPos);
+      
+      // Document metadata
+      yPos += 10;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+      doc.text(`Generated on: ${displayDate}`, margin, yPos);
+      doc.text(`Sort order: ${sortOption.replace('-', ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase())}`, pageWidth - margin, yPos, { align: 'right' });
+  
+      // ===== STATISTICS SECTION =====
+      yPos += 15;
+      doc.setFillColor(lightBackground[0], lightBackground[1], lightBackground[2]);
+      doc.rect(margin, yPos, pageWidth - (margin * 2), 45, 'F');
+      
+      // Stats header
+      yPos += 10;
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      doc.text('Summary Statistics', margin + 5, yPos);
+      
+      // Stats grid - first row
+      yPos += 12;
+      const statsColumnWidth = (pageWidth - (margin * 2) - 10) / 3;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+      doc.text('TOTAL PREDICTIONS', margin + 5, yPos);
+      doc.text('AVERAGE GRADE', margin + 5 + statsColumnWidth, yPos);
+      doc.text('STANDARD DEVIATION', margin + 5 + (statsColumnWidth * 2), yPos);
+      
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      yPos += 7;
+      doc.text(`${total}`, margin + 5, yPos);
+      doc.text(`${average ?? 'N/A'}`, margin + 5 + statsColumnWidth, yPos);
+      doc.text(`${stdDev ?? 'N/A'}`, margin + 5 + (statsColumnWidth * 2), yPos);
+      
+      // Stats grid - second row
+      yPos += 12;
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+      doc.text('HIGHEST PREDICTED GRADE', margin + 5, yPos);
+      doc.text('LOWEST PREDICTED GRADE', margin + 5 + statsColumnWidth * 1.5, yPos);
+      
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      yPos += 7;
+      doc.text(`${highest ?? 'N/A'}`, margin + 5, yPos);
+      doc.text(`${lowest ?? 'N/A'}`, margin + 5 + statsColumnWidth * 1.5, yPos);
+  
+      // ===== STUDENT DATA TABLE =====
+      yPos += 15;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+      doc.text('Student Predictions', margin, yPos);
+      
+      yPos += 5;
+      autoTable(doc, {
+        startY: yPos,
+        head: [['Student Handle', 'Predicted Grade', 'Registration Date']],
+        body: sortedPredictions.map(p => [
+          p.handle,
+          p.predicted_grade.toFixed(1),
+          new Date(p.registered_at).toLocaleDateString()
+        ]),
+        margin: { top: yPos, left: margin, right: margin, bottom: 40 },
+        styles: {
+          fontSize: 10,
+          cellPadding: 5,
+          font: 'helvetica',
+          lineColor: [220, 220, 220],
+          lineWidth: 0.1,
+        },
+        headStyles: {
+          fillColor: primaryColor,
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+          halign: 'left',
+          fontSize: 11,
+        },
+        bodyStyles: {
+          textColor: [70, 70, 70],
+        },
+        columnStyles: {
+          0: { cellWidth: 'auto' },
+          1: { cellWidth: 30, halign: 'center' },
+          2: { cellWidth: 40, halign: 'center' },
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252],
+        },
+        didDrawPage: (data) => {
+          // Footer on each page
+          const footerY = pageHeight - 10;
+          
+          // Add page number
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+          doc.text(`Page ${data.pageNumber}`, pageWidth - margin, footerY, { align: 'right' });
+          
+          // Add footer text
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'italic');
+          doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+          doc.text('Generated automatically by the Grade Prediction System', margin, footerY);
+          
+          // Add line above footer
+          doc.setDrawColor(220, 220, 220);
+          doc.setLineWidth(0.1);
+          doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+        },
+      });
+  
+      // Add logo/watermark on each page if needed
+      // For example, you could add a small watermark in the background
+      
+      // ===== SAVE PDF =====
+      const filename = `GradePredictions_${selectedGroup}_${fileDate}.pdf`;
+      doc.save(filename);
+      showToast('PDF report generated successfully!', 'success');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      showToast('Error generating PDF report. Check console for details.', 'error');
+    }
+  };
+
+  const showToast = (message, type = 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button class="close-toast">&times;</button>
+    `;
+  
+    toast.querySelector('.close-toast').addEventListener('click', () => {
+      toast.remove();
+    });
+  
+    document.body.appendChild(toast);
+  
+    setTimeout(() => {
+      toast.remove();
+    }, 4000);
+  };  
 
   const filteredGroups = groups.filter(group => 
     group.toLowerCase().includes(searchTerm.toLowerCase())
@@ -216,10 +436,38 @@ function GradePredictions() {
 
       <div className="button-group">
         <button onClick={() => navigate('/comparegroups')}>Compare Groups</button>
-        <button onClick={() => navigate('/generate-report')}>Generate Report</button>
+        <button onClick={handleGenerateReport} disabled={!selectedGroup || sortedPredictions.length === 0}>Generate Report</button> {/* Disable if no data */}
         <button onClick={() => navigate('/comparepredictions')}>Compare Over Time</button>
         <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
       </div>
+
+      {/* Report Confirmation Modal */}
+      {showReportModal && (
+        <div className="modal-overlay" onClick={() => setShowReportModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h2>Confirm Report Generation</h2>
+            <p><strong>Group:</strong> {selectedGroup}</p>
+            {/* Display calculated stats in the modal for confirmation */}
+            <p><strong>Total Predictions:</strong> {total}</p>
+            <p><strong>Average Grade:</strong> {average ?? 'N/A'}</p>
+            <p><strong>Highest/Lowest:</strong> {highest ?? 'N/A'} / {lowest ?? 'N/A'}</p>
+            <p><strong>Order:</strong> {sortOption.replace('-', ' ').toUpperCase()}</p>
+            <p><strong>Preview (First 5):</strong></p>
+            <ul>
+              {sortedPredictions.slice(0, 5).map((p, idx) => (
+                // Format grade here as well for consistency
+                <li key={idx}>{p.handle} - {p.predicted_grade.toFixed(1)}</li>
+              ))}
+               {sortedPredictions.length > 5 && <li>... and {sortedPredictions.length - 5} more</li>}
+               {sortedPredictions.length === 0 && <li>No predictions to preview.</li>}
+            </ul>
+            <div className="modal-buttons">
+                <button className="confirm-button" onClick={confirmGeneratePDF} disabled={sortedPredictions.length === 0}>Confirm and Generate PDF</button>
+                <button className="cancel-button" onClick={() => setShowReportModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedStudent && (
         <div className="modal-overlay" onClick={handleCloseModal}>
