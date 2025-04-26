@@ -1,54 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import Plot from 'react-plotly.js';
 import '../styles/CompareGroups.css';
 
-const groupOptions = [
-  { value: 'A', label: 'Group A' },
-  { value: 'B', label: 'Group B' },
-  { value: 'C', label: 'Group C' },
-];
-
-const allGroupData = [
-  { group: 'A', grades: [94, 87], confidence: [96, 92] },
-  { group: 'B', grades: [65, 42], confidence: [89, 75] },
-  { group: 'C', grades: [28, 73], confidence: [68, 82] },
-];
-
 const CompareGroups = () => {
+  const [groups, setGroups] = useState([]);
   const [selectedGroups, setSelectedGroups] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [warning, setWarning] = useState('');
+  const [groupData, setGroupData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleCompare = () => {
-    const selected = selectedGroups.map(g => g.value);
+  useEffect(() => {
+    fetch('http://localhost:8000/api/groups/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.groups) {
+          setGroups(data.groups.map(group => ({ label: group, value: group })));
+        }
+      })
+      .catch((error) => console.error('Error fetching groups:', error));
+  }, []);
 
-    if (selected.length < 2) {
-      setFilteredData([]);
-      setWarning("Please select at least two groups to compare grade predictions.");
+  useEffect(() => {
+    if (selectedGroups.length < 2) {
+      setGroupData([]);
       return;
     }
 
-    const result = allGroupData.filter(d => selected.includes(d.group));
-    setFilteredData(result);
-    setWarning('');
-  };
+    const fetchData = async () => {
+      setLoading(true);
+      const fetchedData = [];
 
-  if (groupOptions.length === 0 || allGroupData.length === 0) {
-    return (
-      <div className="compare-groups-page">
-        <h1><strong>Compare</strong> Predictions by <span className="highlight">Group</span></h1>
-        <p className="description" style={{ color: '#b00', fontStyle: 'italic', marginTop: '20px' }}>
-          Nenhum grupo disponível para comparação. Verifique se há alunos corretamente associados a grupos.
-        </p>
-        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
-          Back to Grade Predictions
-        </button>
-      </div>
-    );
-  }
+      for (const group of selectedGroups) {
+        try {
+          const res = await fetch(`http://localhost:8000/api/group_predictions/${group.value}/`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+            },
+          });
+          const data = await res.json();
+
+          if (data.predictions && data.predictions.length > 0) {
+            const grades = data.predictions.map(p => p.predicted_grade);
+            const mean = grades.reduce((a, b) => a + b, 0) / grades.length;
+            const stdDev = Math.sqrt(grades.map(g => Math.pow(g - mean, 2)).reduce((a, b) => a + b, 0) / grades.length);
+            fetchedData.push({
+              group: group.value,
+              grades,
+              mean: mean.toFixed(1),
+              stdDev: stdDev.toFixed(1),
+              min: Math.min(...grades),
+              max: Math.max(...grades),
+              count: grades.length,
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching predictions for group ${group.value}:`, error);
+        }
+      }
+
+      setGroupData(fetchedData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [selectedGroups]);
 
   return (
     <div className="compare-groups-page">
@@ -57,119 +80,103 @@ const CompareGroups = () => {
       </h1>
 
       <p className="description">
-        This page allows you to compare grade predictions between different groups of students.
-        Use this tool to identify performance trends between groups and adjust your teaching strategies in a targeted way.
+        Compare grade predictions across different groups to analyze trends and patterns.
       </p>
 
-      <label className="instruction">Please, select groups.</label>
       <div className="group-select">
         <Select
           isMulti
-          options={groupOptions}
+          options={groups}
           onChange={setSelectedGroups}
           className="react-select"
-          placeholder="Group A, B, C..."
+          placeholder="Select groups..."
         />
-        <button onClick={handleCompare}>Compare</button>
       </div>
 
-      {warning && (
-        <div style={{ color: 'red', marginTop: '10px', fontStyle: 'italic' }}>
-          {warning}
-        </div>
-      )}
+      {loading ? (
+        <div style={{ marginTop: '30px', fontStyle: 'italic' }}>Loading group data...</div>
+      ) : (
+        groupData.length > 0 && (
+          <>
+            <div className="history-header">
+              <h3 className="info">
+                → Comparative Table
+                <span onClick={() => setShowInfo(!showInfo)}>ⓘ</span>
+              </h3>
+            </div>
 
-      <div className="table-container">
-        <h3 className="info">-&gt; Comparative Table</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Group</th>
-              <th>Average Grade (%)</th>
-              <th>Standard Deviation</th>
-              <th>Min</th>
-              <th>Max</th>
-              <th>Predictions Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.length === 0 ? (
-              <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '20px', fontStyle: 'italic', color: '#888' }}>
-                  Please select at least two groups to compare.
-                </td>
-              </tr>
-            ) : (
-              filteredData.map((groupData, idx) => {
-                const grades = groupData.grades;
-                const mean = Math.round(grades.reduce((a, b) => a + b, 0) / grades.length);
-                const stdDev = Math.round(Math.sqrt(grades.map(g => Math.pow(g - mean, 2)).reduce((a, b) => a + b, 0) / grades.length));
-                const min = Math.min(...grades);
-                const max = Math.max(...grades);
-                return (
-                  <tr key={idx}>
-                    <td>{groupData.group}</td>
-                    <td>{mean}</td>
-                    <td>{stdDev}</td>
-                    <td>{min}</td>
-                    <td>{max}</td>
-                    <td>{grades.length}</td>
-                  </tr>
-                );
-              })
+            {showInfo && (
+              <div className="info-box">
+                <p>This table displays the average grade, standard deviation, minimum, maximum, and total predictions count for each selected group.</p>
+              </div>
             )}
-          </tbody>
-        </table>
-      </div>
 
-      {filteredData.length > 0 && (
-        <div className="charts-container">
-          <div className="chart-row">
-            <div className="chart">
-              <h4>Predicted Grades by Group</h4>
-              <Plot
-                data={[{
-                  x: filteredData.map(d => d.group),
-                  y: filteredData.map(d => {
-                    const sum = d.grades.reduce((a, b) => a + b, 0);
-                    return Math.round(sum / d.grades.length);
-                  }),
-                  type: 'bar',
-                  marker: { color: '#3c66f4' },
-                }]}
-                layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
-                useResizeHandler
-                style={{ width: '100%', height: '100%' }}
-                config={{ responsive: true }}
-              />
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Group</th>
+                    <th>Average Grade (%)</th>
+                    <th>Standard Deviation</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Predictions Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupData.map((g, idx) => (
+                    <tr key={idx}>
+                      <td>{g.group}</td>
+                      <td>{g.mean}</td>
+                      <td>{g.stdDev}</td>
+                      <td>{g.min}</td>
+                      <td>{g.max}</td>
+                      <td>{g.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-            <div className="chart">
-              <h4>Confidence by Group</h4>
-              <Plot
-                data={[{
-                  x: filteredData.map(d => d.group),
-                  y: filteredData.map(d => {
-                    const sum = d.confidence.reduce((a, b) => a + b, 0);
-                    return Math.round(sum / d.confidence.length);
-                  }),
-                  type: 'scatter',
-                  mode: 'lines+markers',
-                  marker: { color: '#8884d8' },
-                }]}
-                layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 250 }}
-                useResizeHandler
-                style={{ width: '100%', height: '100%' }}
-                config={{ responsive: true }}
-              />
+            <div className="charts-container">
+              <div className="chart-row">
+                <div className="chart">
+                  <h4>Average Grades</h4>
+                  <Plot
+                    data={[{
+                      x: groupData.map(d => d.group),
+                      y: groupData.map(d => parseFloat(d.mean)),
+                      type: 'bar',
+                      marker: { color: '#3c66f4' },
+                    }]}
+                    layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 300 }}
+                    useResizeHandler
+                    style={{ width: '100%', height: '100%' }}
+                    config={{ responsive: true }}
+                  />
+                </div>
+
+                <div className="chart">
+                  <h4>Grades Dispersion</h4>
+                  <Plot
+                    data={groupData.map(g => ({
+                      type: 'box',
+                      name: g.group,
+                      y: g.grades,
+                    }))}
+                    layout={{ title: '', margin: { t: 30, l: 40, r: 30, b: 40 }, height: 300 }}
+                    useResizeHandler
+                    style={{ width: '100%', height: '100%' }}
+                    config={{ responsive: true }}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )
       )}
 
-      <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
-        Back to Grade Predictions
-      </button>
+      <button className="back-btn" onClick={() => navigate('/gradepredictions')}>Back to Grade Predictions</button>
     </div>
   );
 };
