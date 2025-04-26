@@ -10,7 +10,7 @@ body {
 .insert-repo-page {
   position: relative;
   box-sizing: border-box;
-  height: 100vh;
+  min-height: 100vh;
   overflow-y: auto;
   padding: 40px;
   text-align: center;
@@ -20,7 +20,8 @@ body {
   color: #1d1d1d;
   font-size: 36px;
   font-weight: 600;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
+  margin-top: 5%;
 }
 
 .highlight {
@@ -33,20 +34,60 @@ body {
 /* =========================
    DROPDOWN SELECT
 ========================= */
-select {
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.top-controls select {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  display: block;
   font-size: 16px;
-  margin: 30px auto;
   padding: 12px 16px;
-  width: 200px;
+  width: 220px;
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-container select {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px; /* pill effect */
+  padding: 8px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e3a8a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sort-container select:hover {
+  background-color: #f0f4ff;
+}
+
+.sort-label {
+  font-weight: 600;
+  font-size: 16px;
 }
 
 /* =========================
    SECTION TITLES
 ========================= */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .info {
   align-items: center;
   color: #1e3a8a;
@@ -54,14 +95,121 @@ select {
   font-size: 18px;
   font-weight: 600;
   gap: 8px;
-  justify-content: start;
-  margin-top: 40px;
   text-align: left;
 }
 
 .info span {
   cursor: pointer;
   font-size: 18px;
+}
+
+/* Added spacing for Statistic Overview */
+.statistic-overview {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   INFO BOX
+========================= */
+.info-box {
+  background-color: #e0e8f8;
+  border-left: 4px solid #1e3a8a;
+  border-radius: 4px;
+  color: #1e3a8a;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.info-icon {
+  color: #1e3a8a;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* =========================
+   SEARCHABLE DROPDOWN
+========================= */
+.searchable-dropdown {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.searchable-dropdown input {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 12px 16px;
+  padding-right: 40px; /* Space for clear button */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.clear-selection {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.clear-selection:hover {
+  background-color: #f0f0f0;
+  color: #1e3a8a;
+}
+
+.group-dropdown {
+  position: absolute;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  list-style-type: none;
+  margin: 4px 0 0;
+  padding: 0;
+  z-index: 10;
+}
+
+.group-dropdown li {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.group-dropdown li:hover {
+  background-color: #f0f4ff;
+}
+
+.group-dropdown li.selected {
+  background-color: #e0e8f8;
+  font-weight: 600;
+}
+
+.group-dropdown li.no-results {
+  color: #888;
+  font-style: italic;
+  text-align: center;
 }
 
 /* =========================
@@ -103,12 +251,86 @@ td {
 
 td:last-child {
   color: #1e3a8a;
-  cursor: pointer;
   font-weight: 600;
 }
 
-td:last-child:hover {
-  text-decoration: underline;
+/* Clickable rows */
+.clickable-row {
+  cursor: pointer; 
+  transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+  background-color: #e0e8f849;
+}
+
+/* Style for the View button */
+td:last-child button {
+  background-color: #1e3a8a;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  transition: background-color 0.2s;
+}
+
+td:last-child button:hover {
+  background-color: #152c66;
+}
+
+/* =========================
+   STATISTICS BOX
+========================= */
+.stats-box {
+  background-color: #f5f8ff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  font-size: 15px;
+  justify-content: space-between;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  padding: 24px 32px;
+  text-align: left;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.button-group button {
+  background-color: #1a378c;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  flex-grow: 1;
+  font-weight: bold;
+  min-width: 220px;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.button-group .back-btn {
+  margin-left: auto;
+}
+
+.back-btn {
+  background-color: #2f364d;
+}
+
+.back-btn:hover {
+  background-color: #2f364d;
 }
 
 /* =========================
@@ -120,12 +342,11 @@ td:last-child:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: transparent; 
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  margin-top: 5%;
 }
 
 .modal-content {
@@ -166,60 +387,14 @@ td:last-child:hover {
 }
 
 /* =========================
-   STATISTICS BOX
-========================= */
-.stats-box {
-  background-color: #f5f8ff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  display: flex;
-  font-size: 15px;
-  justify-content: space-between;
-  margin-top: 30px;
-  padding: 24px 32px;
-  text-align: left;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.button-group button {
-  background-color: #1a378c;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  cursor: pointer;
-  flex-grow: 1;
-  font-weight: bold;
-  min-width: 220px;
-  padding: 12px 20px;
-  text-align: center;
-}
-
-.button-group .back-btn {
-  margin-left: auto;
-}
-
-.back-btn {
-  background-color: #2f364d;
-}
-
-.back-btn:hover {
-  background-color: #2f364d;
-}
-
-/* =========================
    RESPONSIVIDADE
 ========================= */
 @media (max-width: 768px) {
+  .top-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .stats-box {
     flex-direction: column;
     gap: 16px;
@@ -233,4 +408,25 @@ td:last-child:hover {
   select {
     width: 100%;
   }
+
+  .sort-container {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .searchable-dropdown {
+    max-width: 100%;
+  }
+}
+
+.group-select-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
