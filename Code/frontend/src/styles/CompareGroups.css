@@ -13,7 +13,6 @@ html, body {
 
 .compare-groups-page {
   overflow-y: auto;
-
   box-sizing: border-box;
   min-height: 100vh;
   padding: 40px 40px 40px 280px; /* Ajuste para o Sidebar */
@@ -150,8 +149,7 @@ tbody tr:hover {
 .chart h4 {
   margin-bottom: 20px;
   font-size: 18px;
-  color: #666;
-  font-style: italic;
+  color: #1e3a8a;
 }
 
 /* =========================

@@ -260,7 +260,7 @@ function GradePredictions() {
     toast.className = `toast-message ${type}`;
     toast.innerHTML = `
       <span>${message}</span>
-      <button class="close-toast">&arial;</button>
+      <button class="close-toast">&times;</button>
     `;
   
     toast.querySelector('.close-toast').addEventListener('click', () => {
@@ -433,7 +433,7 @@ function GradePredictions() {
 
       <div className="button-group">
         <button onClick={() => navigate('/comparegroups')}>Compare Groups</button>
-        <button onClick={handleGenerateReport} disabled={!selectedGroup || sortedPredictions.length === 0}>Generate Report</button> {/* Disable if no data */}
+        <button onClick={handleGenerateReport}>Generate Report</button> {/* Disable if no data */}
         <button onClick={() => navigate('/comparepredictions')}>Compare Over Time</button>
         <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
       </div>
