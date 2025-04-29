@@ -441,3 +441,24 @@ def get_group_predictions(request, group_name):
 def list_groups(request):
     grupos = Grupo.objects.values_list('group_name', flat=True).distinct()
     return Response({"groups": list(grupos)})
+
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def students_at_risk(request):
+    alunos = AlunoGitlabAct.objects.all()
+
+    data = []
+    for aluno in alunos:
+        data.append({
+            "id": aluno.id,
+            "handle": aluno.handle,
+            "performance": aluno.performance if hasattr(aluno, 'performance') else "Unknown",  # Se tiveres esse campo
+            "is_at_risk": aluno.total_commits < 10,  # Aqui defines o que consideras \"at risk\"!
+            "last_active": aluno.data_registo,
+        })
+
+    return Response({"students": data})

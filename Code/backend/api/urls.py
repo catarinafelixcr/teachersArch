@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/profile/', get_profile),
     path('api/group_predictions/<str:group_name>/', views.get_group_predictions, name='get_group_predictions'),
     path('api/groups/', list_groups),
+    path('api/students_at_risk/', students_at_risk, name='students_at_risk'),
 
     path('', include(router.urls)),
 ]
