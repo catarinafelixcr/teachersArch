@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../styles/InsertRepositoryPage.css';
 import Sidebar from '../components/SideBar';
 import background from '../assets/background-dei.jpg';
+import api from '../services/api'; 
 
 function InsertRepositoryPage() {
   const [repoLink, setRepoLink] = useState('');
@@ -30,12 +31,9 @@ function InsertRepositoryPage() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/groups/', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    })
-      .then(res => res.json())
-      .then(data => {
-        setExistingGroups(data.groups || []);
+    api.get('/api/groups/')
+      .then(res => {
+        setExistingGroups(res.data.groups || []);
       })
       .catch(err => console.error('Error fetching existing groups', err));
   }, []);
@@ -79,13 +77,9 @@ function InsertRepositoryPage() {
       });
     }, 1000);
 
-    fetch('http://localhost:8000/api/extract_students/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
-      body: JSON.stringify({ repo_url: trimmedLink }),
-    })
-      .then(res => res.json())
-      .then(data => {
+    api.post('/api/extract_students/', { repo_url: trimmedLink })
+      .then(res => {
+        const data = res.data;
         setIsLoading(false);
         if (data.students) {
           const extractedHandles = Object.keys(data.students);
@@ -154,13 +148,9 @@ function InsertRepositoryPage() {
       return;
     }
     setIsSaving(true);
-    fetch('http://localhost:8000/api/save_groups/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('access_token')}` },
-      body: JSON.stringify({ repo_url: repoLink, groups, metrics: studentMetrics }),
-    })
-      .then(res => res.json())
-      .then(data => {
+    api.post('/api/save_groups/', { repo_url: repoLink, groups, metrics: studentMetrics })
+      .then(res => {
+        const data = res.data;
         setIsSaving(false);
         if (data.status === 'ok') {
           showToast('Groups saved successfully!');
