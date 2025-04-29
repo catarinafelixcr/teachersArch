@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import Plot from 'react-plotly.js';
 import '../styles/CompareGroups.css';
+import api from '../services/api';
 
 const CompareGroups = () => {
   const [groups, setGroups] = useState([]);
@@ -19,15 +20,10 @@ const CompareGroups = () => {
   ];
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/groups/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.groups) {
-          setGroups(data.groups.map(group => ({ label: group, value: group })));
+    api.get('/api/groups/')
+      .then((res) => {
+        if (res.data.groups) {
+          setGroups(res.data.groups.map(group => ({ label: group, value: group })));
         }
       })
       .catch((error) => console.error('Error fetching groups:', error));
@@ -45,12 +41,8 @@ const CompareGroups = () => {
 
       for (const group of selectedGroups) {
         try {
-          const res = await fetch(`http://localhost:8000/api/group_predictions/${group.value}/`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-            },
-          });
-          const data = await res.json();
+          const res = await api.get(`/api/group_predictions/${group.value}/`);
+          const data = res.data;
 
           if (data.predictions && data.predictions.length > 0) {
             const grades = data.predictions.map(p => p.predicted_grade);
@@ -112,11 +104,13 @@ const CompareGroups = () => {
           placeholder="Select groups..."
         />
       </div>
+
       {selectedGroups.length > 0 && selectedGroups.length < 2 && (
         <div className="warning-message">
           Only one group selected. Select at least two groups to compare.
         </div>
       )}
+
       {loading ? (
         <div style={{ marginTop: '30px', fontStyle: 'italic' }}>Loading group data...</div>
       ) : (
@@ -165,6 +159,7 @@ const CompareGroups = () => {
             <div className="charts-container">
               <div className="chart-row">
 
+                {/* Chart 1: Average Grades */}
                 <div className="chart">
                   <h4>Average Grades <span className="info-icon" onClick={() => toggleInfo('avg')}>ⓘ</span></h4>
                   {showInfo.avg && <div className="info-box">Shows the average predicted grades per group.</div>}
@@ -184,6 +179,7 @@ const CompareGroups = () => {
                   />
                 </div>
 
+                {/* Chart 2: Distribution */}
                 <div className="chart">
                   <h4>Grade Distribution Comparison <span className="info-icon" onClick={() => toggleInfo('distribution')}>ⓘ</span></h4>
                   {showInfo.distribution && <div className="info-box">Shows the distribution and density of grades per group.</div>}
@@ -204,6 +200,7 @@ const CompareGroups = () => {
                   />
                 </div>
 
+                {/* Chart 3: Radar */}
                 <div className="chart">
                   <h4>Group Performance Radar <span className="info-icon" onClick={() => toggleInfo('radar')}>ⓘ</span></h4>
                   {showInfo.radar && <div className="info-box">Radar view comparing mean, min, max and standard deviation per group.</div>}
@@ -216,11 +213,7 @@ const CompareGroups = () => {
                       name: g.group,
                       marker: { color: colors[idx % colors.length] },
                     }))}
-                    layout={{
-                      ...commonLayout,
-                      title: 'Group Performance Radar',
-                      polar: { radialaxis: { visible: true, range: [0, 100] } }
-                    }}
+                    layout={{ ...commonLayout, title: 'Group Performance Radar', polar: { radialaxis: { visible: true, range: [0, 100] } } }}
                     useResizeHandler
                     style={{ width: '100%', height: '100%' }}
                     config={{ responsive: true }}

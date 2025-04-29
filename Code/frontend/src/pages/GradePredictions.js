@@ -5,6 +5,7 @@ import autoTable from 'jspdf-autotable';
 import '../styles/GradePredictions.css';
 import Sidebar from '../components/SideBar';
 import logo from '../assets/logo-white.png';
+import api from '../services/api'; 
 
 function GradePredictions() {
   const [groups, setGroups] = useState([]);
@@ -21,25 +22,18 @@ function GradePredictions() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/groups/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setGroups(data.groups || []));
+    api.get('/api/groups/')
+      .then((res) => setGroups(res.data.groups || []))
+      .catch((err) => console.error('Error fetching groups:', err));
   }, []);
-
+  
   useEffect(() => {
     if (!selectedGroup) return;
-    fetch(`http://localhost:8000/api/group_predictions/${selectedGroup}/`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setPredictions(data.predictions || []));
+    api.get(`/api/group_predictions/${selectedGroup}/`)
+      .then((res) => setPredictions(res.data.predictions || []))
+      .catch((err) => console.error('Error fetching group predictions:', err));
   }, [selectedGroup]);
+  
 
   const handleViewDetails = (student) => setSelectedStudent(student);
   const handleCloseModal = () => setSelectedStudent(null);
