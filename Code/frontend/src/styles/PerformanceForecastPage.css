@@ -1,256 +1,180 @@
-/* Garante altura total e scroll geral */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-  }
-  
-  /* Página principal */
-  .forecast-page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  
-  /* Fundo com imagem fixa */
-  .forecast-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-  }
-  
-  /* Overlay azul translúcido */
-  .forecast-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 51, 102, 0.6);
-    z-index: 1;
-    pointer-events: none;
-  }
-  
-  /* Conteúdo principal */
+/* =========================
+   BACKGROUND + OVERLAY
+========================= */
+.forecast-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+
+.forecast-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(231, 236, 252, 0.9);
+  z-index: -1;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.forecast-main-content {
+  padding: 40px;
+  text-align: center;
+  z-index: 1;
+}
+
+.forecast-main-content h1 {
+  font-size: 36px;
+  color: #1d1d1d;
+  margin-bottom: 50px;
+}
+
+/* =========================
+   GROUP SELECT
+========================= */
+.group-select-container select {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 250px;
+  margin-bottom: 30px;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* =========================
+   INFO SECTIONS
+========================= */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.info {
+  color: #1e3a8a;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.info-icon {
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 8px;
+}
+
+.info-box {
+  background-color: #e0e8f8;
+  border-left: 4px solid #1e3a8a;
+  border-radius: 4px;
+  color: #1e3a8a;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+/* =========================
+   TABLE
+========================= */
+.grade-table {
+  background-color: #f0f4ff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 24px;
+  margin-bottom: 40px;
+  overflow-x: auto;
+}
+
+.grade-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grade-table th, .grade-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.grade-table th {
+  background-color: #e0e8f8;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.grade-table td {
+  background-color: white;
+  border-top: 1px solid #f0f0f0;
+}
+
+.grade-table tbody tr:hover {
+  background-color: #e0e8f8;
+}
+
+/* =========================
+   CHARTS
+========================= */
+.forecast-piechart-wrapper,
+.forecast-barcharts-wrapper {
+  margin: 40px 0;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 20px;
+}
+
+.button-group button {
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button-group button:hover {
+  background-color: #163176;
+}
+
+.back-btn {
+  background-color: #2f364d;
+}
+
+.back-btn:hover {
+  background-color: #23283a;
+}
+
+/* =========================
+   RESPONSIVENESS
+========================= */
+@media (max-width: 768px) {
   .forecast-main-content {
-    position: relative;
-    z-index: 2;
-    padding: 2rem 1rem 4rem;
-    max-width: calc(100% - 240px); /* largura total menos a sidebar */
-    margin-left: 240px; /* compensação da sidebar */
-    color: white;
+    padding: 20px;
   }
-  
-  /* Topbar */
-  .forecast-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .forecast-logo-area img {
-    height: 50px;
-  }
-  
-  .forecast-nav-links a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
-  }
-  
-  /* Cabeçalho */
-  .forecast-header {
-    margin-top: 2rem;
-    text-align: center;
-  }
-  
-  .forecast-highlight {
-    color: #00ccff;
-  }
-  
-  /* Select de grupo */
-  .forecast-controls {
-    text-align: center;
-    margin-top: 1.5rem;
-  }
-  
-  .forecast-select {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 1rem;
-  }
-  
-  /* Cartões de categoria */
-  .forecast-category-cards {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .forecast-category-card {
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  
-  .forecast-category-card.high {
-    background-color: #4CAF50;
-  }
-  
-  .forecast-category-card.medium {
-    background-color: #FFC107;
-  }
-  
-  .forecast-category-card.low {
-    background-color: #F44336;
-  }
-  
-  /* Placeholder de gráficos */
-  .forecast-charts-section {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 3rem;
-    flex-wrap: wrap;
-  }
-  
-  .forecast-chart-placeholder {
-    width: 300px;
-    height: 200px;
-    background: white;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    font-weight: bold;
-  }
-  
-  /* Botões */
-  .forecast-action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-  
-  .forecast-button,
-  .forecast-back-button {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .forecast-button {
-    background-color: #007BFF;
-    color: white;
-  }
-  
-  .forecast-back-button {
-    background-color: transparent;
-    border: 2px solid white;
-    color: white;
-  }
-  
-  /* Tabela */
-  .forecast-table-wrapper {
-    margin: 2rem auto;
+
+  .group-select-container select {
     width: 100%;
-    max-width: 1100px;
-    padding: 0 1rem;
-    z-index: 2;
-    position: relative;
-    text-align: center;
   }
-  
-  .forecast-table-title {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: white;
-  }
-  
-  .forecast-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-    text-align: center;
-    border: 1px solid #ccc;
-    background-color: white;
-    color: black;
-    table-layout: fixed;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .forecast-table thead {
-    background-color: #dce3f2;
-    font-weight: bold;
-  }
-  
-  .forecast-table th,
-  .forecast-table td {
-    padding: 1rem;
-    border: 1px solid #999;
-    word-wrap: break-word;
-    text-align: center;
-    vertical-align: middle;
-  }
-  
-  /* Cores das linhas da tabela */
-  .categoria-muitobom {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .categoria-bom {
-    background-color: #2196F3;
-    color: white;
-  }
-  
-  .categoria-medio {
-    background-color: #4dd0e1;
-    color: black;
-  }
-  
-  .categoria-baixo {
-    background-color: #ffeb3b;
-    color: black;
-  }
-  
-  .categoria-muitobaixo {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  /* Pie Chart */
-  .forecast-piechart-wrapper {
-    display: flex;
+
+  .button-group {
     flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-    z-index: 2;
-    position: relative;
   }
-  
-  /* Barplots */
-  .forecast-barcharts-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 3rem;
-    z-index: 2;
-    position: relative;
-  }
-  
+}

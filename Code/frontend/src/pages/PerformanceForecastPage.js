@@ -1,27 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/PerformanceForecastPage.css';
 import background from '../assets/background-dei.jpg';
 import Sidebar from '../components/SideBar';
 import { useNavigate } from 'react-router-dom';
 import Plot from 'react-plotly.js';
+import api from '../services/api';
 
 function PerformanceForecastPage() {
   const navigate = useNavigate();
 
-  const alunos = [
-    { nome: 'Ana Beatriz Silva', curso: 'Matemática', nota: 92, categoria: 'Muito bom' },
-    { nome: 'Bruno Costa', curso: 'Física', nota: 66, categoria: 'Médio' },
-    { nome: 'Carla Menezes', curso: 'Química', nota: 75, categoria: 'Bom' },
-    { nome: 'Diego Fernandes', curso: 'Biologia', nota: 44, categoria: 'Baixo' },
-    { nome: 'Eduardo Martins', curso: 'Matemática', nota: 28, categoria: 'Muito baixo' },
-    { nome: 'Fernanda Rocha', curso: 'Física', nota: 83, categoria: 'Bom' },
-    { nome: 'Gustavo Almeida', curso: 'Química', nota: 95, categoria: 'Muito bom' },
-    { nome: 'Helena Vasconcelos', curso: 'Biologia', nota: 59, categoria: 'Médio' },
-    { nome: 'Igor Pires', curso: 'Matemática', nota: 22, categoria: 'Muito baixo' },
-    { nome: 'Juliana Castro', curso: 'Física', nota: 38, categoria: 'Baixo' },
-  ];
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [predictions, setPredictions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showTableInfo, setShowTableInfo] = useState(false);
+  const [showPieInfo, setShowPieInfo] = useState(false);
+  const [showBarInfo, setShowBarInfo] = useState(false);
 
-  const contagemCategorias = alunos.reduce((acc, aluno) => {
+  useEffect(() => {
+    api.get('/api/groups/')
+      .then(res => setGroups(res.data.groups))
+      .catch(err => console.error('Error fetching groups:', err));
+  }, []);
+
+  useEffect(() => {
+    if (!selectedGroup) return;
+    setLoading(true);
+    api.get(`/api/group_predictions/${selectedGroup}/`)
+      .then(res => setPredictions(res.data.predictions))
+      .catch(err => console.error('Error fetching predictions:', err))
+      .finally(() => setLoading(false));
+  }, [selectedGroup]);
+
+  const classifyCategoria = (nota) => {
+    if (nota >= 85) return 'Muito bom';
+    if (nota >= 70) return 'Bom';
+    if (nota >= 50) return 'Médio';
+    if (nota >= 30) return 'Baixo';
+    return 'Muito baixo';
+  };
+
+  const enrichedPredictions = predictions.map(p => ({
+    nome: p.handle,
+    curso: selectedGroup,
+    nota: (p.predicted_grade / 20) * 100,
+    categoria: classifyCategoria((p.predicted_grade / 20) * 100)
+  }));
+
+  const contagemCategorias = enrichedPredictions.reduce((acc, aluno) => {
     acc[aluno.categoria] = (acc[aluno.categoria] || 0) + 1;
     return acc;
   }, {});
@@ -34,156 +60,142 @@ function PerformanceForecastPage() {
     'Bom': '#2196F3',
     'Médio': '#4dd0e1',
     'Baixo': '#ffeb3b',
-    'Muito baixo': '#f44336',
+    'Muito baixo': '#f44336'
   };
 
   const coresPie = categorias.map(cat => corCategoria[cat]);
 
   return (
-    <div className="forecast-page">
-      {/* Fundo e overlay */}
+    <div className="insert-repo-page">
       <div className="forecast-background" style={{ backgroundImage: `url(${background})` }} />
       <div className="forecast-overlay" />
 
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Conteúdo principal */}
       <div className="forecast-main-content">
-        <header className="forecast-top-bar">
-          <div className="forecast-nav-links">
-            <a href="#">Help</a>
-            <a href="#">About</a>
-          </div>
-        </header>
+        <h1><span className="highlight">Forecast</span> by Category</h1>
 
-        <div className="forecast-header">
-          <h1><span className="forecast-highlight">Forecast</span> by Category</h1>
-          <p>Select a group to view performance predictions by category.</p>
-        </div>
-
-        <div className="forecast-controls">
-          <select className="forecast-select">
-            <option>Group A</option>
-            <option>Group B</option>
-            <option>Group C</option>
+        <div className="group-select-container">
+          <select value={selectedGroup} onChange={(e) => setSelectedGroup(e.target.value)}>
+            <option value="">Select a group...</option>
+            {groups.map((group, idx) => (
+              <option key={idx} value={group}>{group}</option>
+            ))}
           </select>
         </div>
 
-        {/* TABELA */}
-        <div className="forecast-table-wrapper">
-          <h2 className="forecast-table-title">Previsão de Desempenho com Cores por Categoria</h2>
-          <table className="forecast-table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Curso</th>
-                <th>Nota (%)</th>
-                <th>Categoria</th>
-              </tr>
-            </thead>
-            <tbody>
-              {alunos.map((aluno, idx) => (
-                <tr key={idx} className={`categoria-${aluno.categoria.replace(/\s/g, '').toLowerCase()}`}>
-                  <td>{aluno.nome}</td>
-                  <td>{aluno.curso}</td>
-                  <td>{aluno.nota}</td>
-                  <td>{aluno.categoria}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {loading && <p>Loading predictions...</p>}
 
-        {/* PIE CHART */}
-        <div className="forecast-piechart-wrapper">
-          <h2 className="forecast-table-title">Distribuição por Categoria</h2>
-          <Plot
-            data={[
-              {
-                values: valores,
-                labels: categorias,
-                type: 'pie',
-                marker: { colors: coresPie },
-                textinfo: 'label+percent',
-                insidetextorientation: 'radial',
-              },
-            ]}
-            layout={{
-              height: 400,
-              width: 500,
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              font: { color: 'white' },
-            }}
-          />
-        </div>
+        {selectedGroup && !loading && (
+          <>
+            {/* TABELA */}
+            <div className="history-header">
+              <h3 className="info">
+                → Performance Overview
+                <span onClick={() => setShowTableInfo(!showTableInfo)} className="info-icon">ⓘ</span>
+              </h3>
+            </div>
+            {showTableInfo && (
+              <div className="info-box">
+                <p>This table shows the predicted grades (%) and categorized performance for each student.</p>
+              </div>
+            )}
 
-        {/* BARPLOTS */}
-        <div className="forecast-barcharts-wrapper">
-          <h2 className="forecast-table-title">Notas de Todos os Alunos</h2>
-          <Plot
-            data={[
-              {
-                x: alunos.map(a => a.nome),
-                y: alunos.map(a => a.nota),
-                type: 'bar',
-                marker: {
-                  color: alunos.map(a => corCategoria[a.categoria]),
-                },
-              },
-            ]}
-            layout={{
-              height: 400,
-              width: 900,
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: 'rgba(0,0,0,0)',
-              font: { color: 'white' },
-              margin: { t: 40, b: 100 },
-            }}
-          />
+            <div className="grade-table">
+              {enrichedPredictions.length === 0 ? (
+                <p style={{ textAlign: 'center', fontStyle: 'italic' }}>No predictions available for this group.</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Grupo</th>
+                      <th>Nota (%)</th>
+                      <th>Categoria</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {enrichedPredictions.map((aluno, idx) => (
+                      <tr key={idx} className={`categoria-${aluno.categoria.replace(/\s/g, '').toLowerCase()}`}>
+                        <td>{aluno.nome}</td>
+                        <td>{aluno.curso}</td>
+                        <td>{aluno.nota.toFixed(1)}</td>
+                        <td>{aluno.categoria}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
 
-          <h2 className="forecast-table-title">Notas do Grupo Selecionado</h2>
-          <Plot
-            data={[
-              {
-                x: alunos.slice(0, 5).map(a => a.nome),
-                y: alunos.slice(0, 5).map(a => a.nota),
-                type: 'bar',
-                marker: {
-                  color: alunos.slice(0, 5).map(a => corCategoria[a.categoria]),
-                },
-              },
-            ]}
-            layout={{
-              height: 400,
-              width: 900,
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: 'rgba(0,0,0,0)',
-              font: { color: 'white' },
-              margin: { t: 40, b: 100 },
-            }}
-          />
-        </div>
+            {/* PIE CHART */}
+            <div className="history-header">
+              <h3 className="info">
+                → Categoria Overview
+                <span onClick={() => setShowPieInfo(!showPieInfo)} className="info-icon">ⓘ</span>
+              </h3>
+            </div>
+            {showPieInfo && (
+              <div className="info-box">
+                <p>This pie chart shows the distribution of students across performance categories.</p>
+              </div>
+            )}
 
-        {/* CARDS */}
-        <div className="forecast-category-cards">
-          <div className="forecast-category-card high">High Performance</div>
-          <div className="forecast-category-card medium">Medium Performance</div>
-          <div className="forecast-category-card low">Low Performance</div>
-        </div>
+            <div className="forecast-piechart-wrapper">
+              <Plot
+                data={[{
+                  values: valores,
+                  labels: categorias,
+                  type: 'pie',
+                  marker: { colors: coresPie },
+                  textinfo: 'label+percent',
+                  insidetextorientation: 'radial'
+                }]}
+                layout={{
+                  height: 400,
+                  width: 500,
+                  paper_bgcolor: 'rgba(0,0,0,0)',
+                  font: { color: 'black' }
+                }}
+              />
+            </div>
 
-        {/* Placeholder Charts */}
-        <div className="forecast-charts-section">
-          <div className="forecast-chart-placeholder">[ Chart Placeholder 1 ]</div>
-          <div className="forecast-chart-placeholder">[ Chart Placeholder 2 ]</div>
-        </div>
+            {/* BAR CHART */}
+            <div className="history-header">
+              <h3 className="info">
+                → Individual Scores
+                <span onClick={() => setShowBarInfo(!showBarInfo)} className="info-icon">ⓘ</span>
+              </h3>
+            </div>
+            {showBarInfo && (
+              <div className="info-box">
+                <p>This bar chart displays the predicted scores (%) of individual students, color-coded by category.</p>
+              </div>
+            )}
 
-        {/* Botões */}
-        <div className="forecast-action-buttons">
-          <button className="forecast-button">Generate Report</button>
-          <button className="forecast-back-button" onClick={() => navigate('/initialpage')}>
-            Back to Home
-          </button>
+            <div className="forecast-barcharts-wrapper">
+              <Plot
+                data={[{
+                  x: enrichedPredictions.map(a => a.nome),
+                  y: enrichedPredictions.map(a => a.nota),
+                  type: 'bar',
+                  marker: { color: enrichedPredictions.map(a => corCategoria[a.categoria]) }
+                }]}
+                layout={{
+                  height: 400,
+                  width: 900,
+                  paper_bgcolor: 'rgba(0,0,0,0)',
+                  plot_bgcolor: 'rgba(0,0,0,0)',
+                  font: { color: 'black' },
+                  margin: { t: 40, b: 100 }
+                }}
+              />
+            </div>
+          </>
+        )}
+
+        <div className="button-group">
+          <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
         </div>
       </div>
     </div>
