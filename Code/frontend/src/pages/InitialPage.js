@@ -59,11 +59,11 @@ function InitialPage() {
               <h3>Prediction of Grades</h3>
               <p>Visualize the students' performance forecast based on the data.</p>
             </div>
-            <div className="dashboard-card" onClick={() => navigate('/alunos-risco')}>
+            <div className="dashboard-card" onClick={() => navigate('/studentatrisk')}>
               <h3>Students at Risk</h3>
               <p>Identify which students are most at risk of failing.</p>
             </div>
-            <div className="dashboard-card" onClick={() => navigate('/produtividade-grupos')}>
+            <div className="dashboard-card" onClick={() => navigate('/performanceforecast')}>
               <h3>Performance forecast by category</h3>
               <p>Compare productivity between work groups.</p>
             </div>
