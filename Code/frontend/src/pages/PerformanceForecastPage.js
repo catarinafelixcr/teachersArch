@@ -5,6 +5,9 @@ import Sidebar from '../components/SideBar';
 import { useNavigate } from 'react-router-dom';
 import Plot from 'react-plotly.js';
 import api from '../services/api';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import logo from '../assets/logo-white.png'; 
 
 function PerformanceForecastPage() {
   const navigate = useNavigate();
@@ -35,6 +38,75 @@ function PerformanceForecastPage() {
       .then(res => setGroups(res.data.groups))
       .catch(err => console.error('Error fetching groups:', err));
   }, []);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [includeCharts, setIncludeCharts] = useState(true);
+
+  const handleGenerateReport = () => {
+    if (!selectedGroup) {
+      showToast('Please select a group first.', 'error');
+      return;
+    }
+    setShowReportModal(true);
+  };
+
+  const confirmGeneratePDF = async () => {
+    setShowReportModal(false);
+
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const today = new Date();
+    const displayDate = today.toLocaleDateString('en-GB');
+
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 0, pageWidth, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(15);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Performance Forecast Report', margin, 20);
+    if (logo) doc.addImage(logo, 'PNG', pageWidth - 50, 5, 35, 20);
+
+    let y = 40;
+    doc.setFontSize(11);
+    doc.setTextColor(30, 30, 30);
+    doc.text(`Group: ${selectedGroup}`, margin, y);
+    y += 6;
+    doc.text(`Category: ${categoryFilter}`, margin, y);
+    y += 6;
+    doc.text(`Generated on: ${displayDate}`, margin, y);
+
+    if (includeCharts) {
+      const charts = document.querySelectorAll('.chart');
+      for (let chart of charts) {
+        y += 10;
+        const canvas = await html2canvas(chart, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = doc.getImageProperties(imgData);
+        const imgWidth = pageWidth - margin * 2;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+        if (y + imgHeight > doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          y = 20;
+        }
+
+        doc.addImage(imgData, 'PNG', margin, y, imgWidth, imgHeight);
+        y += imgHeight;
+      }
+    }
+
+    doc.save(`PerformanceForecast_${selectedGroup}_${today.toISOString().slice(0,10)}.pdf`);
+    showToast('PDF generated successfully!', 'success');
+  };
+
+  const showToast = (msg, type = 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = `<span>${msg}</span><button class="close-toast">×</button>`;
+    toast.querySelector('button').onclick = () => toast.remove();
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  };
 
   useEffect(() => {
     if (!selectedGroup) {
@@ -363,7 +435,30 @@ function PerformanceForecastPage() {
           </>
         )}
 
+        {showReportModal && (
+          <div className="modal-overlay" onClick={() => setShowReportModal(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <h2>Confirm Report Generation</h2>
+              <p><strong>Group:</strong> {selectedGroup}</p>
+              <p><strong>Category:</strong> {categoryFilter}</p>
+              <label style={{ display: 'block', margin: '10px 0' }}>
+                <input
+                  type="checkbox"
+                  checked={includeCharts}
+                  onChange={() => setIncludeCharts(!includeCharts)}
+                />{' '}
+                Include Charts in Report
+              </label>
+              <div className="modal-buttons">
+                <button className="confirm-button" onClick={confirmGeneratePDF}>Generate PDF</button>
+                <button className="cancel-button" onClick={() => setShowReportModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="button-group">
+          <button onClick={handleGenerateReport}>Generate Report</button>
           <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
         </div>
       </div>
