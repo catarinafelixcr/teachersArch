@@ -29,6 +29,17 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 import traceback
 
+
+# ----------------------------models ML----------------------------
+'''import os
+from tensorflow.keras.models import load_model
+import numpy as np
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'ml_models', 'modelo_nn.keras')
+modelo_nn = load_model(MODEL_PATH)
+'''
+# -----------------------------------------------------------------
+
 logger = logging.getLogger(__name__)
 
 
@@ -188,7 +199,7 @@ def activate_account(request, token):
     try:
         user = Utilizador.objects.get(activation_token=token)
         user.is_active = True
-        user.activation_token = None  # token usado, remove
+        user.activation_token = None  
         user.save()
         return redirect('http://localhost:3000/login?activated=true')
     except Utilizador.DoesNotExist:
@@ -252,7 +263,7 @@ def reset_password_confirm(request):
         return Response({"error": "Token inválido ou expirado."}, status=400)
 
     user.set_password(new_password)
-    user.activation_token = None  # invalida o token
+    user.activation_token = None  
     user.save()
 
     return Response({"success": "Password atualizada com sucesso."})
@@ -292,7 +303,7 @@ def extract_students(request):
         traceback.print_exc()
         return JsonResponse({"error": str(e)}, status=500)
 
-from api.utils.extract import extract_from_gitlab  # certifica-te que importa o novo
+from api.utils.extract import extract_from_gitlab  
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -319,7 +330,6 @@ def save_groups(request):
             for handle in handles:
                 metric_data = metrics.get(handle, {})
 
-                # Cria novo registo SEM apagar os antigos
                 AlunoGitlabAct.objects.create(
                     group=grupo,
                     handle=handle,
@@ -403,7 +413,6 @@ def get_group_predictions(request, group_name):
         response_data = []
 
         for aluno in alunos:
-            # Mock de previsão (podes substituir por chamadas ao modelo de ML)
             previsao = {
                 "handle": aluno.handle,
                 "predicted_grade": round(min(20, max(0, aluno.total_commits / 5 + aluno.active_days)), 1),
@@ -456,8 +465,8 @@ def students_at_risk(request):
         data.append({
             "id": aluno.id,
             "handle": aluno.handle,
-            "performance": aluno.performance if hasattr(aluno, 'performance') else "Unknown",  # Se tiveres esse campo
-            "is_at_risk": aluno.total_commits < 10,  # Aqui defines o que consideras \"at risk\"!
+            "performance": aluno.performance if hasattr(aluno, 'performance') else "Unknown", 
+            "is_at_risk": aluno.total_commits < 10,  
             "last_active": aluno.data_registo,
         })
 

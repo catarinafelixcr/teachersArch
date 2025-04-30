@@ -18,7 +18,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Se der 401, tenta renovar o token automaticamente
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
