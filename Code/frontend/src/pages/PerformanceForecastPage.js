@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/GradePredictions.css';
+import '../styles/PerformanceForecastPage.css';
 import background from '../assets/background-dei.jpg';
 import Sidebar from '../components/SideBar';
 import { useNavigate } from 'react-router-dom';
 import Plot from 'react-plotly.js';
 import api from '../services/api';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import logo from '../assets/logo-white.png'; 
 
 function PerformanceForecastPage() {
   const navigate = useNavigate();
@@ -18,25 +21,113 @@ function PerformanceForecastPage() {
   const [showTableInfo, setShowTableInfo] = useState(false);
   const [showPieInfo, setShowPieInfo] = useState(false);
   const [showBarInfo, setShowBarInfo] = useState(false);
+  const [showCorrelationInfo, setShowCorrelationInfo] = useState(false);
   const [sortOption, setSortOption] = useState('name-asc');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
+  // --- Optional: State for dynamic metric selection ---
+  // If you want users to select metrics later, uncomment these and add dropdowns
+  // const [xAxisMetric, setXAxisMetric] = useState('total_commits');
+  // const [yAxisMetric, setYAxisMetric] = useState('active_days');
+  // For now, we'll hardcode them for simplicity
+  const xAxisMetric = 'total_commits';
+  const yAxisMetric = 'active_days';
+  
   useEffect(() => {
     api.get('/api/groups/')
       .then(res => setGroups(res.data.groups))
       .catch(err => console.error('Error fetching groups:', err));
   }, []);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [includeCharts, setIncludeCharts] = useState(true);
+
+  const handleGenerateReport = () => {
+    if (!selectedGroup) {
+      showToast('Please select a group first.', 'error');
+      return;
+    }
+    setShowReportModal(true);
+  };
+
+  const confirmGeneratePDF = async () => {
+    setShowReportModal(false);
+
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const today = new Date();
+    const displayDate = today.toLocaleDateString('en-GB');
+
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 0, pageWidth, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(15);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Performance Forecast Report', margin, 20);
+    if (logo) doc.addImage(logo, 'PNG', pageWidth - 50, 5, 35, 20);
+
+    let y = 40;
+    doc.setFontSize(11);
+    doc.setTextColor(30, 30, 30);
+    doc.text(`Group: ${selectedGroup}`, margin, y);
+    y += 6;
+    doc.text(`Category: ${categoryFilter}`, margin, y);
+    y += 6;
+    doc.text(`Generated on: ${displayDate}`, margin, y);
+
+    if (includeCharts) {
+      const charts = document.querySelectorAll('.chart');
+      for (let chart of charts) {
+        y += 10;
+        const canvas = await html2canvas(chart, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = doc.getImageProperties(imgData);
+        const imgWidth = pageWidth - margin * 2;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+        if (y + imgHeight > doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          y = 20;
+        }
+
+        doc.addImage(imgData, 'PNG', margin, y, imgWidth, imgHeight);
+        y += imgHeight;
+      }
+    }
+
+    doc.save(`PerformanceForecast_${selectedGroup}_${today.toISOString().slice(0,10)}.pdf`);
+    showToast('PDF generated successfully!', 'success');
+  };
+
+  const showToast = (msg, type = 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = `<span>${msg}</span><button class="close-toast">×</button>`;
+    toast.querySelector('button').onclick = () => toast.remove();
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  };
 
   useEffect(() => {
-    if (!selectedGroup) return;
+    if (!selectedGroup) {
+      setPredictions([]);
+      return;
+  };
     setLoading(true);
     api.get(`/api/group_predictions/${selectedGroup}/`)
-      .then(res => setPredictions(res.data.predictions))
-      .catch(err => console.error('Error fetching predictions:', err))
-      .finally(() => setLoading(false));
-  }, [selectedGroup]);
+        .then(res => {
+          console.log("API Predictions Response:", res.data.predictions); // DEBUG: Log raw API response
+          setPredictions(res.data.predictions || []); // Ensure predictions is always an array
+        })
+        .catch(err => {
+          console.error('Error fetching predictions:', err);
+          setPredictions([]); // Clear predictions on error
+        })
+        .finally(() => setLoading(false));
+    }, [selectedGroup]);
 
   const classifyCategory = (grade) => {
+    if (grade === null || grade === undefined) return 'Unknown';
     const percentage = (grade / 20) * 100;
     if (percentage >= 85) return 'Very High';
     if (percentage >= 70) return 'High';
@@ -54,13 +145,16 @@ function PerformanceForecastPage() {
   };
 
   const enrichedPredictions = predictions.map(p => {
-    const percentage = (p.predicted_grade / 20) * 100;
+    const grade = p.predicted_grade;
+    const category = classifyCategory(grade);
+    const percentage = category === 'Unknown' ? 0 : (grade / 20) * 100; // Handle unknown for percentage calc
     return {
-      name: p.handle,
+      name: p.handle ?? 'N/A', // Use handle, provide fallback
       group: selectedGroup,
-      grade: p.predicted_grade,
+      grade: grade ?? 0, // Provide fallback for grade
       percentage: percentage,
-      category: classifyCategory(p.predicted_grade)
+      category: category,
+      metrics: p.metrics || {} // Ensure metrics object exists
     };
   });
 
@@ -102,12 +196,32 @@ function PerformanceForecastPage() {
   };
 
   const countCategories = filteredPredictions.reduce((acc, pred) => {
-    acc[pred.category] = (acc[pred.category] || 0) + 1;
+    if (pred.category !== 'Unknown') { // Don't include Unknown in pie chart counts
+        acc[pred.category] = (acc[pred.category] || 0) + 1;
+    }
     return acc;
   }, {});
 
   const categories = Object.keys(countCategories);
   const values = Object.values(countCategories);
+
+  const correlationData = [{
+    x: filteredPredictions.map(p => p.metrics?.[xAxisMetric] ?? 0), // Access metrics safely
+    y: filteredPredictions.map(p => p.metrics?.[yAxisMetric] ?? 0), // Access metrics safely
+    mode: 'markers',
+    type: 'scatter',
+    text: filteredPredictions.map(p => `${p.name}<br>${xAxisMetric}: ${p.metrics?.[xAxisMetric] ?? 'N/A'}<br>${yAxisMetric}: ${p.metrics?.[yAxisMetric] ?? 'N/A'}<br>Category: ${p.category}`), // Tooltip text
+    marker: {
+      color: filteredPredictions.map(p => categoryColors[p.category]),
+      size: 10 // Adjust marker size if needed
+    },
+    hoverinfo: 'text' // Show only the custom text on hover
+  }];
+
+  // Function to generate readable labels from metric names
+  const formatMetricName = (metric) => {
+      return metric.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
 
   const commonLayout = {
     title: '',
@@ -128,7 +242,7 @@ function PerformanceForecastPage() {
       <Sidebar />
 
       <div className="forecast-main-content">
-        <h1><span className="highlight">Performance Forecast</span> by Category</h1>
+        <h1><span className="highlight">Performance Overview</span> by Category</h1>
 
         <div className="group-select-container">
           <div className="searchable-dropdown">
@@ -150,6 +264,7 @@ function PerformanceForecastPage() {
                     <li
                       key={idx}
                       onClick={() => handleGroupSelect(group)}
+                      onMouseDown={() => handleGroupSelect(group)}
                       className={selectedGroup === group ? 'selected' : ''}
                     >
                       {group}
@@ -228,63 +343,122 @@ function PerformanceForecastPage() {
               )}
             </div>
 
-            <div className="charts-container">
-              <div className="chart-row">
-                <div className="chart">
-                  <h4>
-                    Category Overview
-                    <span className="info-icon" onClick={() => setShowPieInfo(!showPieInfo)}> ⓘ</span>
-                  </h4>
-                  {showPieInfo && (
-                    <div className="info-box">
-                      <p>This pie chart shows the percentage of students in each performance category.</p>
+            {/* Only show charts if there are predictions to display */}
+            {filteredPredictions.length > 0 && (
+                <div className="charts-container">
+                <div className="chart-row">
+                    {/* Pie Chart */}
+                    <div className="chart">
+                    <h4>
+                        Category Overview
+                        <span className="info-icon" onClick={() => setShowPieInfo(!showPieInfo)}> ⓘ</span>
+                    </h4>
+                    {showPieInfo && (
+                        <div className="info-box">
+                        <p>This pie chart shows the percentage distribution of students across the different performance categories  based on their predicted grades. This helps identify the overall performance shape of the group and whether interventions are needed in lower-performing categories.</p>
+                        </div>
+                    )}
+                    <Plot
+                        data={[{
+                        values: values,
+                        labels: categories,
+                        type: 'pie',
+                        marker: { colors: categories.map(c => categoryColors[c]) },
+                        textinfo: 'label+percent',
+                        insidetextorientation: 'radial'
+                        }]}
+                        layout={{ ...commonLayout, title: 'Category Distribution' }}
+                        useResizeHandler
+                        style={{ width: '100%', height: '100%' }}
+                        config={{ responsive: true }}
+                    />
                     </div>
-                  )}
-                  <Plot
-                    data={[{
-                      values: values,
-                      labels: categories,
-                      type: 'pie',
-                      marker: { colors: categories.map(c => categoryColors[c]) },
-                      textinfo: 'label+percent',
-                      insidetextorientation: 'radial'
-                    }]}
-                    layout={{ ...commonLayout, title: 'Category Overview' }}
-                    useResizeHandler
-                    style={{ width: '100%', height: '100%' }}
-                    config={{ responsive: true }}
-                  />
+
+                    {/* Bar Chart */}
+                    <div className="chart">
+                    <h4>
+                        Individual Scores (%)
+                        <span className="info-icon" onClick={() => setShowBarInfo(!showBarInfo)}> ⓘ</span>
+                    </h4>
+                    {showBarInfo && (
+                        <div className="info-box">
+                        <p>This bar chart presents each student's predicted performance as a percentage (0–100%), grouped by their name and color-coded by performance category.</p>
+                        </div>
+                    )}
+                    <Plot
+                        data={[{
+                        x: filteredPredictions.map(p => p.name),
+                        y: filteredPredictions.map(p => p.percentage),
+                        type: 'bar',
+                        marker: { color: filteredPredictions.map(p => categoryColors[p.category]) }
+                        }]}
+                        layout={{ ...commonLayout, title: 'Individual Scores (%)', yaxis: { title: 'Grade (%)'}, xaxis: { tickangle: -45 }, margin: { t: 40, b: 120 } }} // Added y-axis title, tilted x-axis labels, adjusted bottom margin
+                        useResizeHandler
+                        style={{ width: '100%', height: '100%' }}
+                        config={{ responsive: true }}
+                    />
+                    </div>
                 </div>
 
-                <div className="chart">
-                  <h4>
-                    Individual Scores
-                    <span className="info-icon" onClick={() => setShowBarInfo(!showBarInfo)}> ⓘ</span>
-                  </h4>
-                  {showBarInfo && (
-                    <div className="info-box">
-                      <p>This bar chart displays the predicted grades for each student in percentage, color-coded by performance category.</p>
+                {/* --- New Chart Row for Correlation Plot --- */}
+                <div className="chart-row">
+                    <div className="chart full-width-chart"> {/* Use full-width if desired */}
+                        <h4>
+                            Metric Correlation ({formatMetricName(xAxisMetric)} vs {formatMetricName(yAxisMetric)})
+                            <span className="info-icon" onClick={() => setShowCorrelationInfo(!showCorrelationInfo)}> ⓘ</span>
+                        </h4>
+                        {showCorrelationInfo && (
+                            <div className="info-box">
+                            <p>This scatter plot shows the relationship between '{formatMetricName(xAxisMetric)}' (horizontal axis) and '{formatMetricName(yAxisMetric)}' (vertical axis). Each point represents a student, colored by their predicted performance category. It helps visualize if students with higher metrics tend to fall into higher performance categories.</p>
+                            {/* Add dropdowns here later if you implement dynamic metric selection */}
+                            </div>
+                        )}
+                        <Plot
+                            data={correlationData}
+                            layout={{
+                            ...commonLayout,
+                            title: `Metric Correlation by Category`,
+                            xaxis: { title: formatMetricName(xAxisMetric) },
+                            yaxis: { title: formatMetricName(yAxisMetric) },
+                            margin: { t: 50, l: 70, r: 30, b: 60 } // Adjusted left margin for y-axis title
+                            }}
+                            useResizeHandler
+                            style={{ width: '100%', height: '100%' }}
+                            config={{ responsive: true }}
+                            
+                        />
                     </div>
-                  )}
-                  <Plot
-                    data={[{
-                      x: filteredPredictions.map(p => p.name),
-                      y: filteredPredictions.map(p => p.percentage),
-                      type: 'bar',
-                      marker: { color: filteredPredictions.map(p => categoryColors[p.category]) }
-                    }]}
-                    layout={{ ...commonLayout, title: 'Individual Scores', margin: { t: 40, b: 100 } }}
-                    useResizeHandler
-                    style={{ width: '100%', height: '100%' }}
-                    config={{ responsive: true }}
-                  />
+                    {/* Add another chart here in the same row if needed, or remove full-width-chart class */}
                 </div>
-              </div>
-            </div>
+                </div>
+            )}
           </>
         )}
 
+        {showReportModal && (
+          <div className="modal-overlay" onClick={() => setShowReportModal(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <h2>Confirm Report Generation</h2>
+              <p><strong>Group:</strong> {selectedGroup}</p>
+              <p><strong>Category:</strong> {categoryFilter}</p>
+              <label style={{ display: 'block', margin: '10px 0' }}>
+                <input
+                  type="checkbox"
+                  checked={includeCharts}
+                  onChange={() => setIncludeCharts(!includeCharts)}
+                />{' '}
+                Include Charts in Report
+              </label>
+              <div className="modal-buttons">
+                <button className="confirm-button" onClick={confirmGeneratePDF}>Generate PDF</button>
+                <button className="cancel-button" onClick={() => setShowReportModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="button-group">
+          <button onClick={handleGenerateReport}>Generate Report</button>
           <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
         </div>
       </div>
