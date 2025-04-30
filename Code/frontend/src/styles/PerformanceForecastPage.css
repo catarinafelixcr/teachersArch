@@ -584,3 +584,20 @@ td:last-child button:hover {
   padding: 0 0 0 15px;
   margin-left: 10px;
 }
+
+
+.chart {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 16px;
+  min-height: 450px; /* ajuste conforme necessário */
+  flex: 1;
+}
+
+
+.chart-row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px; /* Adicione esta linha */
+}
