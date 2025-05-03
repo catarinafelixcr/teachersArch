@@ -1,162 +1,79 @@
-/* =========================
-   BASE
-========================= */
 .compare-page {
-  background-color: #f3f5ff;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  padding: 2rem 3rem;
+  padding-left: 260px; /* Adapta ao width da Sidebar */
+  background-color: #f1f5f9;
   min-height: 100vh;
-  overflow-y: auto;
-  padding: 40px 60px;
-  padding-left: 280px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
 }
 
-/* =========================
-   TÍTULO E DESCRIÇÃO
-========================= */
 .compare-page h1 {
-  align-items: center;
-  display: flex;
-  font-size: 32px;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   font-weight: bold;
-  gap: 10px;
-  justify-content: center;
-  text-align: center;
+  color: #1e40af;
 }
 
-.compare-page .description {
-  color: #444;
-  margin: 20px 0;
-  max-width: 700px;
-  text-align: center;
+.compare-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
 }
 
-/* =========================
-   DESTAQUE
-========================= */
-.highlight-box {
-  background-color: #002b7f;
+.compare-controls input,
+.compare-controls select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  color: white;
-  font-size: 22px;
-  font-weight: 600;
-  margin-left: 10px;
-  padding: 6px 12px;
-}
-
-/* =========================
-   CONTROLES E FILTROS
-========================= */
-.controls-box {
-  align-items: flex-end;
-  background-color: #e2ebff;
-  border-radius: 12px;
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-  padding: 20px;
-}
-
-.controls-box label,
-.controls-box select {
-  font-size: 14px;
-}
-
-.filter-btn {
-  background-color: #cfe0ff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 10px 0 20px;
-  padding: 10px 15px;
-}
-
-/* =========================
-   RESUMO
-========================= */
-.summary-box {
   background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  margin-bottom: 30px;
-  padding: 25px;
+}
+
+.compare-controls button {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #1e40af;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.compare-controls button:hover {
+  background-color: #1c3aa9;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
   text-align: center;
 }
 
-.summary-box div {
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  font-weight: 500;
-  justify-content: center;
-  padding: 10px 5px;
-}
-
-.summary-box p {
-  color: #3c66f4;
-  font-size: 18px;
-  font-weight: bold;
-  margin: 4px 0 0;
-}
-
-/* =========================
-   TABELA DE ALUNOS
-========================= */
-.students-table {
-  background-color: white;
-  border-collapse: collapse;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  width: 100%;
-}
-
-.students-table th,
-.students-table td {
-  border-bottom: 1px solid #eee;
-  padding: 12px;
-  text-align: left;
-}
-
-.students-table th {
-  background-color: #f0f4ff;
-}
-
-/* =========================
-   RODAPÉ / BOTÕES
-========================= */
-.buttons-footer {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-  padding: 0 20px;
-}
-
-.report-btn-wrapper {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-}
-
-.report-btn,
-.back-btn {
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
-  padding: 12px 20px;
-}
-
-.report-btn {
-  background-color: #002b7f;
+.compare-table th {
+  background-color: #1e40af;
   color: white;
+  font-weight: bold;
 }
 
-.back-btn {
-  background-color: #2e2e2e;
-  color: white;
+.compare-table tr:last-child td {
+  border-bottom: none;
 }
+
+.compare-table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+

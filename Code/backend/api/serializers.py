@@ -138,3 +138,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Adicionar info extra ao token, se quiseres
         token['email'] = user.email
         return token
+    
+'''
+class ComparePredictionSerializer(serializers.Serializer):
+    handle = serializers.CharField()
+    predicted_grade = serializers.FloatField()
+    registered_at = serializers.DateTimeField()
+
+'''

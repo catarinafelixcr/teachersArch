@@ -125,7 +125,7 @@ class AlunoGitlabAct(models.Model):
     data_registo = models.DateTimeField(default=timezone.now)  
 
     class Meta:
-        unique_together = (("group", "handle"),)
+        unique_together = (("group", "handle", "data_registo"),)
     
     def __str__(self):
         try:

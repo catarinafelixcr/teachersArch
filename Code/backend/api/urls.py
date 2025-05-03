@@ -3,6 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView
+
 
 router = DefaultRouter()
 router.register(r'utilizadores', UtilizadorViewSet)
@@ -31,6 +33,9 @@ urlpatterns = [
     path('api/group_predictions/<str:group_name>/', views.get_group_predictions, name='get_group_predictions'),
     path('api/groups/', list_groups),
     path('api/students_at_risk/', students_at_risk, name='students_at_risk'),
+    path('api/prediction_dates/', views.prediction_dates),
+    path('api/predictions_by_date/<str:date>/', views.predictions_by_date),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('', include(router.urls)),
 ]

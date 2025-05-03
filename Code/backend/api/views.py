@@ -23,8 +23,13 @@ from .models import Utilizador, Teacher, Grupo, AlunoGitlabAct, TeacherGrupo
 from django.db import IntegrityError
 from django.utils import timezone
 
+from .models import Previsao
+
+
 from .utils.extract import extract_from_gitlab
 from django.views.decorators.csrf import csrf_exempt
+#from .serializers import ComparePredictionSerializer
+
 
 import logging
 import traceback
@@ -330,7 +335,7 @@ def save_groups(request):
             for handle in handles:
                 metric_data = metrics.get(handle, {})
 
-                AlunoGitlabAct.objects.create(
+                aluno_gitlab = AlunoGitlabAct.objects.create(
                     group=grupo,
                     handle=handle,
                     total_commits=metric_data.get("total_commits", 0),
@@ -350,6 +355,17 @@ def save_groups(request):
                     branches_created=metric_data.get("branches_created", 0),
                     merges_to_main_branch=metric_data.get("merges_to_main_branch", 0),
                 )
+
+                # Criação da previsão associada
+                utilizador = Utilizador.objects.filter(email__icontains=handle).first()
+                Previsao.objects.create(
+                    aluno_gitlabact=aluno_gitlab,
+                    student=utilizador if utilizador else request.user,
+                    prev_category='auto',
+                    prev_grade=round(min(20, max(0, metric_data.get("total_commits", 0) / 5 + metric_data.get("active_days", 0)))),
+                    faling_risk=metric_data.get("total_commits", 0) < 10
+                )
+
                 saved_count += 1
 
         return JsonResponse({"status": "ok", "created": saved_count})
@@ -471,3 +487,43 @@ def students_at_risk(request):
         })
 
     return Response({"students": data})
+
+
+# Para preencher os select da interface  de previsão de tempo
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def prediction_dates(request):
+    datas = AlunoGitlabAct.objects.order_by('-data_registo').values_list('data_registo', flat=True).distinct()
+    datas_formatadas = sorted({d.strftime('%Y-%m-%d') for d in datas}, reverse=True)
+    return Response({"dates": list(datas_formatadas)})
+
+
+
+# Para obter previsões por data de um grupo específico
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def predictions_by_date(request, date):
+    group_name = request.GET.get('group')
+    if not group_name:
+        return Response({"error": "Missing group parameter."}, status=400)
+
+    try:
+        grupo = Grupo.objects.get(group_name=group_name)
+    except Grupo.DoesNotExist:
+        return Response({"error": "Grupo não encontrado."}, status=404)
+
+    alunos = AlunoGitlabAct.objects.filter(
+        group=grupo,
+        data_registo__date=date
+    )
+
+    data = []
+    for aluno in alunos:
+        predicted_grade = round(min(20, max(0, aluno.total_commits / 5 + aluno.active_days)), 1)
+        data.append({
+            "handle": aluno.handle,
+            "predicted_grade": predicted_grade,
+            "registered_at": aluno.data_registo,
+        })
+
+    return Response({"predictions": data})
