@@ -1,29 +1,41 @@
-.compare-page {
-  padding: 2rem 3rem;
-  padding-left: 260px; /* Adapta ao width da Sidebar */
-  background-color: #f1f5f9;
+/* ComparePredictions.css atualizado para novo layout dos botões e filtros */
+
+.insert-repo-page {
+  position: relative;
+  box-sizing: border-box;
   min-height: 100vh;
+  overflow-y: auto;
+  padding: 40px;
+  text-align: center;
+  background-color: #e7ecfc;
   font-family: 'Segoe UI', sans-serif;
-  color: #1e293b;
 }
 
-.compare-page h1 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
-  color: #1e40af;
+.insert-repo-page h1 {
+  color: #1d1d1d;
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  margin-top: 5%;
 }
 
-.compare-controls {
+.highlight {
+  background-color: #1e3a8a;
+  border-radius: 6px;
+  color: white;
+  padding: 4px 12px;
+}
+
+.top-controls {
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 2rem;
-  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.compare-controls input,
-.compare-controls select {
+.top-controls select {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border: 1px solid #cbd5e1;
@@ -31,19 +43,10 @@
   background-color: white;
 }
 
-.compare-controls button {
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #1e40af;
-  color: white;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.compare-controls button:hover {
-  background-color: #1c3aa9;
+.compare-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 
 .compare-table {
@@ -53,6 +56,7 @@
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
+  margin-top: 10px;
 }
 
 .compare-table th,
@@ -63,7 +67,7 @@
 }
 
 .compare-table th {
-  background-color: #1e40af;
+  background-color: #1e3a8a;
   color: white;
   font-weight: bold;
 }
@@ -76,4 +80,39 @@
   background-color: #f8fafc;
 }
 
+.highlight-row {
+  background-color: #ffe0e0;
+  font-weight: bold;
+}
 
+.bottom-back {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.primary-button,
+.back-btn {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.primary-button:hover {
+  background-color: #163176;
+}
+
+.back-btn {
+  background-color: #475569;
+}
+
+.back-btn:hover {
+  background-color: #334155;
+}

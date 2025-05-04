@@ -112,19 +112,33 @@ function PerformanceForecastPage() {
     if (!selectedGroup) {
       setPredictions([]);
       return;
-  };
+    }
+  
     setLoading(true);
     api.get(`/api/group_predictions/${selectedGroup}/`)
-        .then(res => {
-          console.log("API Predictions Response:", res.data.predictions); // DEBUG: Log raw API response
-          setPredictions(res.data.predictions || []); // Ensure predictions is always an array
-        })
-        .catch(err => {
-          console.error('Error fetching predictions:', err);
-          setPredictions([]); // Clear predictions on error
-        })
-        .finally(() => setLoading(false));
-    }, [selectedGroup]);
+      .then(res => {
+        const all = res.data.predictions || [];
+  
+        // Obter data mais recente
+        const latestDate = all.reduce((max, p) => {
+          const date = new Date(p.registered_at);
+          return date > max ? date : max;
+        }, new Date(0));
+  
+        // Filtrar apenas os dados dessa data
+        const latest = all.filter(p =>
+          new Date(p.registered_at).toDateString() === latestDate.toDateString()
+        );
+  
+        setPredictions(latest);
+      })
+      .catch(err => {
+        console.error('Error fetching predictions:', err);
+        setPredictions([]);
+      })
+      .finally(() => setLoading(false));
+  }, [selectedGroup]);
+    
 
   const classifyCategory = (grade) => {
     if (grade === null || grade === undefined) return 'Unknown';

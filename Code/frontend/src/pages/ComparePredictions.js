@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// ComparePredictions.js com novo layout atualizado
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/SideBar';
 import api from '../services/api';
@@ -15,64 +16,49 @@ function ComparePredictions() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/api/prediction_dates/')
-      .then((res) => setDates(res.data.dates || []))
-      .catch((err) => console.error('Error loading dates:', err));
-
-    api.get('/api/groups/')
-      .then((res) => setGroups(res.data.groups || []))
-      .catch((err) => console.error('Error loading groups:', err));
+    api.get('/api/groups/').then(res => setGroups(res.data.groups || []));
+    api.get('/api/prediction_dates/').then(res => setDates(res.data.dates || []));
   }, []);
 
-  const fetchPredictions = async () => {
-    try {
-      const res1 = await api.get(`/api/predictions_by_date/${date1}/?group=${group}`);
-      const res2 = await api.get(`/api/predictions_by_date/${date2}/?group=${group}`);
-      setPredictions1(res1.data.predictions || []);
-      setPredictions2(res2.data.predictions || []);
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-    }
-  };
-
   const handleCompare = async () => {
-    if (!date1 || !date2 || !group) {
-      alert("Please select both dates and a group.");
+    if (!group || !date1 || !date2) {
+      alert('Please select a group and two dates.');
       return;
     }
-  
+    if (date1 === date2) {
+      alert('Please select two different dates.');
+      return;
+    }
     try {
       const res1 = await api.get(`/api/predictions_by_date/${date1}/?group=${group}`);
       const res2 = await api.get(`/api/predictions_by_date/${date2}/?group=${group}`);
-  
       setPredictions1(res1.data.predictions || []);
       setPredictions2(res2.data.predictions || []);
-  
-      if ((res1.data.predictions || []).length === 0 || (res2.data.predictions || []).length === 0) {
-        alert("One of the selected dates has no data to compare.");
-      }
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
+    } catch (err) {
+      console.error('Error fetching predictions:', err);
     }
   };
-  
 
   const getDiff = (handle) => {
     const p1 = predictions1.find(p => p.handle === handle);
     const p2 = predictions2.find(p => p.handle === handle);
-    if (!p1 || !p2) return 'N/A';
+    if (!p1) return 'Novo aluno';
+    if (!p2) return 'Sem dados';
     const diff = (p2.predicted_grade - p1.predicted_grade).toFixed(1);
     return diff > 0 ? `+${diff}` : diff;
   };
 
-  const allHandles = Array.from(new Set([...predictions1, ...predictions2].map(p => p.handle)));
+  const allHandles = Array.from(new Set([
+    ...predictions1.map(p => p.handle),
+    ...predictions2.map(p => p.handle)
+  ])).sort();
 
   return (
-    <div className="compare-page">
+    <div className="insert-repo-page">
       <Sidebar />
-      <h1>Compare Predictions Over Time</h1>
+      <h1>Compare <span className="highlight">Predictions Over Time</span></h1>
 
-      <div className="compare-controls">
+      <div className="top-controls">
         <select value={group} onChange={(e) => setGroup(e.target.value)}>
           <option value="">Select group</option>
           {groups.map((g, idx) => (
@@ -89,18 +75,19 @@ function ComparePredictions() {
           <option value="">Select second date</option>
           {dates.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
-
-        <button onClick={handleCompare}>Compare</button>
-        <button onClick={() => navigate('/gradepredictions')}>Back</button>
       </div>
 
-      {predictions1.length > 0 && predictions2.length > 0 && (
+      <div className="compare-button-container">
+        <button className="primary-button" onClick={handleCompare}>Compare</button>
+      </div>
+
+      <div className="grade-table">
         <table className="compare-table">
           <thead>
             <tr>
               <th>Student</th>
-              <th>{date1}</th>
-              <th>{date2}</th>
+              <th>Grade ({date1})</th>
+              <th>Grade ({date2})</th>
               <th>Difference</th>
             </tr>
           </thead>
@@ -108,8 +95,11 @@ function ComparePredictions() {
             {allHandles.map((handle) => {
               const p1 = predictions1.find(p => p.handle === handle);
               const p2 = predictions2.find(p => p.handle === handle);
+              const diff = parseFloat(getDiff(handle));
+              const rowClass = !isNaN(diff) && Math.abs(diff) >= 2 ? 'highlight-row' : '';
+
               return (
-                <tr key={handle}>
+                <tr key={handle} className={rowClass}>
                   <td>{handle}</td>
                   <td>{p1?.predicted_grade ?? 'N/A'}</td>
                   <td>{p2?.predicted_grade ?? 'N/A'}</td>
@@ -119,7 +109,11 @@ function ComparePredictions() {
             })}
           </tbody>
         </table>
-      )}
+      </div>
+
+      <div className="bottom-back">
+        <button className="back-btn" onClick={() => navigate('/gradepredictions')}>⬅ Back</button>
+      </div>
     </div>
   );
 }

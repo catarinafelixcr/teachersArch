@@ -1,10 +1,10 @@
+// StudentAtRisk corrigido para exibir apenas a última extração
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/SideBar';
 import api from '../services/api';
 import '../styles/StudentAtRisk.css'; 
 import Plot from 'react-plotly.js';
-
 
 function StudentsAtRisk() {
   const [groups, setGroups] = useState([]);
@@ -25,7 +25,19 @@ function StudentsAtRisk() {
   useEffect(() => {
     if (!selectedGroup) return;
     api.get(`/api/group_predictions/${selectedGroup}/`)
-      .then(res => setStudents(res.data.predictions))
+      .then(res => {
+        const all = res.data.predictions || [];
+        const latestDate = all.reduce((max, p) => {
+          const date = new Date(p.registered_at);
+          return date > max ? date : max;
+        }, new Date(0));
+
+        const latest = all.filter(p =>
+          new Date(p.registered_at).toDateString() === latestDate.toDateString()
+        );
+
+        setStudents(latest);
+      })
       .catch(err => console.error('Error fetching predictions:', err));
   }, [selectedGroup]);
 
@@ -177,6 +189,7 @@ function StudentsAtRisk() {
               </tbody>
             </table>
           </div>
+
           <div className="graph-wrapper">
             <div className="activity-type-selector">
               <label htmlFor="metric-select">Select Metric:</label>
@@ -191,7 +204,6 @@ function StudentsAtRisk() {
                 <option value="issues_resolved">Issues Resolved</option>
               </select>
             </div>
-
 
             <div className="plot-container">
               <Plot
@@ -217,8 +229,6 @@ function StudentsAtRisk() {
               />
             </div>
           </div>
-
-
         </>
       )}
 

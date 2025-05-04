@@ -29,10 +29,25 @@ function GradePredictions() {
   
   useEffect(() => {
     if (!selectedGroup) return;
+  
     api.get(`/api/group_predictions/${selectedGroup}/`)
-      .then((res) => setPredictions(res.data.predictions || []))
+      .then((res) => {
+        const all = res.data.predictions || [];
+  
+        const latestDate = all.reduce((max, p) => {
+          const date = new Date(p.registered_at);
+          return date > max ? date : max;
+        }, new Date(0));
+  
+        const latest = all.filter(p =>
+          new Date(p.registered_at).toDateString() === latestDate.toDateString()
+        );
+  
+        setPredictions(latest);
+      })
       .catch((err) => console.error('Error fetching group predictions:', err));
   }, [selectedGroup]);
+  
   
 
   const handleViewDetails = (student) => setSelectedStudent(student);
@@ -426,7 +441,7 @@ function GradePredictions() {
       </div>
 
       <div className="button-group">
-        <button onClick={() => navigate('/comparegroups')}>Compare Groups</button>
+        <button onClick={() => navigate('/comparegroups')}>Compare Students</button>
         <button onClick={handleGenerateReport}>Generate Report</button> {/* Disable if no data */}
         <button onClick={() => navigate('/comparepredictions')}>Compare Over Time</button>
         <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
