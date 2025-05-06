@@ -8,5 +8,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "react-confirm-alert": "^3.0.6",
+    "react-plotly.js": "^2.6.0",
+    "react-select": "^5.10.1"
+  }
 }
