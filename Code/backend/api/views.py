@@ -357,7 +357,6 @@ def save_groups(request):
                 )
 
                 # Criação da previsão associada
-                utilizador = Utilizador.objects.filter(email__icontains=handle).first()
                 Previsao.objects.create(
                     aluno_gitlabact=aluno_gitlab,
                     student=utilizador if utilizador else request.user,
@@ -365,6 +364,7 @@ def save_groups(request):
                     prev_grade=round(min(20, max(0, metric_data.get("total_commits", 0) / 5 + metric_data.get("active_days", 0)))),
                     faling_risk=metric_data.get("total_commits", 0) < 10
                 )
+
 
                 saved_count += 1
 
