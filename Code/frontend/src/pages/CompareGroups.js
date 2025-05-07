@@ -7,8 +7,13 @@ import api from '../services/api';
 
 const CompareGroups = () => {
   const [groups, setGroups] = useState([]);
+  const [dates, setDates] = useState([]);
+  const [latestDate, setLatestDate] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [baseDate, setBaseDate] = useState(null);
+  const [compareDate, setCompareDate] = useState(null);
   const [groupData, setGroupData] = useState(null);
+  const [comparisonData, setComparisonData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState({});
 
@@ -22,7 +27,49 @@ const CompareGroups = () => {
         }
       })
       .catch((error) => console.error('Error fetching groups:', error));
+
+    api.get('/api/latest_prediction_date/')
+      .then(res => {
+        if (res.data?.latest_date) {
+          const latest = { label: res.data.latest_date, value: res.data.latest_date };
+          setLatestDate(latest.value);
+          setBaseDate(latest);  
+        }
+      });
   }, []);
+
+  useEffect(() => {
+    if (!selectedGroup) return;
+
+    api.get(`/api/prediction_dates/${selectedGroup.value}/`)
+      .then(res => {
+        if (res.data?.dates) {
+          const formatted = res.data.dates.map(d => ({
+            label: d.split('T')[0], 
+            value: d                 
+          }));
+                    setDates(formatted);
+          if (formatted.length > 0) {
+            setBaseDate(formatted[0]);
+            setCompareDate(null);
+          }
+        } else {
+          setDates([]);
+          setBaseDate(null);
+          setCompareDate(null);
+        }
+      });
+  }, [selectedGroup]);
+
+  useEffect(() => {
+    if (!selectedGroup || !baseDate || !compareDate || baseDate.value === compareDate.value) return;
+
+    setLoading(true);
+    api.get(`/api/compare_predictions/${selectedGroup.value}/${baseDate.value}/${compareDate.value}/`)
+      .then(res => setComparisonData(res.data))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
+  }, [selectedGroup, baseDate, compareDate]);
 
   useEffect(() => {
     if (!selectedGroup) {
@@ -71,7 +118,6 @@ const CompareGroups = () => {
             }
           });
 
-          // Normalização para o radar chart
           const rawStats = [
             parseFloat(mean.toFixed(1)),
             parseFloat(stdDev.toFixed(1)),
@@ -144,6 +190,18 @@ const CompareGroups = () => {
           onChange={(option) => setSelectedGroup(option)}
           className="react-select"
           placeholder="Select a group..."
+        />
+        <Select 
+          options={dates}
+          value={baseDate}
+          onChnage={setBaseDate}
+          placeholder="Base Date (Latest)"
+        />  
+        <Select
+          options={dates}
+          value={compareDate}
+          onChange={setCompareDate}
+          placeholder="Compare with..."
         />
       </div>
 

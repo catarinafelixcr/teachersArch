@@ -176,7 +176,7 @@ const handleSubmit = () => {
     });
 
     setIsSaving(true);
-    api.post('/api/save_groups/', { repo_url: repoLink, groups: grouped, metrics: studentMetrics })
+    api.post('/api/save_groups/', { repo_url: repoLink, groups: grouped, metrics: studentMetrics, data_base: new Date().toISOString() })
       .then(res => {
         setIsSaving(false);
         if (res.data.status === 'ok') {

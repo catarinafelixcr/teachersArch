@@ -310,23 +310,33 @@ def extract_students(request):
 
 from api.utils.extract import extract_from_gitlab  
 
+from django.utils.dateparse import parse_datetime
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_groups(request):
     logger.info(f"Tentativa de salvar grupos pelo utilizador: {request.user.email}")
     try:
+        from django.utils.dateparse import parse_datetime
         data = request.data
         repo_url = data.get("repo_url")
         groups_data = data.get("groups", {})
         metrics = data.get("metrics", {})
+        data_base = data.get("data_base")
 
         if not repo_url or not groups_data:
             logger.warning("Pedido save_groups recebido sem repo_url ou groups.")
             return JsonResponse({"error": "Missing repository URL or groups data."}, status=400)
 
         teacher = Teacher.objects.get(utilizador=request.user)
-
         saved_count = 0
+
+        # Processar data_registo com segurança
+        data_registo = timezone.now().replace(microsecond=0)
+        if data_base:
+            parsed = parse_datetime(data_base)
+            if parsed:
+                data_registo = parsed.replace(microsecond=0)
 
         for group_name, handles in groups_data.items():
             grupo, _ = Grupo.objects.get_or_create(group_name=group_name)
@@ -335,36 +345,40 @@ def save_groups(request):
             for handle in handles:
                 metric_data = metrics.get(handle, {})
 
-                aluno_gitlab = AlunoGitlabAct.objects.create(
+                aluno_gitlab, _ = AlunoGitlabAct.objects.update_or_create(
                     group=grupo,
                     handle=handle,
-                    total_commits=metric_data.get("total_commits", 0),
-                    sum_lines_added=metric_data.get("sum_lines_added", 0),
-                    sum_lines_deleted=metric_data.get("sum_lines_deleted", 0),
-                    sum_lines_per_commit=metric_data.get("sum_lines_per_commit", 0),
-                    active_days=metric_data.get("active_days", 0),
-                    last_minute_commits=bool(metric_data.get("last_minute_commits", 0) > 0),
-                    total_merge_requests=metric_data.get("total_merge_requests", 0),
-                    merged_requests=metric_data.get("merged_requests", 0),
-                    review_comments_given=metric_data.get("review_comments_given", 0),
-                    review_comments_received=metric_data.get("review_comments_received", 0),
-                    total_issues_created=metric_data.get("total_issues_created", 0),
-                    total_issues_assigned=metric_data.get("total_issues_assigned", 0),
-                    issues_resolved=bool(metric_data.get("issues_resolved", False)),
-                    issue_participation=bool(metric_data.get("issue_participation", False)),
-                    branches_created=metric_data.get("branches_created", 0),
-                    merges_to_main_branch=metric_data.get("merges_to_main_branch", 0),
+                    defaults={
+                        "data_registo": data_registo,
+                        "total_commits": metric_data.get("total_commits", 0),
+                        "sum_lines_added": metric_data.get("sum_lines_added", 0),
+                        "sum_lines_deleted": metric_data.get("sum_lines_deleted", 0),
+                        "sum_lines_per_commit": metric_data.get("sum_lines_per_commit", 0),
+                        "active_days": metric_data.get("active_days", 0),
+                        "last_minute_commits": bool(metric_data.get("last_minute_commits", 0) > 0),
+                        "total_merge_requests": metric_data.get("total_merge_requests", 0),
+                        "merged_requests": metric_data.get("merged_requests", 0),
+                        "review_comments_given": metric_data.get("review_comments_given", 0),
+                        "review_comments_received": metric_data.get("review_comments_received", 0),
+                        "total_issues_created": metric_data.get("total_issues_created", 0),
+                        "total_issues_assigned": metric_data.get("total_issues_assigned", 0),
+                        "issues_resolved": bool(metric_data.get("issues_resolved", False)),
+                        "issue_participation": bool(metric_data.get("issue_participation", False)),
+                        "branches_created": metric_data.get("branches_created", 0),
+                        "merges_to_main_branch": metric_data.get("merges_to_main_branch", 0)
+                    }
                 )
 
-                # Criação da previsão associada
-                Previsao.objects.create(
-                    aluno_gitlabact=aluno_gitlab,
-                    student=utilizador if utilizador else request.user,
-                    prev_category='auto',
-                    prev_grade=round(min(20, max(0, metric_data.get("total_commits", 0) / 5 + metric_data.get("active_days", 0)))),
-                    faling_risk=metric_data.get("total_commits", 0) < 10
+                Previsao.objects.update_or_create(
+                    student=request.user,
+                    prev_date=data_registo,
+                    defaults={
+                        "aluno_gitlabact": aluno_gitlab,
+                        "prev_category": "auto",
+                        "prev_grade": round(min(20, max(0, metric_data.get("total_commits", 0) / 5 + metric_data.get("active_days", 0)))),
+                        "faling_risk": metric_data.get("total_commits", 0) < 10
+                    }
                 )
-
 
                 saved_count += 1
 
@@ -376,7 +390,6 @@ def save_groups(request):
     except Exception as e:
         logger.exception(f"ERRO em save_groups para {request.user.email}")
         return JsonResponse({"error": f"Ocorreu um erro interno: {str(e)}"}, status=500)
-
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
@@ -527,3 +540,48 @@ def predictions_by_date(request, date):
         })
 
     return Response({"predictions": data})
+
+
+
+@api_view(['GET'])
+def compare_predictions_by_date(request, group_name, base_date, compare_date):
+    base_predictions = Previsao.objects.filter(
+        student__gitlab_activities__group__group_name=group_name,
+        prev_date=base_date
+    )
+    compare_predictions = Previsao.objects.filter(
+        student__gitlab_activities__group__group_name=group_name,
+        prev_date=compare_date
+    )
+
+    def extract_data(predictions):
+        return [{
+            'student_id': p.student.id,
+            'predicted_grade': p.prev_grade
+        } for p in predictions]
+
+    return Response({
+        'base': extract_data(base_predictions),
+        'compare': extract_data(compare_predictions)
+    })
+
+
+
+
+
+@api_view(['GET'])
+def latest_prediction_date(request):
+    latest_date = Previsao.objects.order_by('-prev_date').values_list('prev_date', flat=True).first()
+    return Response({'latest_date': latest_date})
+
+
+
+
+@api_view(['GET'])
+def prediction_dates_for_group(request, group_name):
+    dates = Previsao.objects.filter(
+        aluno_gitlabact__group__group_name=group_name
+    ).values_list('prev_date', flat=True).distinct().order_by('-prev_date')
+    
+    formatted_dates = [d.strftime('%Y-%m-%dT%H:%M:%S') for d in dates]
+    return Response({'dates': formatted_dates})

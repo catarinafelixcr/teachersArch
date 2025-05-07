@@ -36,6 +36,9 @@ urlpatterns = [
     path('api/prediction_dates/', views.prediction_dates),
     path('api/predictions_by_date/<str:date>/', views.predictions_by_date),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/compare_predictions/<str:group_name>/<str:base_date>/<str:compare_date>/', views.compare_predictions_by_date),
+    path('api/latest_prediction_date/', views.latest_prediction_date),
+    path('api/prediction_dates/<str:group_name>/', views.prediction_dates_for_group),
 
     path('', include(router.urls)),
 ]
