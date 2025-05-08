@@ -24,6 +24,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 
 from .models import Previsao
+import joblib
 
 
 from .utils.extract import extract_from_gitlab
@@ -36,13 +37,9 @@ import traceback
 
 
 # ----------------------------models ML----------------------------
-'''import os
-from tensorflow.keras.models import load_model
-import numpy as np
+from api.utils.ml_model_loader import select_model
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'ml_models', 'modelo_nn.keras')
-modelo_nn = load_model(MODEL_PATH)
-'''
+
 # -----------------------------------------------------------------
 
 logger = logging.getLogger(__name__)
@@ -312,12 +309,24 @@ from api.utils.extract import extract_from_gitlab
 
 from django.utils.dateparse import parse_datetime
 
+from api.utils.ml_model_loader import select_model
+
+from django.utils.dateparse import parse_datetime
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.utils import timezone
+import logging
+
+from api.models import Teacher, Grupo, AlunoGitlabAct, TeacherGrupo, Previsao
+from api.utils.ml_model_loader import select_model
+
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_groups(request):
     logger.info(f"Tentativa de salvar grupos pelo utilizador: {request.user.email}")
     try:
-        from django.utils.dateparse import parse_datetime
         data = request.data
         repo_url = data.get("repo_url")
         groups_data = data.get("groups", {})
@@ -331,7 +340,6 @@ def save_groups(request):
         teacher = Teacher.objects.get(utilizador=request.user)
         saved_count = 0
 
-        # Processar data_registo com segurança
         data_registo = timezone.now().replace(microsecond=0)
         if data_base:
             parsed = parse_datetime(data_base)
@@ -369,14 +377,37 @@ def save_groups(request):
                     }
                 )
 
+                X_input = [[
+                    metric_data.get("total_commits", 0),
+                    metric_data.get("sum_lines_added", 0),
+                    metric_data.get("sum_lines_deleted", 0),
+                    metric_data.get("sum_lines_per_commit", 0),
+                    metric_data.get("active_days", 0),
+                    metric_data.get("last_minute_commits", 0),
+                    metric_data.get("total_merge_requests", 0),
+                    metric_data.get("merged_requests", 0),
+                    metric_data.get("review_comments_given", 0),
+                    metric_data.get("review_comments_received", 0),
+                    metric_data.get("total_issues_created", 0),
+                    metric_data.get("total_issues_assigned", 0),
+                    int(metric_data.get("issues_resolved", False)),
+                    int(metric_data.get("issue_participation", False)),
+                    metric_data.get("branches_created", 0),
+                    metric_data.get("merges_to_main_branch", 0)
+                ]]
+
+                model = select_model(data_registo,grupo)
+                predicted_grade = float(model.predict(X_input)[0])
+                predicted_grade = round(min(20, max(0, predicted_grade)))
+
                 Previsao.objects.update_or_create(
                     student=request.user,
                     prev_date=data_registo,
                     defaults={
                         "aluno_gitlabact": aluno_gitlab,
-                        "prev_category": "auto",
-                        "prev_grade": round(min(20, max(0, metric_data.get("total_commits", 0) / 5 + metric_data.get("active_days", 0)))),
-                        "faling_risk": metric_data.get("total_commits", 0) < 10
+                        "prev_category": "ml_ensemble",
+                        "prev_grade": predicted_grade,
+                        "faling_risk": predicted_grade < 10
                     }
                 )
 
@@ -390,6 +421,8 @@ def save_groups(request):
     except Exception as e:
         logger.exception(f"ERRO em save_groups para {request.user.email}")
         return JsonResponse({"error": f"Ocorreu um erro interno: {str(e)}"}, status=500)
+    
+
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
@@ -442,10 +475,13 @@ def get_group_predictions(request, group_name):
         response_data = []
 
         for aluno in alunos:
-            previsao = {
+            previsao = Previsao.objects.filter(aluno_gitlabact=aluno).order_by('-prev_date').first()
+            predicted_grade = previsao.prev_grade if previsao else None
+
+            response_data.append({
                 "handle": aluno.handle,
-                "predicted_grade": round(min(20, max(0, aluno.total_commits / 5 + aluno.active_days)), 1),
-                "risk": aluno.total_commits < 10,
+                "predicted_grade": predicted_grade,
+                "risk": predicted_grade is not None and predicted_grade < 10,
                 "registered_at": aluno.data_registo,
                 "metrics": {
                     "total_commits": aluno.total_commits,
@@ -465,14 +501,15 @@ def get_group_predictions(request, group_name):
                     "branches_created": aluno.branches_created,
                     "merges_to_main_branch": aluno.merges_to_main_branch,
                 }
-            }
-
-            response_data.append(previsao)
+            })
 
         return Response({"group": group_name, "predictions": response_data})
 
     except Grupo.DoesNotExist:
         return Response({"error": f"O grupo '{group_name}' não existe."}, status=404)
+
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

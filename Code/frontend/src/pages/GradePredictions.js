@@ -441,9 +441,8 @@ function GradePredictions() {
       </div>
 
       <div className="button-group">
-        <button onClick={() => navigate('/comparegroups')}>Compare Students</button>
+        <button onClick={() => navigate('/comparegroups')}>Compare Over Time</button>
         <button onClick={handleGenerateReport}>Generate Report</button> {/* Disable if no data */}
-        <button onClick={() => navigate('/comparepredictions')}>Compare Over Time</button>
         <button className="back-btn" onClick={() => navigate('/initialpage')}>Back to Dashboard</button>
       </div>
 

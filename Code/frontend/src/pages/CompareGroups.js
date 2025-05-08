@@ -194,7 +194,7 @@ const CompareGroups = () => {
         <Select 
           options={dates}
           value={baseDate}
-          onChnage={setBaseDate}
+          onChange={setBaseDate}
           placeholder="Base Date (Latest)"
         />  
         <Select

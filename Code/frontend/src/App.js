@@ -5,7 +5,6 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import InitialPage from './pages/InitialPage';
 import InsertRepositoryPage from './pages/InsertRepositoryPage';
-import ComparePredictions from './pages/ComparePredictions'; 
 import GradePredictions from './pages/GradePredictions';
 import LayoutWithSideBar from './components/LayoutWithSideBar';
 import CompareGroups from './pages/CompareGroups'; 
@@ -50,15 +49,6 @@ function App() {
             </LayoutWithSideBar>
           </PrivateRoute>
         } />
-
-        <Route path="/comparepredictions" element={
-          <PrivateRoute>
-            <LayoutWithSideBar>
-              <ComparePredictions />
-            </LayoutWithSideBar>
-          </PrivateRoute>
-        } />
-        
         <Route path="/comparegroups" element={
           <PrivateRoute>
             <LayoutWithSideBar>
