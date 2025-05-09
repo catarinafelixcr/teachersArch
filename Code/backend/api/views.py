@@ -617,27 +617,43 @@ def predictions_by_date(request, date):
 
 
 
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
+
 @api_view(['GET'])
 def compare_predictions_by_date(request, group_name, base_date, compare_date):
-    base_predictions = Previsao.objects.filter(
-        student__gitlab_activities__group__group_name=group_name,
-        prev_date=base_date
-    )
-    compare_predictions = Previsao.objects.filter(
-        student__gitlab_activities__group__group_name=group_name,
-        prev_date=compare_date
-    )
+    try:
+        grupo = Grupo.objects.get(group_name=group_name)
 
-    def extract_data(predictions):
-        return [{
-            'student_id': p.student.id,
-            'predicted_grade': p.prev_grade
-        } for p in predictions]
+        # Garantir que as datas são timezone-aware
+        base_date = make_aware(parse_datetime(base_date))
+        compare_date = make_aware(parse_datetime(compare_date))
 
-    return Response({
-        'base': extract_data(base_predictions),
-        'compare': extract_data(compare_predictions)
-    })
+        base_predictions = Previsao.objects.filter(
+            aluno_gitlabact__group=grupo,
+            prev_date=base_date
+        )
+        compare_predictions = Previsao.objects.filter(
+            aluno_gitlabact__group=grupo,
+            prev_date=compare_date
+        )
+
+        def extract_data(predictions):
+            return [{
+                'student_id': p.aluno_gitlabact.id,
+                'handle': p.aluno_gitlabact.handle,
+                'predicted_grade': p.prev_grade
+            } for p in predictions]
+
+        return Response({
+            'base': extract_data(base_predictions),
+            'compare': extract_data(compare_predictions)
+        })
+
+    except Grupo.DoesNotExist:
+        return Response({"error": "Grupo não encontrado."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
 
 
 

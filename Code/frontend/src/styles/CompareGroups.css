@@ -189,3 +189,80 @@ tbody tr:hover {
     padding: 20px;
   }
 }
+
+.interval-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.interval-table th,
+.interval-table td {
+  padding: 10px 12px; /* mais compacto */
+  text-align: center;
+  color: #1e3a8a;
+}
+
+
+
+.student-table {
+  margin: 32px auto;
+  background-color: #f0f4ff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  width: 85%;
+  max-width: 950px;
+  overflow: hidden;
+}
+
+.student-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15.5px;
+}
+
+.student-table th,
+.student-table td {
+  padding: 16px 14px;  /* ← altura um pouco maior */
+  text-align: center;
+  color: #1e3a8a;
+}
+
+.student-table th {
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: 600;
+  font-size: 15.5px;
+}
+
+.student-table td:last-child {
+  font-weight: 600;
+}
+
+
+
+.chart-selector {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center; /* ⬅️ centra os filhos horizontalmente */
+  margin-top: 32px;
+}
+
+.chart {
+  background-color: #f0f4ff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 900px; /* ⬅️ define largura máxima */
+}
