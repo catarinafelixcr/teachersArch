@@ -472,11 +472,47 @@ def get_group_predictions(request, group_name):
         grupo = Grupo.objects.get(group_name=group_name)
         alunos = AlunoGitlabAct.objects.filter(group=grupo)
 
+        # NOVO: capturar o parâmetro ?stage=1 a 5
+        stage = request.GET.get('stage')
+        if stage:
+            try:
+                stage = int(stage)
+                if stage not in [1, 2, 3, 4, 5]:
+                    raise ValueError()
+            except ValueError:
+                return Response({"error": "Parâmetro 'stage' deve ser um número de 1 a 5."}, status=400)
+
         response_data = []
 
         for aluno in alunos:
-            previsao = Previsao.objects.filter(aluno_gitlabact=aluno).order_by('-prev_date').first()
-            predicted_grade = previsao.prev_grade if previsao else None
+            if stage:
+                # NOVO: aplicar modelo correspondente ao stage
+                from api.utils.ml_model_loader import select_model
+                X_input = [[
+                    aluno.total_commits,
+                    aluno.sum_lines_added,
+                    aluno.sum_lines_deleted,
+                    aluno.sum_lines_per_commit,
+                    aluno.active_days,
+                    int(aluno.last_minute_commits),
+                    aluno.total_merge_requests,
+                    aluno.merged_requests,
+                    aluno.review_comments_given,
+                    aluno.review_comments_received,
+                    aluno.total_issues_created,
+                    aluno.total_issues_assigned,
+                    int(aluno.issues_resolved),
+                    int(aluno.issue_participation),
+                    aluno.branches_created,
+                    aluno.merges_to_main_branch,
+                ]]
+                model = select_model(stage=stage)
+                predicted_grade = float(model.predict(X_input)[0])
+                predicted_grade = round(min(20, max(0, predicted_grade)))
+            else:
+                # Modo padrão: usa a previsão mais recente
+                previsao = Previsao.objects.filter(aluno_gitlabact=aluno).order_by('-prev_date').first()
+                predicted_grade = previsao.prev_grade if previsao else None
 
             response_data.append({
                 "handle": aluno.handle,
@@ -507,6 +543,7 @@ def get_group_predictions(request, group_name):
 
     except Grupo.DoesNotExist:
         return Response({"error": f"O grupo '{group_name}' não existe."}, status=404)
+
 
 
 

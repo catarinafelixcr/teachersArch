@@ -24,10 +24,16 @@ def get_first_extraction_date(group):
     return record.data_registo if record else now()
 
 
-def select_model(data_registo, grupo):
+def select_model(data_registo=None, grupo=None, stage=None):
     """
-    Seleciona o modelo certo com base na data da extração (data_registo) e a 1ª data do grupo.
+    Seleciona o modelo com base no 'stage' fornecido ou, se ausente, pela data da extração.
     """
+    if stage:
+        return MODELS.get(stage, MODELS[5])  # usa MODELS[5] como fallback seguro
+
+    if not data_registo or not grupo:
+        raise ValueError("É necessário fornecer 'data_registo' e 'grupo' se 'stage' não for especificado.")
+
     first_date = get_first_extraction_date(grupo)
 
     for i in range(5):
