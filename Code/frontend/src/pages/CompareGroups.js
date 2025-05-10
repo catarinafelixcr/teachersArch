@@ -359,8 +359,8 @@ const CompareGroups = () => {
 
                         let emoji = '➖';
                         if (baseGrade != null && compareGrade != null) {
-                          if (compareGrade > baseGrade) emoji = '📈';
-                          else if (compareGrade < baseGrade) emoji = '📉';
+                          if (compareGrade > baseGrade) emoji = '📉';
+                          else if (compareGrade < baseGrade) emoji = '📈';
                         }
 
                         return (

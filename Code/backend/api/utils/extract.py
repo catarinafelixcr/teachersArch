@@ -26,7 +26,6 @@ def fetch_project_from_url(gl, repo_url):
 def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:00:00"):
     from collections import defaultdict
 
-    # Inicializa todos os membros do projeto
     students = defaultdict(lambda: {
         "total_commits": 0,
         "sum_lines_added": 0,
@@ -46,13 +45,11 @@ def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:
         "merges_to_main_branch": 0,
     })
 
-    # 🔁 Adiciona todos os membros do projeto, mesmo sem atividade
     members = project.members.list(all=True)
     for member in members:
         handle = member.username
-        students[handle]  # inicializa com dados zerados
+        students[handle]
 
-    # ⚙️ Lógica de commits
     commits = project.commits.list(all=True, get_all=True)
     seen_days = defaultdict(set)
 
@@ -91,12 +88,10 @@ def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:
 
     return students
 
-
-def extract_from_gitlab(repo_url, last_commit_date_by_handle=None):
-    gl = Gitlab(GITLAB_URL, private_token=GITLAB_TOKEN)
+def extract_from_gitlab(repo_url, api_key=None, last_commit_date_by_handle=None):
+    gl = Gitlab(GITLAB_URL, private_token=api_key or GITLAB_TOKEN)
     project = fetch_project_from_url(gl, repo_url)
 
-    # Garante que se não mandarem datas, consideramos que não há nada gravado
     if last_commit_date_by_handle is None:
         last_commit_date_by_handle = {}
 
