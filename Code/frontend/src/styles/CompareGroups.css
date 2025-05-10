@@ -206,15 +206,14 @@ tbody tr:hover {
 
 
 .student-table {
-  margin: 32px auto;
-  background-color: #f0f4ff;
-  border-radius: 16px;
-  padding: 20px 24px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-  width: 85%;
-  max-width: 950px;
-  overflow: hidden;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 10px;
 }
+
+
 
 .student-table table {
   width: 100%;
@@ -254,8 +253,14 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  align-items: center; /* ⬅️ centra os filhos horizontalmente */
-  margin-top: 32px;
+  align-items: center;
+  margin-top: 48px; /* aumentei de 32px para 48px */
+  text-align: left;
+}
+
+.charts-container h3 {
+  align-self: flex-start; /* ⬅️ força o título à esquerda */
+  margin-bottom: 8px;
 }
 
 .chart {
@@ -264,5 +269,12 @@ tbody tr:hover {
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   width: 100%;
-  max-width: 900px; /* ⬅️ define largura máxima */
+  max-width: 900px;
+  box-sizing: border-box; /* ✅ garante que padding não ultrapassa a largura */
+}
+
+
+
+table thead th {
+  text-align: center;
 }

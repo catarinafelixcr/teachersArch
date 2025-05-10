@@ -620,40 +620,70 @@ def predictions_by_date(request, date):
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware
 
+from django.utils.dateparse import parse_date
+
+from django.utils.dateparse import parse_date
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from api.models import Grupo, Previsao
+
 @api_view(['GET'])
 def compare_predictions_by_date(request, group_name, base_date, compare_date):
     try:
         grupo = Grupo.objects.get(group_name=group_name)
+        base_date = parse_date(base_date)
+        compare_date = parse_date(compare_date)
 
-        # Garantir que as datas são timezone-aware
-        base_date = make_aware(parse_datetime(base_date))
-        compare_date = make_aware(parse_datetime(compare_date))
-
-        base_predictions = Previsao.objects.filter(
+        base_prevs = Previsao.objects.filter(
             aluno_gitlabact__group=grupo,
-            prev_date=base_date
+            prev_date__date=base_date
         )
-        compare_predictions = Previsao.objects.filter(
+        compare_prevs = Previsao.objects.filter(
             aluno_gitlabact__group=grupo,
-            prev_date=compare_date
+            prev_date__date=compare_date
         )
 
-        def extract_data(predictions):
-            return [{
-                'student_id': p.aluno_gitlabact.id,
-                'handle': p.aluno_gitlabact.handle,
-                'predicted_grade': p.prev_grade
-            } for p in predictions]
+        def extract_metric_data(prevs):
+            metrics = {
+                'prev_grade': [],
+                'total_commits': [],
+                'total_issues_created': [],
+                'active_days': []
+            }
+
+            for p in prevs:
+                ag = p.aluno_gitlabact
+                metrics['prev_grade'].append(p.prev_grade)
+                metrics['total_commits'].append(ag.total_commits)
+                metrics['total_issues_created'].append(ag.total_issues_created)
+                metrics['active_days'].append(ag.active_days)
+
+            def compute_stats(values):
+                if not values:
+                    return { 'values': [], 'mean': 0, 'stdDev': 0, 'min': 0, 'max': 0 }
+                mean = sum(values) / len(values)
+                std = (sum((v - mean) ** 2 for v in values) / len(values)) ** 0.5
+                return {
+                    'values': values,
+                    'mean': round(mean, 1),
+                    'stdDev': round(std, 1),
+                    'min': min(values),
+                    'max': max(values)
+                }
+
+            return { metric: compute_stats(values) for metric, values in metrics.items() }
 
         return Response({
-            'base': extract_data(base_predictions),
-            'compare': extract_data(compare_predictions)
+            "base": extract_metric_data(base_prevs),
+            "compare": extract_metric_data(compare_prevs)
         })
 
     except Grupo.DoesNotExist:
         return Response({"error": "Grupo não encontrado."}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+
 
 
 

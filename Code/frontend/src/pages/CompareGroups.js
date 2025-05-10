@@ -17,6 +17,7 @@ const CompareGroups = () => {
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState({});
   const [selectedChart, setSelectedChart] = useState('bar');
+  const [selectedMetric, setSelectedMetric] = useState({ value: 'prev_grade', label: 'Predicted Grade' });
 
   const classifyCategory = (grade) => {
     const percentage = (grade / 20) * 100;
@@ -63,9 +64,11 @@ const CompareGroups = () => {
     api.get(`/api/prediction_dates/${selectedGroup.value}/`)
       .then(res => {
         if (res.data?.dates) {
-          const formatted = res.data.dates.map(d => ({
-            label: d.split('T')[0], 
-            value: d                 
+          const uniqueByDay = [...new Set(res.data.dates.map(d => d.split('T')[0]))];
+
+          const formatted = uniqueByDay.map(dateStr => ({
+            label: dateStr,
+            value: dateStr  
           }));
                     setDates(formatted);
           if (formatted.length > 0) {
@@ -217,25 +220,29 @@ const CompareGroups = () => {
         View grade prediction distribution and statistics within a selected group, including individual student identification.
       </p>
 
-      <div className="group-select">
+      <div className="group-select" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
         <Select
           options={groups}
           onChange={(option) => setSelectedGroup(option)}
           className="react-select"
           placeholder="Select a group..."
         />
-        <Select 
-          options={dates}
-          value={baseDate}
-          onChange={setBaseDate}
-          placeholder="Base Date (Latest)"
-        />  
-        <Select
-          options={dates}
-          value={compareDate}
-          onChange={setCompareDate}
-          placeholder="Compare with..."
-        />
+
+        <div className="base-date-label">
+          <strong>Base Date:</strong> {baseDate?.label || 'Latest'}
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span><strong>Previous Date:</strong></span>
+          <Select
+            options={dates.filter(d => d.value !== baseDate?.value)}
+            value={compareDate}
+            onChange={setCompareDate}
+            placeholder="Select date"
+            isDisabled={!baseDate}
+            className="react-select"
+          />
+        </div>
       </div>
 
       {!selectedGroup && (
@@ -289,7 +296,10 @@ const CompareGroups = () => {
 
             {groupData?.faixaContagem && (
               <div className="interval-table">
-                <h4>Grade Ranges</h4>
+                <h3 className="info">
+                  → Grade Ranges
+                  <span onClick={() => toggleInfo('ranges')}>ⓘ</span>
+                </h3>
                 <table>
                   <thead>
                     <tr>
@@ -324,134 +334,199 @@ const CompareGroups = () => {
             )}
 
             {groupData?.studentNames && (
-              <div className="student-table">
-                <h4>Individual Student Predictions</h4>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Student</th>
-                      <th>Group</th>
-                      <th>Predicted Grade</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {groupData.studentNames.map((name, idx) => (
-                      <tr key={name + idx} style={{ backgroundColor: groupData.pointColors[idx], textAlign: 'center' }}>
-                        <td>{name}</td>
-                        <td>{groupData.group}</td>
-                        <td>{groupData.grades[idx]}</td>
+              <div style={{marginTop: '40px'}}>
+                <h3 className="info" style={{ marginTop: '30px' }}>
+                  → Individual Student Predictions
+                  <span onClick={() => toggleInfo('comparison')}>ⓘ</span>
+                </h3>
+
+                <div className="student-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Student</th>
+                        <th>Group</th>
+                        <th>Grade ({baseDate?.label || 'Base'})</th>
+                        <th>Grade ({compareDate?.label || 'Compare'})</th>
+                        <th>Trend</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {groupData.studentNames.map((name, idx) => {
+                        const group = groupData.group;
+                        const baseGrade = comparisonData?.base?.prev_grade?.values?.[idx];
+                        const compareGrade = comparisonData?.compare?.prev_grade?.values?.[idx];
+
+                        let emoji = '➖';
+                        if (baseGrade != null && compareGrade != null) {
+                          if (compareGrade > baseGrade) emoji = '📈';
+                          else if (compareGrade < baseGrade) emoji = '📉';
+                        }
+
+                        return (
+                          <tr
+                            key={name + idx}
+                            style={{
+                              backgroundColor: groupData.pointColors[idx],
+                              textAlign: 'center'
+                            }}
+                          >
+                            <td>{name}</td>
+                            <td>{group}</td>
+                            <td>{baseGrade ?? '-'}</td>
+                            <td>{compareGrade ?? '-'}</td>
+                            <td>{emoji}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
 
-            {comparisonData && baseDate && compareDate && (
-              
-              <div className="charts-container">
-                <h4>
-                  Comparison Chart <span className="info-icon" onClick={() => toggleInfo('comparison')}>ⓘ</span>
-                </h4>
+            {comparisonData?.base && comparisonData?.compare && baseDate && compareDate && (
+              <div className="charts-container" style={{textAlign: 'left', marginTop: '50px'}}>
+                <h3 className="info" style={{ textAlign: 'left' }}>
+                  → Comparison Chart <span onClick={() => toggleInfo('comparison')}>ⓘ</span>
+                </h3>
+
+                <Select
+                  options={[
+                    { value: 'prev_grade', label: 'Predicted Grade' },
+                    { value: 'total_commits', label: 'Total Commits' },
+                    { value: 'total_issues_created', label: 'Issues Created' },
+                    { value: 'active_days', label: 'Active Days' }
+                  ]}
+                  value={selectedMetric}
+                  onChange={(option) => setSelectedMetric(option)}
+                  placeholder="Select Metric to Compare"
+                  className="react-select"
+                  styles={{ container: (base) => ({ ...base, width: 250, marginBottom: 20 }) }}
+                />
+
                 {showInfo.comparison && (
                   <div className="info-box">
                     Visualize key differences in group performance between the selected dates across all metrics and grades.
                   </div>
                 )}
 
-                {/* Grouped Bar Chart */}
-                <div className="chart">
-                  <Plot
-                    data={[
-                      {
-                        x: ['Mean', 'Std Dev', 'Min', 'Max'],
-                        y: [groupData.mean, groupData.stdDev, groupData.min, groupData.max],
-                        name: baseDate.label,
-                        type: 'bar',
-                        marker: { color: '#1e90ff' }
-                      },
-                      {
-                        x: ['Mean', 'Std Dev', 'Min', 'Max'],
-                        y: [comparisonData.mean, comparisonData.stdDev, comparisonData.min, comparisonData.max],
-                        name: compareDate.label,
-                        type: 'bar',
-                        marker: { color: '#ff9933' }
-                      }
-                    ]}
-                    layout={{
-                      title: 'Metric Trend Over Time',
-                      font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' },
-                      xaxis: { type: 'category' }  // 👈 força categórico, não tempo
-                    }}
-                    config={{ responsive: true }}
-                    useResizeHandler
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                </div>
+                {(() => {
+                  const metric = selectedMetric.value;
+                  const baseStats = comparisonData?.base?.[metric];
+                  const compareStats = comparisonData?.compare?.[metric];
 
-                {/* Line Chart */}
-                <div className="chart">
-                  <Plot
-                    data={[
-                      {
-                        x: [baseDate.label, compareDate.label],
-                        y: [groupData.mean, comparisonData.mean],
-                        name: 'Mean',
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        line: { color: '#1e90ff' }
-                      },
-                      {
-                        x: [baseDate.label, compareDate.label],
-                        y: [groupData.stdDev, comparisonData.stdDev],
-                        name: 'Std Dev',
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        line: { color: '#ff9933' }
-                      }
-                    ]}
-                    layout={{
-                      title: 'Metric Trend Over Time',
-                      font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' }
-                    }}
-                    config={{ responsive: true }}
-                    useResizeHandler
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                </div>
+                  if (!baseStats || !compareStats) {
+                    return <div>No data available for selected metric.</div>;
+                  }
 
-                {/* Box Plot */}
-                <div className="chart">
-                  <Plot
-                    data={[
-                      {
-                        y: groupData.grades,
-                        name: baseDate.label,
-                        type: 'box',
-                        boxpoints: 'all',
-                        jitter: 0.5,
-                        marker: { color: '#1e90ff' }
-                      },
-                      {
-                        y: comparisonData.grades,
-                        name: compareDate.label,
-                        type: 'box',
-                        boxpoints: 'all',
-                        jitter: 0.5,
-                        marker: { color: '#ff9933' }
-                      }
-                    ]}
-                    layout={{
-                      title: 'Grade Distribution Comparison',
-                      yaxis: { title: 'Grade (%)' },
-                      font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' }
-                    }}
-                    config={{ responsive: true }}
-                    useResizeHandler
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                </div>
+                  return (
+                    <>
+                      {/* Grouped Bar Chart */}
+                      <div className="chart">
+                        <div style={{ width: '100%', height: '400px' }}>
+                          <Plot
+                            data={[
+                              {
+                                x: ['Mean', 'Std Dev', 'Min', 'Max'],
+                                y: [baseStats.mean, baseStats.stdDev, baseStats.min, baseStats.max],
+                                name: baseDate.label,
+                                type: 'bar',
+                                marker: { color: '#2563eb' }
+                              },
+                              {
+                                x: ['Mean', 'Std Dev', 'Min', 'Max'],
+                                y: [compareStats.mean, compareStats.stdDev, compareStats.min, compareStats.max],
+                                name: compareDate.label,
+                                type: 'bar',
+                                marker: { color: '#22c55e' }
+                              }
+                            ]}
+                            layout={{
+                              title: `${selectedMetric.label} Comparison`,
+                              font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' },
+                              xaxis: { type: 'category' },
+                              margin: { t: 40, l: 50, r: 20, b: 50 },
+                            }}
+                            config={{ responsive: true }}
+                            useResizeHandler
+                            style={{ width: '100%', height: '100%' }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Line Chart */}
+                      <div className="chart">
+                        <div style={{ width: '100%', height: '400px' }}>
+                          <Plot
+                            data={[
+                              {
+                                x: [baseDate.label, compareDate.label],
+                                y: [baseStats.mean, compareStats.mean],
+                                name: 'Mean',
+                                type: 'scatter',
+                                mode: 'lines+markers',
+                                line: { color: '#2563eb' }
+                              },
+                              {
+                                x: [baseDate.label, compareDate.label],
+                                y: [baseStats.stdDev, compareStats.stdDev],
+                                name: 'Std Dev',
+                                type: 'scatter',
+                                mode: 'lines+markers',
+                                line: { color: '#22c55e' }
+                              }
+                            ]}
+                            layout={{
+                              title: `${selectedMetric.label} Trend`,
+                              font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' },
+                              margin: { t: 40, l: 50, r: 20, b: 50 },
+                            }}
+                            config={{ responsive: true }}
+                            useResizeHandler
+                            style={{ width: '100%', height: '100%' }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Box Plot */}
+                      <div className="chart">
+                        <div style={{ width: '100%', height: '400px' }}>
+                          <Plot
+                            data={[
+                              {
+                                y: baseStats.values,
+                                name: baseDate.label,
+                                type: 'box',
+                                boxpoints: 'all',
+                                jitter: 0.5,
+                                marker: { color: '#2563eb' }
+                              },
+                              {
+                                y: compareStats.values,
+                                name: compareDate.label,
+                                type: 'box',
+                                boxpoints: 'all',
+                                jitter: 0.5,
+                                marker: { color: '#22c55e' }
+                              }
+                            ]}
+                            layout={{
+                              title: `${selectedMetric.label} Distribution`,
+                              yaxis: { title: selectedMetric.label },
+                              font: { family: 'Segoe UI', size: 12, color: '#1e3a8a' },
+                              margin: { t: 40, l: 50, r: 20, b: 50 },
+                            }}
+                            config={{ responsive: true }}
+                            useResizeHandler
+                            style={{ width: '100%', height: '100%' }}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             )}
           </>
