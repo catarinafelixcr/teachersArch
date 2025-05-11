@@ -24,6 +24,8 @@ def fetch_project_from_url(gl, repo_url):
         raise Exception(f"Projeto não encontrado: {repo_url}")
 
 def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:00:00"):
+    from collections import defaultdict
+
     students = defaultdict(lambda: {
         "total_commits": 0,
         "sum_lines_added": 0,
@@ -43,8 +45,12 @@ def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:
         "merges_to_main_branch": 0,
     })
 
-    commits = project.commits.list(all=True, get_all=True)
+    members = project.members.list(all=True)
+    for member in members:
+        handle = member.username
+        students[handle]
 
+    commits = project.commits.list(all=True, get_all=True)
     seen_days = defaultdict(set)
 
     for commit_summary in commits:
@@ -58,13 +64,11 @@ def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:
         handle = author.split("@")[0]
         created_at = commit.created_at
 
-        # 🛑 Verifica se o commit já era antigo
         last_saved_date = last_commit_date_by_handle.get(handle)
         if last_saved_date and datetime.fromisoformat(created_at) <= last_saved_date:
-            continue  # ignora commits velhos
+            continue
 
         students[handle]["total_commits"] += 1
-
         additions = commit.stats.get("additions", 0) if commit.stats else 0
         deletions = commit.stats.get("deletions", 0) if commit.stats else 0
 
@@ -84,11 +88,10 @@ def fetch_students(project, last_commit_date_by_handle, deadline="2025-01-01T00:
 
     return students
 
-def extract_from_gitlab(repo_url, last_commit_date_by_handle=None):
-    gl = Gitlab(GITLAB_URL, private_token=GITLAB_TOKEN)
+def extract_from_gitlab(repo_url, api_key=None, last_commit_date_by_handle=None):
+    gl = Gitlab(GITLAB_URL, private_token=api_key or GITLAB_TOKEN)
     project = fetch_project_from_url(gl, repo_url)
 
-    # Garante que se não mandarem datas, consideramos que não há nada gravado
     if last_commit_date_by_handle is None:
         last_commit_date_by_handle = {}
 

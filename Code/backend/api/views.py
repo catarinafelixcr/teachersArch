@@ -472,11 +472,47 @@ def get_group_predictions(request, group_name):
         grupo = Grupo.objects.get(group_name=group_name)
         alunos = AlunoGitlabAct.objects.filter(group=grupo)
 
+        # NOVO: capturar o parâmetro ?stage=1 a 5
+        stage = request.GET.get('stage')
+        if stage:
+            try:
+                stage = int(stage)
+                if stage not in [1, 2, 3, 4, 5]:
+                    raise ValueError()
+            except ValueError:
+                return Response({"error": "Parâmetro 'stage' deve ser um número de 1 a 5."}, status=400)
+
         response_data = []
 
         for aluno in alunos:
-            previsao = Previsao.objects.filter(aluno_gitlabact=aluno).order_by('-prev_date').first()
-            predicted_grade = previsao.prev_grade if previsao else None
+            if stage:
+                # NOVO: aplicar modelo correspondente ao stage
+                from api.utils.ml_model_loader import select_model
+                X_input = [[
+                    aluno.total_commits,
+                    aluno.sum_lines_added,
+                    aluno.sum_lines_deleted,
+                    aluno.sum_lines_per_commit,
+                    aluno.active_days,
+                    int(aluno.last_minute_commits),
+                    aluno.total_merge_requests,
+                    aluno.merged_requests,
+                    aluno.review_comments_given,
+                    aluno.review_comments_received,
+                    aluno.total_issues_created,
+                    aluno.total_issues_assigned,
+                    int(aluno.issues_resolved),
+                    int(aluno.issue_participation),
+                    aluno.branches_created,
+                    aluno.merges_to_main_branch,
+                ]]
+                model = select_model(stage=stage)
+                predicted_grade = float(model.predict(X_input)[0])
+                predicted_grade = round(min(20, max(0, predicted_grade)))
+            else:
+                # Modo padrão: usa a previsão mais recente
+                previsao = Previsao.objects.filter(aluno_gitlabact=aluno).order_by('-prev_date').first()
+                predicted_grade = previsao.prev_grade if previsao else None
 
             response_data.append({
                 "handle": aluno.handle,
@@ -507,6 +543,7 @@ def get_group_predictions(request, group_name):
 
     except Grupo.DoesNotExist:
         return Response({"error": f"O grupo '{group_name}' não existe."}, status=404)
+
 
 
 
@@ -580,27 +617,73 @@ def predictions_by_date(request, date):
 
 
 
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
+
+from django.utils.dateparse import parse_date
+
+from django.utils.dateparse import parse_date
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from api.models import Grupo, Previsao
+
 @api_view(['GET'])
 def compare_predictions_by_date(request, group_name, base_date, compare_date):
-    base_predictions = Previsao.objects.filter(
-        student__gitlab_activities__group__group_name=group_name,
-        prev_date=base_date
-    )
-    compare_predictions = Previsao.objects.filter(
-        student__gitlab_activities__group__group_name=group_name,
-        prev_date=compare_date
-    )
+    try:
+        grupo = Grupo.objects.get(group_name=group_name)
+        base_date = parse_date(base_date)
+        compare_date = parse_date(compare_date)
 
-    def extract_data(predictions):
-        return [{
-            'student_id': p.student.id,
-            'predicted_grade': p.prev_grade
-        } for p in predictions]
+        base_prevs = Previsao.objects.filter(
+            aluno_gitlabact__group=grupo,
+            prev_date__date=base_date
+        )
+        compare_prevs = Previsao.objects.filter(
+            aluno_gitlabact__group=grupo,
+            prev_date__date=compare_date
+        )
 
-    return Response({
-        'base': extract_data(base_predictions),
-        'compare': extract_data(compare_predictions)
-    })
+        def extract_metric_data(prevs):
+            metrics = {
+                'prev_grade': [],
+                'total_commits': [],
+                'total_issues_created': [],
+                'active_days': []
+            }
+
+            for p in prevs:
+                ag = p.aluno_gitlabact
+                metrics['prev_grade'].append(p.prev_grade)
+                metrics['total_commits'].append(ag.total_commits)
+                metrics['total_issues_created'].append(ag.total_issues_created)
+                metrics['active_days'].append(ag.active_days)
+
+            def compute_stats(values):
+                if not values:
+                    return { 'values': [], 'mean': 0, 'stdDev': 0, 'min': 0, 'max': 0 }
+                mean = sum(values) / len(values)
+                std = (sum((v - mean) ** 2 for v in values) / len(values)) ** 0.5
+                return {
+                    'values': values,
+                    'mean': round(mean, 1),
+                    'stdDev': round(std, 1),
+                    'min': min(values),
+                    'max': max(values)
+                }
+
+            return { metric: compute_stats(values) for metric, values in metrics.items() }
+
+        return Response({
+            "base": extract_metric_data(base_prevs),
+            "compare": extract_metric_data(compare_prevs)
+        })
+
+    except Grupo.DoesNotExist:
+        return Response({"error": "Grupo não encontrado."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+
 
 
 

@@ -190,7 +190,7 @@ function StudentsAtRisk() {
             </table>
           </div>
 
-          <div className="graph-wrapper">
+          <div className="selector-wrapper">
             <div className="activity-type-selector">
               <label htmlFor="metric-select">Select Metric:</label>
               <select
@@ -204,29 +204,49 @@ function StudentsAtRisk() {
                 <option value="issues_resolved">Issues Resolved</option>
               </select>
             </div>
+          </div>
 
-            <div className="plot-container">
+          <div className="side-by-side-container">
+            <div className="chart-section">
               <Plot
                 data={[{
                   x: filteredStudents.map(s => s.handle),
-                  y: filteredStudents.map(s => s.metrics?.[selectedMetric] || 0),
-                  type: 'scatter',
-                  mode: 'lines+markers',
-                  name: selectedMetric,
-                  line: { shape: 'linear', color: '#1e3a8a' },
-                  marker: { size: 6 }
+                  y: filteredStudents.map(s => s.metrics?.[selectedMetric] ?? 0),
+                  type: 'bar',
+                  name: selectedMetric.replace('_', ' '),
+                  marker: { color: '#1e3a8a' }
                 }]}
                 layout={{
                   title: `Student ${selectedMetric.replace('_', ' ')} Comparison`,
-                  xaxis: { title: 'Student' },
+                  xaxis: { title: 'Student', tickangle: -45 },
                   yaxis: { title: selectedMetric.replace('_', ' ') },
                   height: 400,
-                  font: { family: 'Segoe UI', color: '#1e3a8a' }
+                  font: { family: 'Segoe UI', color: '#1e3a8a' },
+                  margin: { t: 50, l: 50, r: 20, b: 100 }
                 }}
+                config={{ responsive: true }}
                 useResizeHandler
                 style={{ width: '100%', height: '100%' }}
-                config={{ responsive: true }}
               />
+            </div>
+
+            <div className="table-section">
+              <table className="metric-table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>{selectedMetric.replace('_', ' ')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredStudents.map((s, idx) => (
+                    <tr key={idx}>
+                      <td>{s.handle}</td>
+                      <td>{s.metrics?.[selectedMetric] ?? 0}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </>
