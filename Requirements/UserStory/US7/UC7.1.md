@@ -24,7 +24,7 @@ UC7.1. - Registar um novo Professor.
 **Extensions**:
 
 5a. Validação de dados falha.
-- 5a1. O sistema exibe uma mensagem de erro clara e específica junto ao campo inválido, indicando o problema (ex., "Email inválido", "Password muito fraca", "Campo Nome é obrigatório"). O sistema mantém os dados corretos já introduzidos no formulário para facilitar a correção.
+- 5a1. O sistema exibe uma mensagem de erro clara e específica junto ao campo inválido, indicando o problema ("Enter a valid address", "Password must be at least 8 characters"). O sistema mantém os dados corretos já introduzidos no formulário para facilitar a correção.
 
 6a. Email institucional já registado.
 - 6a1. O sistema exibe uma mensagem de erro informando que o email institucional já está associado a uma conta existente e pode sugerir a recuperação de password.

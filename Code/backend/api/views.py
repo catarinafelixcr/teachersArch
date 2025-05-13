@@ -332,6 +332,7 @@ def save_groups(request):
         groups_data = data.get("groups", {})
         metrics = data.get("metrics", {})
         data_base = data.get("data_base")
+        stage = data.get("stage")  
 
         if not repo_url or not groups_data:
             logger.warning("Pedido save_groups recebido sem repo_url ou groups.")
@@ -396,7 +397,7 @@ def save_groups(request):
                     metric_data.get("merges_to_main_branch", 0)
                 ]]
 
-                model = select_model(data_registo,grupo)
+                model = select_model(stage=stage) if stage else select_model(data_registo, grupo)
                 predicted_grade = float(model.predict(X_input)[0])
                 predicted_grade = round(min(20, max(0, predicted_grade)))
 

@@ -2,7 +2,7 @@
 
 **Test case description:**  Verificar se o sistema impede o login com um email incorreto e exibe a mensagem de erro adequada.
 
-**Related Use Cases:** UC1.1 - Login com email e password, Extensão 3a.
+**Related Use Cases:** UC1.1 - Login com email e password.
 
 **Pre-conditions:**
 
@@ -26,7 +26,7 @@
 
     - O sistema deve permanecer na página de login.
 
-    - O sistema deve exibir uma mensagem de erro equivalente a: "Email ou password incorretos." (ou similar).
+    - O sistema deve exibir uma mensagem de erro equivalente a: "Credenciais inválidas ou token ausente".
 
 **Actual Result:**
 
