@@ -14,15 +14,15 @@
 **Steps**:  
 
 - Aceder à dashboard do professor no sistema.  
-- ir até à opção "Atualizar dados do GitLab".  
+- Clicar na opção "Insert Repository".  
 - Inserir o link do repositório GitLab válido e já associado no campo apropriado.  
-- Clicar no botão "Atualizar" ou "Validar".  
+- Clicar no botão "Submit Gitlab Link".  
 
 **Expected Result**:  
 
 - O sistema deve validar o link e associá-lo corretamente.  
 - O sistema deve verificar que não há novas atividades desde a última atualização.  
-- O sistema deve exibir a mensagem informativa: "Os dados já estão atualizados. Não há novas atividades desde a última sincronização."
+- O sistema deve exibir a mensagem informativa: "Os dados já estão atualizados. Não há novas atividades desde a última sincronização.".  
 - O sistema não deve reiniciar o processamento do modelo de Machine Learning.
 
 **Actual Result**:

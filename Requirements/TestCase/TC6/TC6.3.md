@@ -12,14 +12,15 @@
 **Steps**:  
 
 - Aceder à dashboard do professor no sistema.  
-- Navegar até à opção "Atualizar dados do GitLab".  
+- Navegar até à opção "Insert Repository".  
 - Inserir um link de repositório GitLab válido em formato, mas inexistente ou inacessível.
-- Clicar no botão "Atualizar" ou "Validar".  
+- Clicar no botão "Submit GitLab Link".  
 
 **Expected Result**:  
 
 - O sistema não deve validar o link.  
-- O sistema deve exibir uma mensagem de erro: "O link do repositório GitLab não é válido ou está inacessível".  
+- O sistema deve exibir a mensagem de erro:  
+  - "Error fetching students. Please check the repository link, API key, and network connection.".  
 - O sistema não deve tentar recolher dados nem reiniciar o processamento de ML.  
 
 **Actual Result**:

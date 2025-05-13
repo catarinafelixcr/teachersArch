@@ -12,15 +12,15 @@
 **Steps:**
 
     - Aceder à dashboard do professor no sistema.
-    - Navegar até à opção "Inserir dados de GitLab".
+    - Navegar até à opção "Insert Repository".
     - Escolher a opção para inserir dados (aluno específico, grupo, ou turma).
     - Inserir um link de repositório GitLab com formato inválido (ex: "texto aleatório", "http://google.com", "gitlab.com/user/repo").
-    - Clicar no botão "Validar" ou "Inserir".
+    - Clicar no botão "Submit GitLab Link".
 
 **Expected Results:**
 
     - O sistema não deve validar o link.
-    - O sistema deve exibir a mensagem de erro: "O link do repositório GitLab não é válido ou está inacessível." (ou similar - pode ser mais específico sobre o formato inválido).
+    - O sistema deve exibir a mensagem de erro: "Repository link must be a valid GitLab URL.".
     - O sistema não deve tentar recolher dados nem iniciar o processamento de ML.
 
 **Actual Results:**
