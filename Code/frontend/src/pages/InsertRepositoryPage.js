@@ -17,7 +17,7 @@ function InsertRepositoryPage() {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [countdown, setCountdown] = useState(4);
+  // Removed countdown state
   const [toast, setToast] = useState({ visible: false, message: '', type: '' });
   const [apiKeyError, setApiKeyError] = useState('');
   const [repoLinkError, setRepoLinkError] = useState('');
@@ -82,16 +82,8 @@ const handleSubmit = () => {
     return;
   }
 
-  // continua com a chamada à API
   setIsLoading(true);
-  setCountdown(3);
-
-  let interval = setInterval(() => {
-    setCountdown(prev => {
-      if (prev === 1) clearInterval(interval);
-      return prev - 1;
-    });
-  }, 1000);
+  // Removed countdown setting and interval logic
 
   api.post('/api/extract_students/', {
     repo_url: trimmedLink,
@@ -109,12 +101,14 @@ const handleSubmit = () => {
         }, 100);
       } else {
         setRepoLinkError('No students found in this repository.');
+        setStudents([]); // Clear students if none found or error
       }
     })
     .catch(err => {
       console.error(err);
       setIsLoading(false);
-      setRepoLinkError('Error fetching students.');
+      setRepoLinkError('Error fetching students. Please check the repository link, API key, and network connection.');
+      setStudents([]); // Clear students on error
     });
 };
 
@@ -169,6 +163,10 @@ const handleSubmit = () => {
       showToast('Repository link is required to save groups.', 'error');
       return;
     }
+    if (groups.length === 0) {
+      showToast('No groups created to save.', 'error');
+      return;
+    }
 
     const grouped = {};
     groups.forEach(({ name, students }) => {
@@ -182,13 +180,13 @@ const handleSubmit = () => {
         if (res.data.status === 'ok') {
           showToast('Groups saved successfully!');
         } else {
-          showToast('Error saving groups.', 'error');
+          showToast(res.data.message || 'Error saving groups.', 'error');
         }
       })
       .catch(err => {
         setIsSaving(false);
         console.error('Detailed error saving groups:', err);
-        showToast(`Error saving groups: ${err.message}`, 'error');
+        showToast(`Error saving groups: ${err.response?.data?.message || err.message}`, 'error');
       });
   };
 
@@ -231,19 +229,21 @@ const handleSubmit = () => {
               onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
             />
             {repoLinkError && <div className="repo-error-message">{repoLinkError}</div>}
-            <button onClick={handleSubmit}>Submit GitLab Link</button>
+            <button onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? 'Fetching...' : 'Submit GitLab Link'}
+            </button>
             {errorMessage && <div className="repo-error-message">{errorMessage}</div>}
           </div>
 
           {isLoading && (
             <div className="loading-message">
-              <p>Fetching students... Please wait {countdown > 0 ? `${countdown}s` : ''}</p>
+              <p>Fetching students... Please wait. <br />This process can take several minutes depending on the repository size and network conditions.</p>
               <div className="spinner"></div>
             </div>
           )}
         </div>
 
-        {students.length > 0 && (
+        {students.length > 0 && !isLoading && ( // Added !isLoading to prevent showing this section while loading
           <div ref={groupSectionRef}>
             <div className="grouping-table">
               <h1><span className="highlight">Associate</span> the students with a group</h1>
@@ -305,7 +305,7 @@ const handleSubmit = () => {
             )}
 
             <div style={{ marginTop: '50px', textAlign: 'center' }}>
-              <button className={`save-group-button ${isSaving ? 'saving' : ''}`} onClick={handleSaveGroups} disabled={isSaving}>
+              <button className={`save-group-button ${isSaving ? 'saving' : ''}`} onClick={handleSaveGroups} disabled={isSaving || groups.length === 0}>
                 {isSaving ? 'Saving...' : 'Save Groups'}
               </button>
             </div>
