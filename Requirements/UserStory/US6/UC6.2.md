@@ -6,26 +6,26 @@ UC.6.2. Atualizar Dados do GitLab
 
 **Level**: User goals – Sea level.
 
-**Stakeholders**: Professor (garante que o sistema tem acesso aos repositórios certos), alunos (beneficiam de previsões baseadas nos dados do GitLab), instituição de ensino (procuram melhorar a qualidade do ensino) e o sistema de previsão (depende destes dados para gerar previsões precisas).
+**Stakeholders and Interests**: Professor (garante que o sistema tem acesso aos repositórios certos), alunos (beneficiam de previsões baseadas nos dados do GitLab), instituição de ensino (procuram melhorar a qualidade do ensino) e o sistema de previsão (depende destes dados para gerar previsões precisas).
 
 **Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso à API do GitLab para validação do link.
 
 **Main Success Scenario**:
 1. O professor acede à dashboard;
-2. Seleciona a opção "Atualizar dados do GitLab";
+2. Seleciona a opção "Insert Repository";
 3. O professor insere o link do repositório do GitLab;
-4. O sistema valida o link e associa-o a um grupo ou aluno já existente;
+4. O sistema valida o link e associa-o a um repositorio já existente;
 5. O sistema recolhe apenas as novas atividades desde a última atualização;
 6. O sistema reinicia o processamento do modelo de Machine Learning;
-7. O professor recebe uma mensagem "Os dados do repositório foram atualizados com sucesso e o modelo de Machine Learning está a processar as novas previsões. Em breve, poderá consultá-las."
+7. O professor recebe uma mensagem "  ".
 
 **Extensions**:
 
 3a - O link fornecido não é válido
-- 3a1. O sistema exibe uma mensagem: "O link do repositório GitLab não é válido ou está inacessível."
+- 3a1. O sistema exibe uma mensagem: "Repository link must be a valid GitLab URL."
 
 4a - Não há novos dados desde a última atualização
 - 4a1. O sistema exibe uma mensagem: "Os dados já estão atualizados. Não há novas atividades desde a última sincronização."
 
 6a - O processamento do modelo de ML falha
-- 6a1. O sistema exibe uma mensagem: "Os dados foram recolhidos, mas ocorreu um erro ao gerar as previsões. Tente novamente mais tarde."
+- 6a1. O sistema exibe uma mensagem: " "

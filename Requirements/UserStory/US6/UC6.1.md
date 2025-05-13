@@ -12,20 +12,16 @@ UC.6.1. Inserir Link do Repositório GitLab
 
 **Main Success Scenario**:
 1. O professor acede à dashboard;
-2. O professor escolhe uma das seguintes opções: para um aluno específico,para um grupo de alunos ou para toda a turma.
-2. Seleciona a opção "Inserir dados de GitLab";
+2. Seleciona a opção "Insert Repository";
 3. O professor insere o link do repositório GitLab;
-4. O sistema valida o link;
-5. O sistema recolhe os dados do GitLab e armazena-os;
-6. O sistema inicia automaticamente o processamento do modelo de Machine Learning;
-7. O professor recebe uma mensagem "Os dados foram recolhidos com sucesso e o modelo de Machine Learning está a processar as previsões. Em breve, poderá consultá-las."
-
+4. O sistema recolhe os dados do GitLab e armazena-os para processamento;
+5. O sistema inicia automaticamente o processamento do modelo de Machine Learning;
+6. O professor recebe uma mensagem " "
 
 **Extensions**:
 
 3a - O link fornecido não é válido
-- 3a1. O sistema exibe a mensagem: "O link do repositório GitLab não é válido ou está inacessível."
+- 3a1. O sistema exibe a mensagem: "Repository link must be a valid GitLab URL."
 
 6a - O processamento do modelo de ML falha
-- 6a1. O sistema exibe uma mensagem: "Os dados foram recolhidos, mas ocorreu um erro ao gerar as previsões. Tente novamente mais tarde."
-- 6a2. O sistema gera um log de erro e notifica o administrador para revisão do problema.
+- 6a1. O sistema exibe uma mensagem: " "
