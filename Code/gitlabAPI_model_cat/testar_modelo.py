@@ -5,53 +5,56 @@ import os
 import datetime
 import numpy as np
 
+# --------------------------
 # Configuração
-FEATURES_FINAIS_PARA_MODELO = [
-    'total_issues_created_log',
-    'issue_participation_log',
-    'issue_resolution_rate_created_log',
-    'total_review_activity_log',
-    'merged_ratio_log',
-    'sum_lines_added_log',
-    'interval',
-    'branches_created',
+# --------------------------
+FEATURES_INTERVAL_1 = [
+    "review_comments_given",
+    "review_comments_received",
+    "total_review_activity_log",
+    "merged_requests",
+    "total_merge_requests",
+    "merges_to_main_branch",
+    "total_issues_created",
+    "issues_resolved",
+    "issue_resolution_rate_log",
+    "sum_lines_added_log",
+    "issue_participation_log",
+    "branches_created"
 ]
 EPSILON = 1e-6
 
-# ------------------------------------------------------------------------
-# Função de pré-processamento (igual ao do treino)
-# ------------------------------------------------------------------------
-def preprocess_data_for_prediction(df):
-    df_processed = df.copy()
+# --------------------------
+# Pré-processamento híbrido
+# --------------------------
+def preprocess_interval_1(df):
+    df = df.copy()
 
-    df_processed['sum_lines_added_log'] = np.log1p(df_processed.get('sum_lines_added', 0))
-    df_processed['total_issues_created_log'] = np.log1p(df_processed.get('total_issues_created', 0))
-    df_processed['issue_participation_log'] = np.log1p(df_processed.get('issue_participation', 0))
+    df["total_review_activity_log"] = np.log1p(
+        df.get("review_comments_given", 0) + df.get("review_comments_received", 0)
+    )
+    df["issue_resolution_rate_log"] = np.log1p(
+        df.get("issues_resolved", 0) / (df.get("total_issues_created", 0) + EPSILON)
+    )
+    df["sum_lines_added_log"] = np.log1p(df.get("sum_lines_added", 0))
+    df["issue_participation_log"] = np.log1p(df.get("issue_participation", 0))
 
-    merged_ratio = df_processed.get('merged_requests', 0) / (df_processed.get('total_merge_requests', 0) + EPSILON)
-    df_processed['merged_ratio_log'] = np.log1p(merged_ratio)
+    for col in FEATURES_INTERVAL_1:
+        if col not in df:
+            df[col] = 0
 
-    issue_res_rate = df_processed.get('issues_resolved', 0) / (df_processed.get('total_issues_created', 0) + EPSILON)
-    df_processed['issue_resolution_rate_created_log'] = np.log1p(issue_res_rate)
+    return df[FEATURES_INTERVAL_1]
 
-    total_review = df_processed.get('review_comments_given', 0) + df_processed.get('review_comments_received', 0)
-    df_processed['total_review_activity_log'] = np.log1p(total_review)
-
-    # Garantir que todas as colunas existem
-    for col in FEATURES_FINAIS_PARA_MODELO:
-        if col not in df_processed:
-            df_processed[col] = 0
-
-    return df_processed[FEATURES_FINAIS_PARA_MODELO]
-
-# ------------------------------------------------------------------------
-# Função para obter dados do GitLab
-# ------------------------------------------------------------------------
+# --------------------------
+# Obter dados do GitLab
+# --------------------------
 def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
     gl = Gitlab(gitlab_url, private_token=gitlab_token)
     try:
         project = gl.projects.get(project_path)
         members = project.members.list(all=True)
+
+        all_mrs = project.mergerequests.list(state='all', all=True)
 
         def coletar_dados(member):
             user = gl.users.get(member.id)
@@ -80,6 +83,20 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
             issues_created = project.issues.list(author_id=member.id, all=True)
             issues_closed = project.issues.list(author_id=member.id, state='closed', all=True)
 
+            # Comentários dados e recebidos
+            comments_given = 0
+            comments_received = 0
+            for mr in all_mrs:
+                try:
+                    notes = mr.notes.list(all=True)
+                    for note in notes:
+                        if note.author["username"] == user.username:
+                            comments_given += 1
+                        elif mr.author["username"] == user.username:
+                            comments_received += 1
+                except Exception:
+                    continue
+
             return {
                 "username": user.username,
                 "total_commits": total_commits,
@@ -88,11 +105,12 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
                 "branches_created": len(branches),
                 "merged_requests": len(merged_requests),
                 "total_merge_requests": len(total_merge_requests),
+                "merges_to_main_branch": 0,  # Ajustar se tiveres forma de contar merges reais
                 "total_issues_created": len(issues_created),
                 "issues_resolved": len(issues_closed),
-                "issue_participation": 0,
-                "review_comments_given": 0,
-                "review_comments_received": 0,
+                "issue_participation": 0,  # Placeholder por agora
+                "review_comments_given": comments_given,
+                "review_comments_received": comments_received,
                 "interval": interval
             }
 
@@ -102,13 +120,12 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
         print(f"Erro ao obter dados: {e}")
         return pd.DataFrame()
 
-# ------------------------------------------------------------------------
+# --------------------------
 # Execução principal
-# ------------------------------------------------------------------------
-
+# --------------------------
 if __name__ == "__main__":
     gitlab_url = "https://gitlab.com"
-    gitlab_token = os.getenv("GITLAB_TOKEN", "glpat-z7gzPpe48a5krLoLa4o4")  # substitui por token real
+    gitlab_token = os.getenv("GITLAB_TOKEN", "glpat-z7gzPpe48a5krLoLa4o4")
     project_path = "dei-uc/pecd2025/pecd2025-pl2g4"
 
     intervalo = int(input("⏱ Intervalo a analisar: "))
@@ -119,10 +136,10 @@ if __name__ == "__main__":
     if df_raw.empty:
         print("⚠️ Nenhum dado obtido.")
     else:
-        print("Dados recolhidos para os membros.\n")
+        print("📋 Dados recolhidos para os membros.\n")
 
-        df_ready = preprocess_data_for_prediction(df_raw)
-        modelo = joblib.load("modelo_final_nota_aluno.pkl")
+        df_ready = preprocess_interval_1(df_raw)
+        modelo = joblib.load("modelo_intervalo1.pkl")
         previsoes = modelo.predict(df_ready)
 
         print("\n🎯 Previsões de nota final:")
