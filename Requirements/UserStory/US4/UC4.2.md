@@ -10,26 +10,22 @@ UC4.2. Ver o desempenho dos grupos
 
 **Preconditions**: O professor deve estar autenticado no sistema (dependente do UC1 - Login feito). O sistema tem que ter acesso aos dados dos elementos do repositório e às previsões já processadas pelo modelo de Machine Learning (dependente do US6).
 
-
 **Main Success Scenario**:
 
-1. O professor acessa à dashboard;
-2. O professor seleciona a opção "Prever o desempenho";
-3. O professor visualiza as notas de todos os alunos (histórico);
-4. O professor ativa a opção "Alunos em risco de reprovação";
+1. O professor acede à dashboard;
+2. O professor seleciona a opção "Student at Risk";
 5. O professor seleciona o botão para visualizar de um grupo à sua escolha.
 6. O sistema processa os dados e exibe os elementos identificados como "em risco";
 7. O professor clica num elemento para ver detalhes adicionais sobre a previsão do desempenho.
 
 **Extensions**:
 
-
 3b. O grupo não tem dados suficientes para análise.
-- 3b1. O sistema exibe uma mensagem "Não há dados suficientes sobre este grupo."
+- 3b1. O sistema exibe uma mensagem "Error fetching predictions:"
     
 4a. Nenhum aluno está previsto para reprovação.
-- 4a1. O sistema exibe uma mensagem "Nenhum aluno em risco de reprovação."
+- 4a1. O sistema exibe uma mensagem não exibe mensagem.
 
 7a. O professor clica num aluno, mas não há detalhes disponíveis
-- 7qa1. O sistema exibe uma mensagem "De momento, não existem dados adicionais sobre este aluno."
+- 7qa1. O sistema exibe uma mensagem "Error fetching student details:"
 

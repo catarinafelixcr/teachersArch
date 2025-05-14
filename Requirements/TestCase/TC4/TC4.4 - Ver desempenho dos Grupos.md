@@ -10,15 +10,13 @@
 
 **Steps**:  
 1. Aceder à dashboard.  
-2. Selecionar a opção "Prever o desempenho".  
-3. Visualizar as notas de todos os alunos do grupo.  
-4. Ativar a opção "Alunos em risco de reprovação".  
+2. Selecionar a opção "Student at Risk".  
 5. Selecionar um grupo para análise.  
-6. O sistema processa os dados e exibe os alunos identificados como "em risco".  
+6. O sistema processa os dados e exibe os alunos identificados como "Students at Risk".  
 7. Clicar num aluno para ver detalhes adicionais.  
 
 **Expected result**:  
-- O sistema apresenta os alunos classificados como "em risco de reprovação".  
+- O sistema apresenta os alunos classificados como "Students at Risk".  
 - Ao selecionar um grupo, o sistema exibe as previsões correspondentes.  
 - Ao clicar num aluno, o sistema apresenta detalhes adicionais sobre o seu desempenho.  
 
