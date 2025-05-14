@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import Plot from 'react-plotly.js';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import Plotly from 'plotly.js-dist-min';
 import '../styles/CompareGroups.css';
 import api from '../services/api';
+
 
 const CompareGroups = () => {
   const [groups, setGroups] = useState([]);
@@ -18,6 +22,11 @@ const CompareGroups = () => {
   const [showInfo, setShowInfo] = useState({});
   const [selectedChart, setSelectedChart] = useState('bar');
   const [selectedMetric, setSelectedMetric] = useState({ value: 'prev_grade', label: 'Predicted Grade' });
+
+  const barChartRef = useRef();
+  const lineChartRef = useRef();
+  const boxPlotRef = useRef();
+
 
   const classifyCategory = (grade) => {
     const percentage = (grade / 20) * 100;
@@ -35,6 +44,112 @@ const CompareGroups = () => {
     'High': '#8bc34a',
     'Very High': '#4caf50'
   };
+
+
+  const generatePDFReport = async () => {
+    try {
+      const doc = new jsPDF();
+      const margin = 15;
+      const pageWidth = doc.internal.pageSize.getWidth();
+
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('en-GB').replace(/\//g, '-');
+
+      doc.setFontSize(16);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Group Prediction Report', margin, 20);
+
+      doc.setFontSize(12);
+      doc.text(`Group: ${groupData.group}`, margin, 30);
+      doc.text(`Generated on: ${today.toLocaleDateString('en-GB')}`, margin, 37);
+
+      let currentY = 45;
+
+      autoTable(doc, {
+        startY: currentY,
+        head: [['Average Grade', 'Standard Deviation', 'Min', 'Max', 'Total']],
+        body: [[
+          groupData.mean,
+          groupData.stdDev,
+          groupData.min,
+          groupData.max,
+          groupData.count
+        ]]
+      });
+
+      currentY = doc.lastAutoTable.finalY + 10;
+
+      if (groupData.faixaContagem) {
+        autoTable(doc, {
+          startY: currentY,
+          head: [['Grade Range', 'Number of Students']],
+          body: Object.entries(groupData.faixaContagem).map(([range, count]) => [range, count])
+        });
+        currentY = doc.lastAutoTable.finalY + 10;
+      }
+
+      if (groupData.studentNames?.length > 0 && comparisonData?.base && comparisonData?.compare) {
+        const baseGrades = comparisonData.base.prev_grade.values;
+        const compareGrades = comparisonData.compare.prev_grade.values;
+
+        const studentsTable = groupData.studentNames.map((name, idx) => {
+          const base = baseGrades?.[idx] ?? '-';
+          const compare = compareGrades?.[idx] ?? '-';
+          let trend = '➖';
+          if (base != null && compare != null && !isNaN(base) && !isNaN(compare)) {
+            if (compare > base) trend = '📉';
+            else if (compare < base) trend = '📈';
+          }
+
+          return [
+            name,
+            groupData.group,
+            base,
+            compare,
+            trend
+          ];
+        });
+
+        autoTable(doc, {
+          startY: currentY,
+          head: [[
+            'Student',
+            'Group',
+            `Grade (${baseDate?.label})`,
+            `Grade (${compareDate?.label})`,
+            'Trend'
+          ]],
+          body: studentsTable
+        });
+
+        currentY = doc.lastAutoTable.finalY + 10;
+      }
+
+
+      // Inserir gráficos como imagem (se disponíveis)
+      const addPlotImage = async (ref, title) => {
+        if (!ref.current) return;
+        const plotNode = ref.current.querySelector('.js-plotly-plot');
+        if (!plotNode) return;
+
+        const imgData = await Plotly.toImage(plotNode, { format: 'png', width: 700, height: 400 });
+        doc.addPage();
+        doc.setFontSize(14);
+        doc.text(title, margin, 20);
+        doc.addImage(imgData, 'PNG', margin, 30, pageWidth - margin * 2, 90);
+      };
+
+      await addPlotImage(barChartRef, 'Bar Chart Comparison');
+      await addPlotImage(lineChartRef, 'Line Chart Trend');
+      await addPlotImage(boxPlotRef, 'Box Plot Distribution');
+
+      doc.save(`GroupReport_${groupData.group}_${dateStr}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Check console for details.');
+    }
+  };
+
 
 
   const navigate = useNavigate();
@@ -424,7 +539,7 @@ const CompareGroups = () => {
                   return (
                     <>
                       {/* Grouped Bar Chart */}
-                      <div className="chart">
+                      <div className="chart" ref={barChartRef}>
                         <div style={{ width: '100%', height: '400px' }}>
                           <Plot
                             data={[
@@ -457,7 +572,7 @@ const CompareGroups = () => {
                       </div>
 
                       {/* Line Chart */}
-                      <div className="chart">
+                      <div className="chart" ref={lineChartRef}>
                         <div style={{ width: '100%', height: '400px' }}>
                           <Plot
                             data={[
@@ -491,7 +606,7 @@ const CompareGroups = () => {
                       </div>
 
                       {/* Box Plot */}
-                      <div className="chart">
+                      <div className="chart" ref={boxPlotRef}>
                         <div style={{ width: '100%', height: '400px' }}>
                           <Plot
                             data={[
@@ -532,8 +647,15 @@ const CompareGroups = () => {
           </>
         )
       )}
+      {groupData && (
+        <button className="generate-report-btn" onClick={generatePDFReport}>
+          Generate Report PDF
+        </button>
+      )}
 
-      <button className="back-btn" onClick={() => navigate('/gradepredictions')}>Back to Grade Predictions</button>
+      <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
+        Back to Grade Predictions
+      </button>
     </div>
   );
 };
