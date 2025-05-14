@@ -10,7 +10,7 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O professor seleciona a opção "Performance Overview by Category".
 - O sistema exibe as previsões categorizadas de todos os aluno (histórico).
 - O professor seleciona um grupo especifico nos filtros.
 - O sistema exibe apenas as previsões desse grupo.

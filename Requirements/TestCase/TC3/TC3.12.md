@@ -12,13 +12,14 @@
 
 **Steps**:
 - Aceder à dashboard do professor no sistema.
-- Clicar na opção "Previsão de Desempenho por Categorias".
+- Clicar na opção "Students' Grade Predictions".
+- Clicar na opção "Compare Over Time".
 - Utilizar o filtro de datas para selecionar as datas.
 - Selecionar uma data específica para a qual se sabe que não existem dados históricos de previsões de desempenho. 
 
 **Expected Result**:
-- O sistema deve exibir a página "Previsão de Desempenho por Categorias".
-- Em vez de exibir visualizações de dados históricos para a data selecionada, o sistema deve apresentar uma mensagem informativa "Não existem previsões de desempenho para a data selecionada.".
+- O sistema deve exibir a página "Students' Grade Predictions".
+- Em vez de exibir visualizações de dados históricos para a data selecionada, o sistema deve apresentar uma mensagem informativa "No predictions to preview.".
 - A página não deve exibir erros técnicos, visualizações vazias ou dados incorretos.
 - O sistema mantém a estrutura da página (títulos, filtros, etc.), mas substituir a área de visualização de dados pela mensagem informativa.
 

@@ -2,7 +2,7 @@
 
 **Test Case Description:** O sistema deve exibir a previsão de desempenho por categorias
 
-**Related Use Cases**: UC3.1 - Visualizar a previsão de desempenho por categorias, Main Success Scenario, Passo 4
+**Related Use Cases**: UC3.1 - Visualizar a previsão de desempenho por categorias
 
 **Pre-conditions**:
 - O professor deve estar autenticado no sistema. 
@@ -10,14 +10,14 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".
-- O sistema exibe as previsões categorizadas de todos os alunos (histórico).
+- O professor seleciona a opção "Performance Overview by Category".
+- O sistema exibe as previsões categorizadas de todos os alunos por grupo (histórico).
 - O sistema apresenta visualizações gráficas e tabelas interativas.
 - O professor aplica filtros iterativos ao selecionar uma categoria especifica.
 - O sistema atualiza automaticamente as visualizações conforme os filtros aplicados.
 
 **Expected Result**:
-- O sistema deve exibir a comparação detalhada das previsões para o aluno selecionado.
-- O sistema deve exibir gráficos para comparação.
+- O sistema exibe a comparação detalhada das previsões para o aluno selecionado.
+- O sistema exibe gráficos para comparação.
 
 **Actual Result**:

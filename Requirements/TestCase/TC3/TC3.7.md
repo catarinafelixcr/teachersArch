@@ -10,14 +10,15 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".   
-- O sistema exibe as previsões categorizadas de todos os aluno (histórico).  
-- O professor seleciona os filtros que desejar.
-- O professor escolhe a opção "Gerar Relatório".
-- O sistema gera o relatório com filtros que tinham sido selecionados em formato PDF.
+- O professor seleciona a opção "Performance Overview by Category".   
+- O sistema exibe as previsões categorizadas de todos os aluno do grupo (histórico).  
+- O professor escolhe a opção "Generate Report".
+- O sistema gera o relatório em formato PDF.
 
 **Expected Result:**
-- O sistema deve exibir estatísticas comparativas dos grupos (média, desvio padrão, variação).
+- O sistema deve exibir estatísticas comparativas dos grupos ("TOTAL PREDICTIONS", "AVERAGE GRADE", "STANDARD DEVIATION", "HIGHEST PREDICTED GRADE", "LOWEST PREDICTED GRADE").
 - O sistema deve apresentar a distribuição gráfica das previsões de notas.
 
 **Actual Result**:
+
+Funciona

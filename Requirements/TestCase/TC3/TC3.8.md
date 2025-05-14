@@ -10,7 +10,7 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O professor seleciona a opção "Performance Overview by Category".
 
 **Expected Result**:
 - O sistema sofre um erro técnico e falha ao exibir as visualizações interativas.

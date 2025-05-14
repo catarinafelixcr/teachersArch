@@ -2,7 +2,7 @@
 
 **Test Case Description**: Verificar se um professor consegue atualizar os dados do GitLab com um link válido, quando existem novas atividades desde a última atualização, e se o sistema recolhe os novos dados e reinicia o processamento do modelo de Machine Learning com sucesso.  
 
-**Related Use Cases**: UC6.2 - Atualizar Dados do GitLab, Main Success Scenario.  
+**Related Use Cases**: UC6.1 - Inserir Link do Repositorio do GitLab
 
 **Pre-conditions**:  
 
