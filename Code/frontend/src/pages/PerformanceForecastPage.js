@@ -372,20 +372,31 @@ function PerformanceForecastPage() {
                         <p>This pie chart shows the percentage distribution of students across the different performance categories  based on their predicted grades. This helps identify the overall performance shape of the group and whether interventions are needed in lower-performing categories.</p>
                         </div>
                     )}
-                    <Plot
+                    console.log("Pie chart categories:", categories, "values:", values);
+                    {categories.length > 0 ? (
+                      <Plot
                         data={[{
-                        values: values,
-                        labels: categories,
-                        type: 'pie',
-                        marker: { colors: categories.map(c => categoryColors[c]) },
-                        textinfo: 'label+percent',
-                        insidetextorientation: 'radial'
+                          values: values,
+                          labels: categories,
+                          type: 'pie',
+                          marker: { colors: categories.map(c => categoryColors[c]) },
+                          textinfo: 'label+percent',
+                          insidetextorientation: 'radial'
                         }]}
-                        layout={{ ...commonLayout, title: 'Category Distribution' }}
+                        layout={{
+                          ...commonLayout,
+                          title: 'Category Distribution',
+                          margin: { t: 40, l: 30, r: 30, b: 40 },
+                          height: 400,
+                          showlegend: true
+                        }}
                         useResizeHandler
                         style={{ width: '100%', height: '100%' }}
                         config={{ responsive: true }}
-                    />
+                      />
+                    ) : (
+                      <p style={{ textAlign: 'center', marginTop: '20px' }}>No data available for pie chart.</p>
+                    )}
                     </div>
 
                     {/* Bar Chart */}
@@ -400,16 +411,31 @@ function PerformanceForecastPage() {
                         </div>
                     )}
                     <Plot
-                        data={[{
+                      data={[{
                         x: filteredPredictions.map(p => p.name),
                         y: filteredPredictions.map(p => p.percentage),
                         type: 'bar',
                         marker: { color: filteredPredictions.map(p => categoryColors[p.category]) }
-                        }]}
-                        layout={{ ...commonLayout, title: 'Individual Scores (%)', yaxis: { title: 'Grade (%)'}, xaxis: { tickangle: -45 }, margin: { t: 40, b: 120 } }} // Added y-axis title, tilted x-axis labels, adjusted bottom margin
-                        useResizeHandler
-                        style={{ width: '100%', height: '100%' }}
-                        config={{ responsive: true }}
+                      }]}
+                      layout={{
+                        ...commonLayout,
+                        title: 'Individual Scores (%)',
+                        autosize: true,
+                        yaxis: {
+                          title: 'Grade (%)',
+                          range: [0, 100]
+                        },
+                        xaxis: {
+                          tickangle: -20,
+                          automargin: true,
+                          tickfont: { size: 11 }
+                        },
+                        bargap: 0.3,
+                        margin: { t: 60, l: 60, r: 30, b: 100 }
+                      }}
+                      config={{ responsive: true }}
+                      useResizeHandler
+                      style={{ width: '100%', height: '100%' }}
                     />
                     </div>
                 </div>

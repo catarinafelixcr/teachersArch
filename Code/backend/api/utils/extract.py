@@ -96,4 +96,23 @@ def extract_from_gitlab(repo_url, api_key=None, last_commit_date_by_handle=None)
         last_commit_date_by_handle = {}
 
     students_data = fetch_students(project, last_commit_date_by_handle)
+
+
+    branch_counts = defaultdict(int)
+    branches = project.branches.list(all=True)
+
+    for branch in branches:
+        try:
+            commit = project.commits.get(branch.commit['id'])
+            author_email = commit.author_email or ""
+            handle = author_email.split("@")[0]  
+            branch_counts[handle] += 1
+        except Exception as e:
+            print(f"Erro ao processar branch {branch.name}: {e}")
+            continue
+
+    for handle in students_data:
+        students_data[handle]["branches_created"] = branch_counts.get(handle, 0)
+
+
     return students_data
