@@ -32,7 +32,7 @@
 
     - Após as 5 tentativas falhadas, o sistema não deve permitir o login, mesmo com as credenciais corretas.
 
-    - O sistema deve exibir uma mensagem de erro equivalente a: "Muitas tentativas falhadas. Tente novamente em 30 segundos.".
+    - O sistema deve exibir uma mensagem de erro equivalente a: "5 failed attempts. You are temporarily blocked for 30 seconds.".
 
 **Actual Results:**
 

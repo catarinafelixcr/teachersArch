@@ -28,7 +28,7 @@
 
     - O sistema deve autenticar o professor.
 
-    - O sistema deve redirecionar o professor para a página inicial do sistema (ex: Dashboard do Professor).
+    - O sistema deve redirecionar o professor para a página inicial do sistema.
 
     - Não deve ser exibida nenhuma mensagem de erro.
 

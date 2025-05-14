@@ -17,7 +17,9 @@ function InsertRepositoryPage() {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  // Removed countdown state
+  const [semesterStage, setSemesterStage] = useState(1);
+
+
   const [toast, setToast] = useState({ visible: false, message: '', type: '' });
   const [apiKeyError, setApiKeyError] = useState('');
   const [repoLinkError, setRepoLinkError] = useState('');
@@ -174,7 +176,7 @@ const handleSubmit = () => {
     });
 
     setIsSaving(true);
-    api.post('/api/save_groups/', { repo_url: repoLink, groups: grouped, metrics: studentMetrics, data_base: new Date().toISOString() })
+    api.post('/api/save_groups/', { repo_url: repoLink, groups: grouped, metrics: studentMetrics, data_base: new Date().toISOString(), stage: semesterStage })
       .then(res => {
         setIsSaving(false);
         if (res.data.status === 'ok') {
@@ -208,7 +210,16 @@ const handleSubmit = () => {
           <p className="description">Enter the GitLab repository link you want to analyze. The system will fetch the necessary data from the specified repository.</p>
         </div>
 
+
         <div className="repo-inputs">
+          <div className="semester-stage-selector">
+            <label htmlFor="stage">Model Stage (1–5):</label>
+            <select id="stage" value={semesterStage} onChange={(e) => setSemesterStage(Number(e.target.value))}>
+              {[1, 2, 3, 4, 5].map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
           <div className="repo-block">
             <input
               type="text"
@@ -219,6 +230,7 @@ const handleSubmit = () => {
             />
             {apiKeyError && <div className="repo-error-message">{apiKeyError}</div>}
           </div>
+          
 
           <div className="repo-block">
             <input

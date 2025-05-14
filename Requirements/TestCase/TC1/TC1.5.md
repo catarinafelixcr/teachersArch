@@ -30,7 +30,7 @@
 **Expected Results:**
 
     - O professor é redirecionado para a página onde pode introduzir o email.
-    - Ao submeter o email, o sistema exibe uma mensagem do tipo: "Se existir uma conta com este email, enviámos instruções para redefinir a password."
+    - Ao submeter o email, o sistema exibe uma mensagem do tipo: "If this email exists, password reset instructions have been sent.".
     - O email é enviado com um link de redefinição que contém o ID e o token do utilizador.
     -  link enviado é funcional e leva à página correta de nova password 
 

@@ -17,6 +17,8 @@ function LoginPage() {
   const [error, setError] = useState('');
   const [activated, setActivated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState({});
+
 
   const [blockedEmails, setBlockedEmails] = useState({});
 
@@ -60,16 +62,37 @@ function LoginPage() {
       });
 
       const data = await response.json();
-      console.log("🔐 Resposta do login JWT:", data);
+      console.log("Resposta do login JWT:", data);
 
       if (response.ok && data.access) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         localStorage.setItem('userToken', 'true');
-        console.log("✅ access_token guardado:", data.access);
+        console.log("access_token guardado:", data.access);
+
+        // Reset falhas
+        setFailedAttempts(prev => ({ ...prev, [email]: 0 }));
         navigate('/initialpage');
       } else {
-        setError("Credenciais inválidas ou token ausente");
+        // Incrementa tentativas falhadas
+        setFailedAttempts(prev => {
+          const updated = { ...prev };
+          updated[email] = (updated[email] || 0) + 1;
+
+          if (updated[email] >= 5) {
+            const newBlocked = {
+              ...blockedEmails,
+              [email]: now + 30 * 1000
+            };
+            setBlockedEmails(newBlocked);
+            setError("5 failed attempts. You are temporarily blocked for 30 seconds.");
+            updated[email] = 0; // reset para nova contagem depois
+          } else {
+            setError("Credenciais inválidas ou token ausente");
+          }
+
+          return updated;
+        });
       }
     } catch (err) {
       setError("Erro de rede ou servidor");
@@ -77,6 +100,7 @@ function LoginPage() {
 
     setLoading(false);
   };
+
 
   const handleKeyDown = (e, field) => {
     if (e.key === 'Enter') {

@@ -30,7 +30,7 @@
 
     - O sistema deve permanecer na página de login.
 
-    - O sistema deve exibir uma mensagem de erro equivalente a: "Email ou password incorretos." 
+    - O sistema deve exibir uma mensagem de erro equivalente a: "Credenciais inválidas ou token ausente".
 
 **Actual Results:**
 

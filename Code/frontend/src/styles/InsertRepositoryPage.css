@@ -539,3 +539,31 @@
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+
+
+
+
+.semester-stage-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  color: white;
+  font-weight: 500;
+}
+
+.semester-stage-selector label {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.semester-stage-selector select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: #1e3a8a;
+  width: 200px;
+  text-align: center;
+}

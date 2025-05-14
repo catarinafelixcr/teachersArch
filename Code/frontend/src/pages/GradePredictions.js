@@ -18,7 +18,6 @@ function GradePredictions() {
   const [showGeneralInfo, setShowGeneralInfo] = useState(false);
   const [showStatsInfo, setShowStatsInfo] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
-  const [semesterStage, setSemesterStage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -30,9 +29,9 @@ function GradePredictions() {
 
 
   useEffect(() => {
-  if (!selectedGroup || !semesterStage) return;
+  if (!selectedGroup) return;
 
-  api.get(`/api/group_predictions/${selectedGroup}/?stage=${semesterStage}`)
+  api.get(`/api/group_predictions/${selectedGroup}/`)
     .then((res) => {
       const all = res.data.predictions || [];
       const latestDate = all.reduce((max, p) => {
@@ -45,7 +44,7 @@ function GradePredictions() {
       setPredictions(latest);
     })
     .catch((err) => console.error('Error fetching group predictions:', err));
-}, [selectedGroup, semesterStage]);
+}, [selectedGroup]);
 
   
   useEffect(() => {
@@ -380,15 +379,6 @@ function GradePredictions() {
             </ul>
           )}
         </div>
-      </div>
-
-      <div className="semester-stage-selector">
-        <label htmlFor="stage">Semester Stage (1–5):</label>
-        <select id="stage" value={semesterStage} onChange={(e) => setSemesterStage(Number(e.target.value))}>
-          {[1, 2, 3, 4, 5].map(n => (
-            <option key={n} value={n}>{n}</option>
-          ))}
-        </select>
       </div>
 
       <div className="history-header">

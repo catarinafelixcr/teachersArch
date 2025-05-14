@@ -5,19 +5,27 @@
 **Related Use Cases**: UC7.1
 
 **Pre-conditions**:
+
 - O sistema de registo de professores está acessível.
+
 - Não existe uma conta de professor registada com o email institucional a ser utilizado para o teste.
 
 **Steps**:
+
 - Aceder à página de registo de professores.
-- Preencher o formulário de registo com dados válidos para todos os campos obrigatórios (nome, email institucional, password que cumpra os requisitos, etc.).
+
+- Preencher o formulário de registo com dados válidos para todos os campos obrigatórios (nome, email institucional, password, verificar password).
+
 - Submeter o formulário de registo.
 
 **Expected Result**:
+
 - O sistema deve validar os dados introduzidos sem erros.
+
 - O sistema deve criar uma nova conta de professor na base de dados.
-- O sistema deve exibir uma mensagem de sucesso de registo: "Registo efetuado com sucesso. Verifique o seu email para confirmação."
+
+- O sistema deve exibir uma mensagem de sucesso de registo: "Account created successfuly! Please check your email to verify your account before logging in."
 
 **Actual Results:**
-Válido.
-Quando abrimos o link da confirmação no email abre a pasta do gamma, mas depois de retornarmos a pagina de login o registo esta feito.
+
+Aprovado.
