@@ -8,7 +8,7 @@ import numpy as np
 # --------------------------
 # Configuração
 # --------------------------
-FEATURES_INTERVAL_1 = [
+FEATURES_INTERVAL = [
     "review_comments_given",
     "review_comments_received",
     "total_review_activity_log",
@@ -27,7 +27,7 @@ EPSILON = 1e-6
 # --------------------------
 # Pré-processamento híbrido
 # --------------------------
-def preprocess_interval_1(df):
+def preprocess_interval(df):
     df = df.copy()
 
     df["total_review_activity_log"] = np.log1p(
@@ -39,11 +39,11 @@ def preprocess_interval_1(df):
     df["sum_lines_added_log"] = np.log1p(df.get("sum_lines_added", 0))
     df["issue_participation_log"] = np.log1p(df.get("issue_participation", 0))
 
-    for col in FEATURES_INTERVAL_1:
+    for col in FEATURES_INTERVAL:
         if col not in df:
             df[col] = 0
 
-    return df[FEATURES_INTERVAL_1]
+    return df[FEATURES_INTERVAL]
 
 # --------------------------
 # Obter dados do GitLab
@@ -53,7 +53,6 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
     try:
         project = gl.projects.get(project_path)
         members = project.members.list(all=True)
-
         all_mrs = project.mergerequests.list(state='all', all=True)
 
         def coletar_dados(member):
@@ -83,7 +82,6 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
             issues_created = project.issues.list(author_id=member.id, all=True)
             issues_closed = project.issues.list(author_id=member.id, state='closed', all=True)
 
-            # Comentários dados e recebidos
             comments_given = 0
             comments_received = 0
             for mr in all_mrs:
@@ -105,10 +103,10 @@ def obter_dados_gitlab(project_path, gitlab_url, gitlab_token, interval):
                 "branches_created": len(branches),
                 "merged_requests": len(merged_requests),
                 "total_merge_requests": len(total_merge_requests),
-                "merges_to_main_branch": 0,  # Ajustar se tiveres forma de contar merges reais
+                "merges_to_main_branch": 0,
                 "total_issues_created": len(issues_created),
                 "issues_resolved": len(issues_closed),
-                "issue_participation": 0,  # Placeholder por agora
+                "issue_participation": 0,
                 "review_comments_given": comments_given,
                 "review_comments_received": comments_received,
                 "interval": interval
@@ -128,9 +126,9 @@ if __name__ == "__main__":
     gitlab_token = os.getenv("GITLAB_TOKEN", "glpat-z7gzPpe48a5krLoLa4o4")
     project_path = "dei-uc/pecd2025/pecd2025-pl2g4"
 
-    intervalo = int(input("⏱ Intervalo a analisar: "))
+    intervalo = 5  # Fixo para este script
 
-    print("🔄 A obter dados do GitLab...")
+    print(f"🔄 A obter dados do GitLab (intervalo {intervalo})...")
     df_raw = obter_dados_gitlab(project_path, gitlab_url, gitlab_token, intervalo)
 
     if df_raw.empty:
@@ -138,10 +136,10 @@ if __name__ == "__main__":
     else:
         print("📋 Dados recolhidos para os membros.\n")
 
-        df_ready = preprocess_interval_1(df_raw)
-        modelo = joblib.load("modelo_intervalo1.pkl")
+        df_ready = preprocess_interval(df_raw)
+        modelo = joblib.load("modelo_intervalo5.pkl")
         previsoes = modelo.predict(df_ready)
 
-        print("\n🎯 Previsões de nota final:")
+        print("\n Previsões de nota final:")
         for i, row in df_raw.iterrows():
             print(f"  {row['username']:20s} → {previsoes[i]:.2f}")
