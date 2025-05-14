@@ -8,12 +8,11 @@
 - O professor deve estar autenticado no sistema.
 - O sistema deve ter acesso às previsões de desempenho geradas, incluindo datas.
 - Devem existir dados históricos de previsões de desempenho no sistema (de datas anteriores).
-- Deve existir um mecanismo para selecionar uma data a ser visualizada (ex: filtro por data).
 
 **Steps**:
 - Aceder à dashboard do professor no sistema.
-- Clicar na opção "Previsão de Desempenho por Categorias".
-- Localizar e utilizar o mecanismo para selecionar o período (datas).
+- Clicar na opção "Student's Grade Predictions".
+- Localizar e utilizar o mecanismo para selecionar o período ("Compare Over Time").
 
 **Expected Result**:
 - O sistema deve exibir as previsões de desempenho por categorias para a data selecionada.

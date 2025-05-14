@@ -11,13 +11,12 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".
-- O sistema exibe as previsões categorizadas de todos os aluno (histórico).
-- O professor seleciona os filtros que desejar.
-- O professor escolhe a opção "Gerar Relatório".
+- O professor seleciona a opção "Prediction of Grades".
+- O sistema exibe as previsões categorizadas de todos os aluno do grupo (histórico).
+- O professor escolhe a opção "Generate Report".
 
 **Expected Result**:
 - O sistema não deve gerar o relatório de desempenho em PDF.
-- O sistema deve exibir uma mensagem de erro: "Falha ao gerar o relatório de desempenho. Por favor, tente novamente mais tarde."
+- O sistema deve exibir uma mensagem de erro: "Erro ao gerar Report".
 
 **Actual Result**:
