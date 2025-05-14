@@ -1,23 +1,37 @@
 **Test Case ID**: TC2.7
 
-**Test Case Description**: Este teste verifica se o sistema compara corretamente as previsões entre grupos.
+**Test Case Title**: Filtragem previsões 
 
-**Related Use Cases**: UC2.3
+**Test Case Description**: Verificar se o sistema filtra corretamente os alunos com base na tendência da sua evolução ("Trend") ao longo do tempo, como *Improved*, *Declined*, ou *Unchanged*, representados com emojis.
+
+**Related Use Cases**: UC2.2 
 
 **Pre-conditions**:
 
-- O professor deve estar autenticado.
-- Deve haver dados, previsões e associação de alunos a grupos disponíveis.
-- Previsões de notas exibidas com sucesso (TC2.1 bem-sucedido).
+- O professor está autenticado no sistema.
+
+- Existem dados de previsões atuais e anteriores.
+
+- A funcionalidade de comparação está ativa (existem pelo menos 2 datas disponíveis).
+
 
 **Steps**:
-- Clicar em "Comparar notas de grupos".
-- Selecionar dois ou mais grupos.
 
-**Expected Result:**
-- O sistema deve exibir estatísticas comparativas dos grupos (média, desvio padrão).
-- O sistema deve apresentar a distribuição gráfica das previsões de notas.
+- Aceder à página inicial do sistema.
 
-**Actual Result**:
+- Clicar na opção "Prediction of Grades.
 
-    - Aprovado.
+- Clicar na opção "Compare over Time".
+
+- Na tabela de compração, existe uma coluna que exibe a tendência do aluno de acordo com o emoji que representa ("Improved", "Declined" ou "Unchenged")
+
+
+**Expected Result**:
+
+- O sistema deve atualizar a tabela ao mostrar apenas os alunos cujo campo “Status” corresponde à tendência selecionada.
+
+- A tabela deve estar correta tanto para a previsão atual quanto para a anterior.
+
+**Status**:
+
+- Aprovado

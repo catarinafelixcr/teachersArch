@@ -1,24 +1,23 @@
-**Test Case ID**: TC2.10
+**Test Case ID**: TC2.17
 
-**Test Case Description**: Verificar se o sistema permite comparar as previsões de notas em dois momentos distintos quando todos os dados estão disponíveis.
+**Test Case Description**: Verificar se o relatório gerado contém as informações corretas e esperadas, como as notas dos grupos, estatísticas e a formatação adequada.
 
-**Related Use Cases**: UC2.4
+**Related Use Cases**: UC2.5
 
 **Pre-conditions**:
-- O professor deve estar autenticado.
-- Os dados dos alunos e as previsões devem estar disponíveis.
-- O sistema deve ter armazenado as previsões atuais e anteriores.
+- Relatório de notas gerado com sucesso (TC2.15 bem-sucedido).
 
 **Steps**:
-- Aceder à pagina inical.
-- Clicar na opção "Previsão de Notas".
-- Clicar na opção "Comparar Previsões".
-- Selecionar uma data para a previsão anterior a ser comparada.
+- Abrir o relatório PDF gerado.
+- Verificar o conteúdo do relatório.
 
 **Expected Result**:
-- O sistema deve exibir as estatísticas globais de ambas as previsões (atual e anterior), como a média, a moda, a mediana e o desvio padrão.
-- O sistema deve permitir que o professor selecione filtros para identificar os alunos que melhoraram ou pioraram.
+- O relatório deve conter:
+  1. Título claro e identificação do relatório (ex. "Relatório de Previsão de Notas dos Grupos").
+  2. Data de geração do relatório.
+  3. Notas de previsão para cada aluno, organizadas por grupo.
+  4. Estatísticas resumidas por grupo (média, desvio padrão, etc.).
+  5. Estatísticas globais (média geral, desvio padrão geral, percentis gerais).
+  6. Formatação clara e legível.
 
-**Actual Result**: 
-
-    - Aprovado.
+**Actual Result**:

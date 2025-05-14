@@ -1,34 +1,24 @@
-UC.2.4. Comparar a previsão em dois momentos distintos  
+UC.2.6. Visualizar a previsão da nota de um aluno
 
 **Primary Actor**: Professor.
 
-**Scope**: O professor acede ao sistema para comparar a previsão atual de notas dos alunos com previsões feitas em momentos anteriores.
+**Scope**: O professor acede ao sistema para visualizar detalhes da previsão de notas de um aluno.
 
 **Level**: User goals – Sea level.
 
-**Stakeholders**: Professor (quer verificar se as previsões mudaram ao longo do tempo), instituição de ensino (pode usar essas comparações para entender melhor o impacto do tempo e da atividade dos alunos na precisão das previsões) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
+**Stakeholders**: Professor (precisa de compreender o desempenho previsto para adaptar as suas estratégias), alunos (beneficiam de avaliações e abordagens adequadas ao seu nível), instituição de ensino (procuram melhorar a qualidade do ensino) e o sistema de previsão (fornece previsões de desempenho com base na atividade dos alunos).
 
-**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já treinadas pelo modelo de Machine Learning (dependente do US6). O sistema deve armazenar previsões anteriores feitas em diferentes momentos.
+**Preconditions**: O professor deve estar autenticado no sistema (dependente do US1). O sistema deve ter acesso aos dados dos alunos e às previsões já treinadas pelo modelo de Machine Learning (dependente do US6). O professor já está na página de visualização de notas (dependente do U2.1).
 
 **Main Success Scenario**:  
 1. O professor acede à pagina inicial;
-2. Seleciona a opção "Grade Predictions";
-3. O sistema exibe o histórico das previsões para todos os alunos;
-4. O professor seleciona uma opção "Compare over Time";
-5. O sistema apresenta opções para selecionar a data da previsão da primeira data e da segunda data a ser comparada;
-6. O sistema apresenta estatísticas globais de ambas as previsões, como a media, desvio padrao;
-7. O professor pode selecionar filtros para saber quem melhorou ou piorou;
-8. O professor clica num aluno para obter uma comparação detalhada.
+2. Seleciona a opção "Prediction of Grades;
+3. O professor seleciona o grupo que quer analisar.
+4. O sistema exibe o histórico das previsões para todos os alunos;
+5. O sistema apresenta estatísticas globais (Total predictions, Average Grade, Standar Deviation, Highest Predicted Grade e Lowest Predicted Grade);
+6. O professor clica em "View" que aparece na coluna details da tabela com as previsões.
 
-Extensions:
-3a. As previsões apresentam um nível de confiança baixo.
-- 3a1. O sistema exibe uma mensagem "Previsões com baixa confiança (probabilidade < 70%)."
+**Extensions**:
 
-3b. Não existe histórico de previsões.
-- 3b1. O sistema exibe uma mensagem equivalente a "Não existem previsões disponíveis."
-
-5a. Não há previsões passadas disponíveis para comparação.
-- 5a1. O sistema exibe uma mensagem equivalente a "Não existem previsões registadas para a data selecionada"
-
-8a. Sem detalhes do aluno.
-- 8a1. O sistema exibe uma mensagem equivalente a "De momento, não existem dados adicionais sobre este aluno."
+1a. Sem detalhes do aluno.
+- 1a1. O sistema exibe uma mensagem equivalente a "De momento, não existem dados adicionais sobre este aluno."

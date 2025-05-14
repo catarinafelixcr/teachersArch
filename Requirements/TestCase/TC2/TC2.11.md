@@ -1,24 +1,27 @@
-**Test Case ID**: TC2.11
+**Test case ID**: TC2.18
 
-**Test Case Description**: Verificar o comportamento do sistema quando não existem previsões passadas disponíveis para a data selecionada.
+**Test case Description**: Verificar se o sistema exibe uma mensagem adequada quando não existem dados adicionais sobre o aluno.
 
-**Related Use Cases**: UC2.4
+**Related Use Cases**: UC2.6
 
 **Pre-conditions**:
-- O professor deve estar autenticado.
-- Os dados dos alunos e as previsões atuais devem estar disponíveis.
-- Não existem previsões armazenadas para a data selecionada.
+
+- O professor está autenticado no sistema.
+
+- O professor está na página de visualização de notas.
+
+- O aluno selecionado não tem dados adicionais disponíveis (nem previsão gerada).
 
 **Steps**:
-- Aceder à pagina inicial do sistema.
-- Clicar na opção "Previsão de Notas".
-- Clicar na opção "Comparar Previsões".
-- Não existem opções de dadas passadas.
 
-**Expected Result:**
-- O sistema deve exibir uma mensagem equivalente a: "Não existem previsões registadas anteriormente."
-- O sistema desabilita a opção de "Comparar Previsões" se não houver dados atuais.
+- O professor acede à "Prediction of Grades"
 
-**Actual Result**: 
+- O professor clica sobre um aluno sem dados de previsão.
 
-- Aprovado
+**Expected Results**:
+
+- O sistema exibe uma mensagem como: No data”
+
+**Actual Results:**
+
+Aprovado

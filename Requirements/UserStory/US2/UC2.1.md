@@ -1,4 +1,4 @@
-UC2.1. Visualizar a previsão de notas dos alunos.
+UC2.1. Visualizar a previsão de notas dos alunos de um grupo.
 
 **Primary Actor**: Professor.
 
@@ -12,9 +12,11 @@ UC2.1. Visualizar a previsão de notas dos alunos.
 
 **Main Success Scenario**:  
 1. O professor acede à página inicial;
-2. Seleciona a opção "Previsão de Notas";
-3. O sistema exibe o histórico das previsões para todos os alunos;
-4. O sistema apresenta estatísticas globais (média prevista, desvio padrão);
+2. Seleciona a opção "Prediciton of Grades";
+3. O professor seleciona o grupo que quer analisar.
+4. O sistema exibe o histórico das previsões para todos os alunos;
+5. O sistema apresenta estatísticas globais (Total predictions, Average Grade, Standar Deviation, Highest Predicted Grade e Lowest Predicted Grade);
+6. O professor clica num aluno para obter mais detalhes sobre a respetiva previsão.
 
 **Extensions**:
 
@@ -22,5 +24,5 @@ UC2.1. Visualizar a previsão de notas dos alunos.
 - 3a1. O sistema informa "Previsões com baixa confiança (probabilidade < 70%)."
 
 3b. Não existe histórico de previsões.
-- 3b1. O sistema exibe uma mensagem equivalente a "Não existem previsões disponíveis."
+- 3b1. O sistema exibe uma mensagem equivalente a "No grade predictions available."
  

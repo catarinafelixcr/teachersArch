@@ -1,18 +1,33 @@
 **Test Case ID**: TC2.6
 
-**Test Case Description**: Este teste verifica se é possível visualizar os detalhes de um aluno de um grupo específico.
+**Test Case Description**: Verificar o comportamento do sistema quando não existem previsões passadas disponíveis para a data selecionada.
 
 **Related Use Cases**: UC2.2
 
 **Pre-conditions**:
-- Professor autenticado, dados, previsões e grupos disponíveis (TC2.6 bem-sucedido).
+
+- O professor deve estar autenticado.
+
+- Os dados dos alunos e as previsões atuais devem estar disponíveis.
+
+- Não existem previsões armazenadas para a data selecionada.
 
 **Steps**:
-- Na lista de previsões do grupo, clicar em um aluno.
 
-**Expected Result**:
-- O sistema deve exibir os detalhes da previsão para o aluno selecionado.
+- Aceder à pagina inical.
 
-**Actual Result:**
+- Clicar na opção "Prediction of Grades".
+
+- Clicar na opção "Compare over Time".
+
+- Não existem opções de dadas passadas.
+
+**Expected Result:**
+
+- O sistema deve exibir uma mensagem equivalente a: "No options"
+
+- O sistema não permite a compração.
+
+**Actual Result**: 
 
 - Aprovado

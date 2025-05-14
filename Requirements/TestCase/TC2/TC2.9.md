@@ -1,22 +1,19 @@
-**Test Case ID**: TC2.9 
+**Test Case ID:** TC2.16 
 
-**Test Case Description**: Verificar o comportamento do sistema quando o utilizador seleciona apenas um grupo para comparar.
+**Test Case Description**: Verificar o comportamento do sistema quando ocorre uma falha inesperada durante a geração do relatório.
 
-**Related Use Cases**: UC2.3
+**Related Use Cases**: UC2.5
 
 **Pre-conditions**:
-- O professor deve estar autenticado no sistema.
-- Os dados dos alunos, as previsões processadas pelo modelo de Machine Learning e a associação de alunos a grupos devem estar disponíveis.
+- O professor deve estar autenticado.
+- Os dados dos alunos e as previsões devem estar disponíveis (mas simular uma condição que cause falha na geração, como falta de recursos do sistema ou erro interno).
 - Previsões de notas exibidas com sucesso (TC2.1 bem-sucedido).
 
 **Steps**:
-- Clicar na opção "Comparar notas de grupos".
-- Selecionar apenas um grupo na lista de grupos disponíveis.
-- Tentar iniciar a comparação.
+- Clicar na opção "Gerar relatório".
 
 **Expected Result**:
-- O sistema deve exibir uma mensagem de erro ou aviso: "Selecione pelo menos dois grupos para comparar as previsões de notas."
+- O sistema não deve gerar o relatório em PDF.
+- O sistema deve exibir uma mensagem de erro: "Falha ao gerar o relatório. Por favor, tente novamente mais tarde."
 
-**Actual Result**: 
-
-    - Aprovado.
+**Actual Result**:
