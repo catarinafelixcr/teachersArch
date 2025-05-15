@@ -32,3 +32,5 @@ This process can take several minutes depending on the repository size and netwo
 - O sistema deve exibir a mensagem "Group created with success".
 
 **Actual Result**:
+
+- Aprovado.
