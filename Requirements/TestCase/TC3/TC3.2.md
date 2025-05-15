@@ -22,3 +22,5 @@
 - Não devem ocorrer erros ou comportamentos inesperados durante a interação.
 
 **Actual Result**:
+
+- Aprovado.
