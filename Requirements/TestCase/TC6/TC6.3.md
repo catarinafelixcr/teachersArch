@@ -24,3 +24,5 @@
 - O sistema não deve tentar recolher dados nem reiniciar o processamento de ML.  
 
 **Actual Result**:
+
+- Aprovado.
