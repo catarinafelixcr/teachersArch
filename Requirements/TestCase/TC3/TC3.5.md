@@ -22,3 +22,5 @@
 - O sistema deve exibir um gráfico ou outro tipo de visualização para facilitar a comparação.
 
 **Actual Result**:
+
+- Aprovado.
