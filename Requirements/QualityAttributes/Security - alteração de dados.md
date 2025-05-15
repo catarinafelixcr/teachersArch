@@ -16,7 +16,7 @@
 
 **Resposta**
 
-- O sistema deve manter um registo de todas as alterações feitas nos dados e prevenir alterações não autorizadas e deve permitir a recuperação da versão anterior, correta.
+- O sistema deve registrar acessos a endpoints críticos e validar permissões por meio de tokens.
 
 **Medida da Resposta**
 
