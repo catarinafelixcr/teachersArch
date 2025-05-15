@@ -25,6 +25,7 @@ MODEL_PATHS = {
     5: os.path.join(PROJECT_CODE_DIR, 'gitlabAPI_Luciana', 'EnsembleModels', 'Ensemble_interval5.pkl'),
 }
 
+
 # Carregar os modelos
 MODELS = {}
 all_models_loaded = True

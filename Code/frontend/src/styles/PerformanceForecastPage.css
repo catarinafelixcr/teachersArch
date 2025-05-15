@@ -587,17 +587,28 @@ td:last-child button:hover {
 
 
 .chart {
+  flex: 1 1 100%;
+  min-width: 0;
+  min-height: 450px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   padding: 16px;
-  min-height: 450px; /* ajuste conforme necessário */
-  flex: 1;
+  max-width: 100%;
+  overflow-x: auto;
 }
+
 
 
 .chart-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 30px;
-  margin-bottom: 40px; /* Adicione esta linha */
 }
+
+@media (max-width: 768px) {
+  .chart-row {
+    flex-direction: column;
+  }
+}
+

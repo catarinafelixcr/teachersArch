@@ -12,11 +12,11 @@ UC3.2 Gerar relatório de desempenho por categorias
 
 **Main Success Scenario**:
 1. O professor está na dashboard;
-2. O professor seleciona a opção "Previsão de Desempenho por Categorias";
-3. O sistema exibe as previsões categorizadas de todos os aluno (histórico);
-4. O professor seleciona os filtros que desejar;
-5. O professor escolhe a opção "Gerar Relatório";
-6. O sistema gera o relatório com filtros que tinham sido selecionados em formato PDF.
+2. O professor seleciona a opção "Prediction of Grades";
+3. O professor seleciona o grupo;
+4. O sistema exibe o histórico de notas dos alunos do grupo;
+5. O professor escolhe a opção "Generate Report";
+6. O sistema gera o relatório em formato PDF.
 
 **Extensions**:
 

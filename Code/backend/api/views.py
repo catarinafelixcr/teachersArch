@@ -290,9 +290,9 @@ from .utils.extract import extract_from_gitlab
 @permission_classes([IsAuthenticated])
 def extract_students(request):
     try:
-        print("🔔 View extract_students chamada")
+        print("View extract_students chamada")
         data = request.data
-        print("📥 Dados recebidos:", data)
+        print("Dados recebidos:", data)
 
         repo_url = data.get("repo_url")
         if not repo_url:

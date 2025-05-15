@@ -10,14 +10,12 @@
 
 **Steps**:  
 - Aceder à dashboard.  
-- Selecionar a opção "Prever o desempenho".  
-- Tentar visualizar as notas de todos os alunos do grupo.  
-- Ativar a opção "Alunos em risco de reprovação".  
+- Selecionar a opção "Student at Risk".  
 - Selecionar um grupo para análise.  
 - O sistema tenta carregar os dados.  
 
 **Expected result**:  
-- O sistema exibe uma mensagem onde avisa que não há dados suficientes para análise.  
+- O sistema exibe não exibe informação nenhuma (apenas um erro na consola "Error fetching predictions:")  
 - Nenhuma informação sobre desempenho dos grupos é apresentada.  
 
 **Actual result**:

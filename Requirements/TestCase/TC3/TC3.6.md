@@ -10,12 +10,12 @@
 
 **Steps**:
 - O professor está na dashboard.
-- O professor seleciona a opção "Previsão de Desempenho por Categorias".
+- O professor seleciona a opção "Performance Overview by Category".
 - O sistema exibe as previsões categorizadas de todos os aluno (histórico).
 - O professor seleciona um grupo especifico nos filtros.
 
 **Expected Result**:
 - O sistema sofre um erro técnico e falha ao exibir as visualizações interativas.
-- O sistema exibe uma mensagem "O sistema sofreu um erro técnico ao carregar as visualizações. Tente novamente mais tarde."
+- O sistema exibe uma mensagem "No predictions available for this group."
 
 **Actual Result**:

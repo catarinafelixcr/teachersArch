@@ -278,3 +278,27 @@ tbody tr:hover {
 table thead th {
   text-align: center;
 }
+
+
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 40px auto 0;
+}
+
+.generate-report-btn {
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.generate-report-btn:hover {
+  background-color: #1e3a8a;
+}

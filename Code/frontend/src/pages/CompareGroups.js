@@ -482,7 +482,14 @@ const CompareGroups = () => {
                           <tr
                             key={name + idx}
                             style={{
-                              backgroundColor: groupData.pointColors[idx],
+                              backgroundColor: (() => {
+                                if (compareGrade == null) return 'rgba(255, 255, 204, 0.5)'; // sem dado
+                                if (compareGrade <= 5) return 'rgba(255, 77, 77, 0.25)';
+                                if (compareGrade <= 9) return 'rgba(255, 153, 51, 0.25)';
+                                if (compareGrade <= 13) return 'rgba(255, 235, 59, 0.25)';
+                                if (compareGrade <= 17) return 'rgba(139, 195, 74, 0.25)';
+                                return 'rgba(76, 175, 80, 0.25)';
+                              })(),
                               textAlign: 'center'
                             }}
                           >
@@ -648,14 +655,15 @@ const CompareGroups = () => {
         )
       )}
       {groupData && (
-        <button className="generate-report-btn" onClick={generatePDFReport}>
-          Generate Report PDF
-        </button>
+        <div className="button-row">
+          <button className="generate-report-btn" onClick={generatePDFReport}>
+            Generate Report PDF
+          </button>
+          <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
+            Back to Grade Predictions
+          </button>
+        </div>
       )}
-
-      <button className="back-btn" onClick={() => navigate('/gradepredictions')}>
-        Back to Grade Predictions
-      </button>
     </div>
   );
 };

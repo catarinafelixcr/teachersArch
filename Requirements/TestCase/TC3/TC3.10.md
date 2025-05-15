@@ -10,11 +10,11 @@
 
 **Steps**:
 - Aceder à dashboard do professor no sistema.
-- Clicar na opção "Previsão de Desempenho por Categorias".
+- Clicar na opção "Performance Overview by Category".
 
 **Expected Result**:
-- O sistema deve exibir a página de "Previsão de Desempenho por Categorias".
-- Em vez das visualizações de dados, o sistema deve apresentar uma mensagem informativa "Não existem previsões de desempenho disponíveis neste momento." (ex: "Nenhuma previsão de desempenho gerada ainda. Por favor, insira os dados do GitLab primeiro." ou "Sem dados para exibir.").
+- O sistema deve exibir a página de "Performance Overview by Category".
+- Em vez das visualizações de dados, o sistema deve apresentar uma mensagem informativa "Nenhuma previsão encontrada para este grupo".
 - A página não deve apresentar erros ou visualizações vazias que possam confundir o utilizador.
 
 **Actual Result**:
