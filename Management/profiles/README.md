@@ -1,0 +1,1 @@
+Aqui encontram-se os perfis dos membros do grupo que foi escrito na primeira aula prática da cadeira.

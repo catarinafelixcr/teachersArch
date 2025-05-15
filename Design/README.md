@@ -1,0 +1,1 @@
+O processo de desenvolvimento seguiu a metodologia de design-first, onde primeiro construímos toda a interface visual antes de iniciar a implementação técnica.Ou seja, antes de iniciar o desenvolvimento do código, investimos tempo na criação de um design detalhado no **Figma**.
