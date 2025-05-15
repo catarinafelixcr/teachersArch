@@ -8,15 +8,8 @@ import logging # Import logging for better messages
 # Configure basic logging
 logging.basicConfig(level=logging.INFO) # You can set to DEBUG for more verbosity
 
-# This should point to the 'pecd2025-pl2g4/Code/' directory
-# __file__ is .../Code/backend/api/utils/ml_model_loader.py
-# dirname(__file__) is .../Code/backend/api/utils
-# dirname(dirname(__file__)) is .../Code/backend/api
-# dirname(dirname(dirname(__file__))) is .../Code/backend
-# dirname(dirname(dirname(dirname(__file__)))) is .../Code/  <-- This is what we want
 PROJECT_CODE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-# Caminhos relativos para os modelos, now relative to PROJECT_CODE_DIR
 MODEL_PATHS = {
     1: os.path.join(PROJECT_CODE_DIR, 'gitlabAPI_Luciana', 'EnsembleModels', 'Ensemble_interval1.pkl'),
     2: os.path.join(PROJECT_CODE_DIR, 'gitlabAPI_Luciana', 'EnsembleModels', 'Ensemble_interval2.pkl'),

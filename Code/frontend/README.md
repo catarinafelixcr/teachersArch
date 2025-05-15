@@ -23,6 +23,7 @@ Este diretório contém toda a implementação da interface de utilizador do pro
    npm install react-router-dom
    npm install react-select
    npm install react-plotly.js plotly.js
+   npm install plotly.js-dist-min
    ```
 
 3. Inicia a aplicação React:
