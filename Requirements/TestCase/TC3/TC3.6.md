@@ -16,6 +16,8 @@
 
 **Expected Result**:
 - O sistema sofre um erro técnico e falha ao exibir as visualizações interativas.
-- O sistema exibe uma mensagem "No predictions available for this group."
+- O sistema exibe uma mensagem "No grade predictions available."
 
 **Actual Result**:
+
+- Aprovado.
