@@ -24,3 +24,5 @@
 - Ao remover o filtro, as visualizações devem voltar a apresentar todos os dados.
 
 **Actual Result**:
+
+- Aprovado.
