@@ -21,3 +21,5 @@
 - Ao clicar num aluno, o sistema apresenta detalhes adicionais sobre o seu desempenho.  
 
 **Actual result**:
+
+- Aprovado.
