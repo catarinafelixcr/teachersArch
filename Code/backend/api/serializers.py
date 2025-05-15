@@ -5,13 +5,11 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.hashers import check_password
 from .models import Utilizador
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import serializers
-from django.contrib.auth.hashers import check_password
 from dj_rest_auth.serializers import PasswordResetSerializer
 from django.core.mail import send_mail
-from rest_framework.exceptions import AuthenticationFailed
-from .models import Utilizador
 
+
+# Serializers para converter os modelos em JSON para serem usados nos endpoints da API
 class UtilizadorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilizador
@@ -68,7 +66,9 @@ class UtilizadorProfileSerializer(serializers.ModelSerializer):
         model = Utilizador
         fields = ['id', 'name', 'email']
 
+
 class CustomTokenObtainPairSerializer(serializers.Serializer):
+    # Autentica um utilizador com email e password
     email = serializers.EmailField()
     password = serializers.CharField()
 
@@ -77,72 +77,64 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         password = attrs.get("password")
 
         print(f"Attempting login for email: {email}")
+        # Verifica se o professor existe
         try:
             user = Utilizador.objects.get(email=email)
-            print(f"User found: {user.email}, Active: {getattr(user, 'is_active', False)}") # Check is_active directly
+            print(f"User found: {user.email}, Active: {getattr(user, 'is_active', False)}") 
         except Utilizador.DoesNotExist:
             print("User lookup failed.")
             raise AuthenticationFailed("Email inválido")
-
+        # Verifica a password manualmente
         if not check_password(password, user.password):
             print("Password check failed.")
             raise AuthenticationFailed("Password inválida")
-        
-        if not getattr(user, 'is_active', True):  # Default para True por segurança em dev
+        # Verifica se a conta está ativada
+        if not getattr(user, 'is_active', True):  
             print("Account not active check failed.")
             raise AuthenticationFailed("Account not activated. Please check your email.")
 
 
-        # Criar tokens manualmente
-        refresh = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)   # token de longo prazo (1h)
         print("Token generation successful.", refresh)
         return {
             "refresh": str(refresh),
-            "access": str(refresh.access_token),
+            "access": str(refresh.access_token),    # token de acesso imediato
         }
     
+
+# Personalização do envio de email de recuperação de password
 class CustomPasswordResetSerializer(PasswordResetSerializer):
     def send_mail(self, subject_template_name, email_template_name,
                   context, from_email, to_email, html_email_template_name=None):
-        uid = context['uid']
+        # Link de reset
+        uid = context['uid']    
         token = context['token']
         reset_link = f"http://localhost:3000/reset-password-confirm/{uid}/{token}/"
 
         subject = "Reset Your TeacherSArch Password"
         message = f"""
-Hello!
+                    Hello!
 
-We received a request to reset your password on the TeacherSArch platform.
+                    We received a request to reset your password on the TeacherSArch platform.
 
-Click the link below to create a new password:
-{reset_link}
+                    Click the link below to create a new password:
+                    {reset_link}
 
-If you didn't make this request, you can ignore this email.
+                    If you didn't make this request, you can ignore this email.
 
-Best regards,
-The TeacherSArch Team
-        """
+                    Best regards,
+                    The TeacherSArch Team
+                    """
 
         send_mail(subject, message, from_email, [to_email])
 
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework import serializers
-
+# Herda de TokenObtainPairSerializer
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = 'email'  # aqui está a magia
-
+    username_field = 'email'  # adiciona o email ao conteúdo do token JWT
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # Adicionar info extra ao token, se quiseres
-        token['email'] = user.email
+        token['email'] = user.email # campo de login é o emial em vez de username 
         return token
     
-'''
-class ComparePredictionSerializer(serializers.Serializer):
-    handle = serializers.CharField()
-    predicted_grade = serializers.FloatField()
-    registered_at = serializers.DateTimeField()
-
-'''
