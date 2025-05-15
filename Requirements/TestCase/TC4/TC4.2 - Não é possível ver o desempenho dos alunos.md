@@ -14,7 +14,9 @@
 - O sistema carregar os dados.  
 
 **Expected result**:  
-- O sistema exibe uma mensagem informando que não há dados suficientes para análise.  
+- O sistema exibe uma mensagem "No students found.".  
 - Nenhuma informação sobre desempenho dos alunos é apresentada.  
 
 **Actual result**:
+
+- Aprovado.
