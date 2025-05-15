@@ -14,7 +14,9 @@
 
 **Expected Result**:
 - O sistema deve exibir a página de "Performance Overview by Category".
-- Em vez das visualizações de dados, o sistema deve apresentar uma mensagem informativa "Nenhuma previsão encontrada para este grupo".
+- Em vez das visualizações de dados, o sistema deve apresentar uma mensagem informativa "No predictions available for this group.".
 - A página não deve apresentar erros ou visualizações vazias que possam confundir o utilizador.
 
 **Actual Result**:
+
+- Aprovado.
