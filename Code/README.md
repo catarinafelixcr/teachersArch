@@ -1,48 +1,47 @@
-# Nome do Projeto - TeachersArch — PECD 2025
+Aqui, temos toda a base do código do projeto.
 
-    - Website de apoio ao Professor 
+## Estrutura
 
-## Demonstração
+- `.venv/`: Ambiente virtual do Python com todas as dependências necessárias para o backend. --> cada um de nós tem o seu ambiente virtual. ATENÇÃO TEM DE SER PYTHON VERSÃO 11 devido a algumas compatibilidades de bibliotecas.
+- `backend/`: Implementação da lógica do backend, como APIs, manipulação de dados e integrações com BD ou serviços externos.
+- `frontend/`: Interface, construída para visualização e interação com o sistema.
+- `gitlab_miguel/`: Testes ou código de integração com GitLab, desenvolvidos pelo Miguel.
+- `gitlabAPI/`: Módulo principal de interação com a API do GitLab.
+- `gitlabAPI_copy_copy/`: Vversão alternativa da `gitlabAPI`
+- `gitlabAPI_Luciana/`: Versão personalizada e testes feitos pela Luciana para interação com a API do GitLab.
+- `gitlabAPI_model_cat/`: Versão personalizada e testes feitos pela Catarina para interação com a API do GitLab.
+- `POEMS/`: Para o tuturial.
 
-[localhost:3000/](http://localhost:3000)
+## Arquivos adicionais
 
-    - alterar o que vem à frente da barra com a página que quer visualizar
+- `.gitignore`: Lista de arquivos e pastas a serem ignoradas pelo Git.
+- `.gitkeep`: Ficheiro placeholder para garantir que pastas vazias sejam versionadas no Git.
 
+## Como utilizar
 
-## Tecnologias utilizadas
+Precisas de 2 terminais. Um correrá o backend e outro o frontend. Além disso, precisas de etr a BD criada no teu pc.
 
-- **Frontend:** React.js
-- **Backend:** Python, Django REST Framework, pgADMIN
-- **Ferramentas:** django-cors-headers
-- **Plotly.js** (gráficos)
+Num dos terminais:
+1. Precisas de ativar o ambiente virtual:
+   -  source .venv/bin/activate (Linux/Mac) ou .venv\Scripts\activate (Windows)
+Se ainda não tens, cria-o em versão python 11:
+   - python3.11 -m venv .venv
 
-## Instalação
+2. Instala as dependências:
+   - pip install -r requirements.txt
 
-# Backend 
-    - cd /backend
+3. Acede à pasta backend e siga as instruções do respetivo README:
+   - cd backend
 
-# Cria ambiente virtual (opcional, mas recomendado)
-python -m venv .venv
-source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
+No outro terminal:
+1. Não precisas necessáriamente de um ambiente virtual, é opcional.
 
-# Instala dependências
-pip install -r requirements.txt
+2. Acede à pasta backend e siga as instruções do respetivo README:
+   - cd frontend
 
-pip install django
-pip install djangorestframework
-pip install dj-rest-auth
-pip install django-cors-headers
-pip install djangorestframework-simplejwt
-pip install psycopg2-binary
-pip install django-allauth
+Quanto à BD, obtamos por usar pgAdmin:
 
-(se não funcionar trocar o "-" por "_")
-
-[pode ser possível ter que instalar mais alguma app que esteja em settings.py em /backend, na secção de installed_apps]
-
-# Base de Dados - pgADMIN
-
-Certifica-te de que tens o PostgreSQL e o pgADMIN instalado e a base de dados criada com os seguintes dados:
+1. Certifica-te de que tens o PostgreSQL e o pgADMIN instalado e a base de dados criada com os seguintes dados:
 
 DATABASES = {
     'default': {
@@ -55,28 +54,3 @@ DATABASES = {
     }
 }
 
-
-# Aplica migrações
-python manage.py makemigrations # criar as tabelas da BD
-python manage.py migrate
-
-# Inicia o servidor Django
-python manage.py runserver
-
-
-## Frontend
-    - cd /frontend
-
-    - necessário instalar Node.js
-
-# Instala dependências
-npm install react-router-dom
-npm install react-select
-npm install react-plotly.js plotly.js
-
-npm install
-
-# Inicia a aplicação React
-npm start
-
-    - se der erro na página relacionado com SideBar.js basta colocar o nome do ficheiro na pasta /components para Sidebar.js ("b" minúsculo)
