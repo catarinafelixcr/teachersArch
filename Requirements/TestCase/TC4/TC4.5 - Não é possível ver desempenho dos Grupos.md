@@ -19,5 +19,3 @@
 - Nenhuma informação sobre desempenho dos grupos é apresentada.  
 
 **Actual result**:
-
-- Aprovado
