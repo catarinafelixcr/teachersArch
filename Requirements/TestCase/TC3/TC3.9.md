@@ -17,6 +17,8 @@
 
 **Expected Result**:
 - O sistema não deve gerar o relatório de desempenho em PDF.
-- O sistema deve exibir uma mensagem de erro: "Erro ao gerar Report".
+- O sistema deve exibir uma mensagem de erro: "Error generating PDF report. Check console for details.".
 
 **Actual Result**:
+
+- Aprovado.
