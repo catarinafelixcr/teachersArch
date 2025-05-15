@@ -2,12 +2,11 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
-
 from django.utils import timezone
 from datetime import timedelta
 
 
-
+# É um gestor personalizado que define como criar utilizadores normais e superutilizadores no sistema.
 class UtilizadorManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Creates and saves a User with the given email and password."""
@@ -15,7 +14,7 @@ class UtilizadorManager(BaseUserManager):
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        user.set_password(password) # Use the inherited method
+        user.set_password(password) 
         user.save(using=self._db)
         return user
 
@@ -23,84 +22,89 @@ class UtilizadorManager(BaseUserManager):
         """Creates and saves a superuser with the given email and password."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True) # Superusers should be active by default
+        extra_fields.setdefault('is_active', True) 
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-
-        # Ensure required fields (like 'name' if it's in REQUIRED_FIELDS) are handled
-        # The createsuperuser command will prompt for fields in REQUIRED_FIELDS
+        
         return self.create_user(email, password, **extra_fields)
 
 
-class Utilizador(AbstractBaseUser, PermissionsMixin): # Inherit from AbstractBaseUser and PermissionsMixin
+
+# Modelo principal de contas de utilizador, substitui o User padrão do django
+# Representa qualquer utilizador, controla a autentificação por email, gera a
+# ativação da conta com activation_token e valida-o
+class Utilizador(AbstractBaseUser, PermissionsMixin):   # herda deste parâmetros para autentificação
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=512, null=True, blank=True)
-    # 'password' field is provided by AbstractBaseUser
-    # 'last_login' field is provided by AbstractBaseUser
-    email = models.EmailField( # Use EmailField for better validation
+    # Campo do login
+    email = models.EmailField( 
         verbose_name='email address',
         max_length=255,
         unique=True,
     )
-    is_active = models.BooleanField(default=False) # Keep this for activation flow
-    activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True, db_index=True) # Add db_index
 
-    # Add fields required by Django admin/auth system
-    is_staff = models.BooleanField(default=False) # Required for admin access
-    # is_superuser is provided by PermissionsMixin
-    # groups and user_permissions fields are provided by PermissionsMixin
-
-    objects = UtilizadorManager() # Link the custom manager
-
-    # --- THE FIX ---
-    USERNAME_FIELD = 'email' # Tell Django to use 'email' for login/identification
-    REQUIRED_FIELDS = ['name'] # Fields prompted for when using createsuperuser (besides email/password)
+    # Atributos adicionais de conta
+    is_active = models.BooleanField(default=False) 
+    activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True, db_index=True) 
+    is_staff = models.BooleanField(default=False) 
+    objects = UtilizadorManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name'] 
 
     def __str__(self):
         return self.email
 
+    # Guarda a password encriptada
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
+    # Verifica se a password está correta
     def check_password(self, raw_password):
-        from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)
 
     activation_token = models.CharField(max_length=128, blank=True, null=True, unique=True, db_index=True)
     token_expiry = models.DateTimeField(null=True, blank=True)  # Campo para expiração do token
 
+    # Gera e guarda um token com validade de 24h
     def set_activation_token(self, token):
         self.activation_token = token
         self.token_expiry = timezone.now() + timedelta(hours=24)  # Expira após 24 horas
         self.save()
 
+    # Verifica se o token expirou
     def is_token_expired(self):
         return self.token_expiry and timezone.now() > self.token_expiry
 
+# Relaciona um Utilizador a um professor 
 class Teacher(models.Model):
+    # Relação de 1 para 1
     utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
+    # Campo opcional
     link_gitlab = models.CharField(max_length=512, unique=True, null=True, blank=True)
 
+# Representa todos os grupos dos estudantes 
 class Grupo(models.Model):
+    # Identificador do repositório
     group_id = models.BigAutoField(primary_key=True)
+    # Nome único do grupo
     group_name = models.CharField(max_length=512, unique=True)
 
+
+# Representa um projeto do GitLab
 class Project(models.Model):
+    # Identificador do Projeto
     project_id = models.BigAutoField(primary_key=True)
+    # URL do repositório GitLab
     repo_url = models.CharField(max_length=512)
 
+
+# Atividades de um estudante no GitLab
 class AlunoGitlabAct(models.Model):
-    #utilizador = models.OneToOneField(Utilizador, on_delete=models.CASCADE, primary_key=True)
-    # acho que não faz sentido ser OneToOne, porque um Utilizador (que representa um estudante aqui) pode ter 
-    # muitos registos AlunoGitlabAct (por exemplo, um para cada grupo em que participa, 
-    # ou talvez até registos de diferentes momentos no tempo se a lógica evoluir).
-    # cada registo AlunoGitlabAct pertence a um e apenas um Utilizador (o estudante cuja atividade está a ser registada).
-    #utilizador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gitlab_activities')
-    
-    id = models.BigAutoField(primary_key=True) # antigo student_num --> mas automatico!!
+    # Chave primária
+    id = models.BigAutoField(primary_key=True) 
     #student_num = models.BigIntegerField()
     group = models.ForeignKey(Grupo, on_delete=models.CASCADE)
     handle = models.CharField(max_length=128)
@@ -127,52 +131,67 @@ class AlunoGitlabAct(models.Model):
     class Meta:
         unique_together = (("group", "handle", "data_registo"),)
     
+    # Para mostrar o email do utilizador e nome do grupo 
     def __str__(self):
         try:
             return f"Activity for {self.utilizador.email} in Group '{self.group.group_name}'"
         except: 
             return f"Activity record {self.id}"
 
-class Previsao(models.Model):
-    aluno_gitlabact = models.ForeignKey(AlunoGitlabAct, on_delete=models.CASCADE, related_name='previsoes')
-    prevision_id = models.BigAutoField(primary_key=True)
-    prev_category = models.CharField(max_length=55)
-    student = models.ForeignKey(Utilizador, on_delete=models.CASCADE)
-    prev_grade = models.BigIntegerField()
-    faling_risk = models.BooleanField()
-    prev_date = models.DateTimeField(auto_now_add=True)
 
-    
+# Registo da previsão de desempenho de um aluno 
+class Previsao(models.Model):
+    aluno_gitlabact = models.ForeignKey(AlunoGitlabAct, on_delete=models.CASCADE, related_name='previsoes') # origem dos dados da previsão
+    prevision_id = models.BigAutoField(primary_key=True)    # identificador único da previsão 
+    prev_category = models.CharField(max_length=55) # categoria da previsão 
+    student = models.ForeignKey(Utilizador, on_delete=models.CASCADE)   # aluno a quem pertence a previsão
+    prev_grade = models.BigIntegerField()   # nota prevista
+    faling_risk = models.BooleanField() # indica se há risco de reprovar
+    prev_date = models.DateTimeField(auto_now_add=True) # data/hora em que a previsão foi feita
+
+    # Retorna uma string para representar a previsão (ex: miguelant -> 17 (Bom))
     def __str__(self):
         return f"{self.aluno_gitlabact.handle} → {self.prev_grade} ({self.prev_category})"
 
+    # Para garantir que o estudante só pode ter uma previsão por data
     class Meta:
         unique_together = (("prev_date", "student"),)
 
-class AlunoGitlabactPrevisao(models.Model):
-    aluno_gitlabact = models.ForeignKey(AlunoGitlabAct, on_delete=models.CASCADE)
-    previsao = models.ForeignKey(Previsao, on_delete=models.CASCADE)
 
+# Tabela de associação entre registos de ativadade GitLab e previsões de desempenho
+class AlunoGitlabactPrevisao(models.Model):
+    aluno_gitlabact = models.ForeignKey(AlunoGitlabAct, on_delete=models.CASCADE)   # conjunto de métricas de atividade de GitLab de um aluno
+    previsao = models.ForeignKey(Previsao, on_delete=models.CASCADE)    # previsão feita com base nessa atividade
+
+    # Para garantir que não se criem ligações duplicadas entre a mesma atividade e previsão
     class Meta:
         unique_together = (("aluno_gitlabact", "previsao"),)
 
-class PrevisaoGrupo(models.Model):
-    previsao = models.ForeignKey(Previsao, on_delete=models.CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
 
+# Associação de uma previsão a um grupo - previsão feita para um determinado grupo 
+class PrevisaoGrupo(models.Model):
+    previsao = models.ForeignKey(Previsao, on_delete=models.CASCADE)    # refere-se á previsão de desempenho de um aluno
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)  # grupo onde a previsão vai ser inserida
+
+    # Para garantir que e mesma previsão não é associada duas vezes ao mesmo grupo
     class Meta:
         unique_together = (("previsao", "grupo"),)
 
-class GrupoProject(models.Model):
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
+# Para associar um grupo a um projeto
+class GrupoProject(models.Model):
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)  # grupo de alunos 
+    project = models.ForeignKey(Project, on_delete=models.CASCADE) # repositório do GitLab
+
+    # Pra garantir que não se repetem ligções grupo-projeto
     class Meta:
         unique_together = (("grupo", "project"),)
 
+
+# Associa um professor a um grupo  
 class TeacherGrupo(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)  # professor responsável pelo grupo
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)  # grupo de alunos 
 
     class Meta:
         unique_together = (("teacher", "grupo"),)

@@ -15,7 +15,9 @@
 - O sistema tenta carregar os dados.  
 
 **Expected result**:  
-- O sistema exibe não exibe informação nenhuma (apenas um erro na consola "Error fetching predictions:")  
+- O sistema exibe a mensagem "Error fetching group list". 
 - Nenhuma informação sobre desempenho dos grupos é apresentada.  
 
 **Actual result**:
+
+- Aprovado
