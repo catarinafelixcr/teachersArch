@@ -22,3 +22,5 @@
 - As visualizações devem ser claras e indicar explicitamente que estão a apresentar dados da data selecionada.
 
 **Actual Result**:
+
+- Aprovado.
