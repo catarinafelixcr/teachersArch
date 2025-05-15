@@ -21,3 +21,5 @@
 - O sistema exibe gráficos para comparação.
 
 **Actual Result**:
+
+- Aprovado.
