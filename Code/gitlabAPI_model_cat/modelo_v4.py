@@ -133,59 +133,78 @@ if __name__ == "__main__":
         df_ready = preprocess_interval(df_raw)
 
         print("\nPrevisões com todos os modelos (intervalos 1 a 5):")
-        for intervalo in range(1, 6):
-            modelo_nome = f"modelo_intervalo{intervalo}.pkl"
-            try:
-                modelo = joblib.load(modelo_nome)
-                y_pred = modelo.predict(df_ready)
+for intervalo in range(1, 6):
+    modelo_nome = f"modelo_intervalo{intervalo}.pkl"
+    try:
+        modelo = joblib.load(modelo_nome)
+        y_pred = modelo.predict(df_ready)
 
-                scaler = MinMaxScaler(feature_range=(8, 19))  
-                y_esc = scaler.fit_transform(y_pred.reshape(-1, 1)).ravel()
-                y_final = np.clip(y_esc, 0, 20)
+        # ------------------------------------------
+        # Estratégia Atualizada: Escala Dinâmica
+        # ------------------------------------------
+        # Calcular média e desvio padrão das previsões
+        mean_pred = np.mean(y_pred)
+        std_pred = np.std(y_pred)
 
-                print(f"\nIntervalo {intervalo}:")
-                for i, row in df_raw.iterrows():
-                    print(f"  {row['username']:20s} --> {y_final[i]:.2f}")
+        # Definir limites dinâmicos com base na distribuição
+        limite_inferior = mean_pred - 2 * std_pred  # 2σ abaixo da média
+        limite_superior = mean_pred + 2 * std_pred  # 2σ acima da média
+
+        # Escalonar notas com possibilidade de extrapolar 10-20
+        y_esc = np.interp(
+            y_pred,
+            (limite_inferior, limite_superior),
+            (8, 22)  # Intervalo mais amplo para permitir extrapolação
+        )
+
+        # Aplicar limites apenas para evitar valores absurdos
+        y_esc = np.clip(y_esc, 0, 20)  # Notas entre 5 e 25 (ajuste conforme necessidade)
+
+        print(f"\nIntervalo {intervalo}:")
+        for i, row in df_raw.iterrows():
+            print(f"  {row['username']:20s} --> {y_esc[i]:.2f}")
+
+    except FileNotFoundError:
+        print(f"Não encontrei o modelo para o intervalo {intervalo}!!!!!")
 
 
-            except FileNotFoundError:
-                print(f"Não encontrei o modelo para o intervalo {intervalo}!!!!! algo de errado não está certo")
 
-
+#############################
 # 
+#
 #Previsões com todos os modelos (intervalos 1 a 5):
 #
 #Intervalo 1:
-#  catafcruz02          --> 19.00
-#  pedromazevedo21      --> 8.19
-#  miguelant            --> 19.00
-#  LucianaRocha         --> 12.52
-#  furdurico            --> 8.00
+#  catafcruz02          --> 19.05
+#  pedromazevedo21      --> 11.32
+#  miguelant            --> 19.05
+#  LucianaRocha         --> 14.41
+#  furdurico            --> 11.18
 #
 #Intervalo 2:
-#  catafcruz02          --> 18.58
-#  pedromazevedo21      --> 8.34
-#  miguelant            --> 19.00
-#  LucianaRocha         --> 8.00
-#  furdurico            --> 8.34
+#  catafcruz02          --> 19.14
+#  pedromazevedo21      --> 12.22
+#  miguelant            --> 19.43
+#  LucianaRocha         --> 11.99
+#  furdurico            --> 12.22
 #
 #Intervalo 3:
-#  catafcruz02          --> 19.00
-#  pedromazevedo21      --> 18.39
-#  miguelant            --> 18.65
-#  LucianaRocha         --> 8.00
-#  furdurico            --> 15.10
+#  catafcruz02          --> 17.67
+#  pedromazevedo21      --> 17.16
+#  miguelant            --> 17.38
+#  LucianaRocha         --> 8.41
+#  furdurico            --> 14.38
 #
 #Intervalo 4:
-#  catafcruz02          --> 19.00
-#  pedromazevedo21      --> 13.82
-#  miguelant            --> 18.62
-#  LucianaRocha         --> 15.93
-#  furdurico            --> 8.00
+#  catafcruz02          --> 18.43
+#  pedromazevedo21      --> 13.91
+#  miguelant            --> 18.10
+#  LucianaRocha         --> 15.74
+#  furdurico            --> 8.82
 #
 #Intervalo 5:
-#  catafcruz02          --> 18.84
-#  pedromazevedo21      --> 10.82
-#  miguelant            --> 19.00
-#  LucianaRocha         --> 13.18
-#  furdurico            --> 8.00
+#  catafcruz02          --> 18.91
+#  pedromazevedo21      --> 12.47
+#  miguelant            --> 19.04
+#  LucianaRocha         --> 14.37
+#  furdurico            --> 10.22
