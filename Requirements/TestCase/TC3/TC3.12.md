@@ -24,3 +24,5 @@
 - O sistema mantém a estrutura da página (títulos, filtros, etc.), mas substituir a área de visualização de dados pela mensagem informativa.
 
 **Actual Result**:
+
+- Aprovado.
