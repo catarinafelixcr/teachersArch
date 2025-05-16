@@ -64,7 +64,7 @@ def fetch_students(gl, project, last_commit_date_by_handle, deadline="2025-01-01
 
     seen_days = defaultdict(set)
 
-    print("\n🧾 Commits:")
+    print("\n Commits:")
     for commit_summary in project.commits.list(all=True, get_all=True):
         try:
             commit = project.commits.get(commit_summary.id)
@@ -140,8 +140,7 @@ def fetch_students(gl, project, last_commit_date_by_handle, deadline="2025-01-01
         except Exception:
             continue
 
-    # 🔄 Unificação por substrings
-    print("\n📘 Unificando estudantes semelhantes por substrings...")
+    print("\n unir estudantes semelhantes por substrings...")
     unified = {}
     used = set()
     all_handles = sorted(students.keys(), key=len)  # começa pelos nomes mais curtos
@@ -162,8 +161,7 @@ def fetch_students(gl, project, last_commit_date_by_handle, deadline="2025-01-01
 
         unified[base] = merged
 
-    # 🔍 Resultado final
-    print("\n✅ Resumo unificado por estudante:")
+    print("\n Resumo unificado por estudante:")
     for handle, data in unified.items():
         print(f"🔸 {handle}: commits={data['total_commits']}, MRs={data['total_merge_requests']}, issues={data['total_issues_created']}, linhas adicionadas={data['sum_lines_added']}")
 

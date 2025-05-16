@@ -3,10 +3,9 @@ import joblib
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from api.models import AlunoGitlabAct
-import logging # Import logging for better messages
+import logging 
 
-# Configure basic logging
-logging.basicConfig(level=logging.INFO) # You can set to DEBUG for more verbosity
+logging.basicConfig(level=logging.INFO) 
 
 PROJECT_CODE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -50,18 +49,15 @@ for i, path in MODEL_PATHS.items():
         MODELS[i] = None
         all_models_loaded = False
 
-# Remove None entries if you prefer to check with .get() or 'in'
 MODELS = {k: v for k, v in MODELS.items() if v is not None}
 
 logging.info(f"Loaded models: {list(MODELS.keys())}")
 if not all_models_loaded:
     logging.warning("One or more models failed to load. Check paths and file integrity.")
 
-# It's critical that model 5 (the fallback) is loaded if other logic depends on it.
 if 5 not in MODELS:
     logging.critical("CRITICAL: Fallback model 5 FAILED to load. Application might not work as expected.")
-    # Depending on your application's needs, you might want to raise an error here
-    # raise RuntimeError("Fallback model 5 could not be loaded. Application cannot start.")
+
 
 
 def get_first_extraction_date(group):
@@ -76,7 +72,6 @@ def select_model(data_registo=None, grupo=None, stage=None):
     """
     Seleciona o modelo com base no 'stage' fornecido ou, se ausente, pela data da extração.
     """
-    # Fallback model key
     FALLBACK_MODEL_KEY = 5 # Or choose another default if 5 is not always available
 
     if stage:
