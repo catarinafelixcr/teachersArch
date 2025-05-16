@@ -12,11 +12,11 @@
 
 **Ambiente**
 
-- Operação normal do sistema, com vários utilizadores a interagir em simultâneo e a tendo o modelo ML realizar previsões.
+- Operação normal do sistema e modelo ML realizar previsões.
 
 **Resposta**
 
-- O sistema deve registrar acessos a endpoints críticos e validar permissões por meio de tokens.
+- O sistema deve registar acessos a endpoints críticos e validar permissões por meio de tokens.
 
 **Medida da Resposta**
 

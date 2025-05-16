@@ -8,15 +8,15 @@
 
 **Artefato**
 
-- o sistema com a interface com as várias funcionalidades e o modelo ML.
+- O sistema com a interface com as várias funcionalidades e o modelo ML.
 
 **Ambiente**
 
-- acesso de vários utilizadores em simultâneo, com várias inserções d elinks e tokens.
+- Acesso de vários utilizadores em simultâneo, com várias inserções d elinks e tokens.
 
 **Resposta**
 
-- o sistema retorna os alunos do repositório do GitLab correspondente aos dados que o utilizador introduziu.
+- O sistema retorna os alunos do repositório do GitLab correspondente aos dados que o utilizador introduziu.
 
 **Medida da Resposta**
 

@@ -1,6 +1,6 @@
 **Contexto**
 
- - O sistema é um site que inclui várias funcionalidades, incluindo a demonstração de um modelo de ML para prever o desempenho dos alunos ao longo do semestre, com base na atividade GitLab. A testabilidade do sistema é essencial para garantir que todas as funcionalidades, incluindo a interface do utilizador e a precisão do modelo de ML, possam ser verificadas de forma eficiente, garantindo confiabilidade e facilidade na sua manutenção.
+ - O sistema é um site que inclui várias funcionalidades, incluindo a utilização de um modelo de ML para prever o desempenho dos alunos ao longo do semestre, com base na atividade GitLab. A testabilidade do sistema é essencial para garantir que todas as funcionalidades, incluindo a interface do utilizador e a precisão do modelo de ML, possam ser verificadas de forma eficiente, garantindo confiabilidade e facilidade na sua manutenção.
 
 **Estímulo**
 
@@ -12,7 +12,7 @@
 
 **Ambiente**
 
-- Diferentes navegadores, dispositivos móveis e cenários de carga elevada.
+- Diferentes navegadores e cenários de carga elevada.
 
 **Resposta**
 

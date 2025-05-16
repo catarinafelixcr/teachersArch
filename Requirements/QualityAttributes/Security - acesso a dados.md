@@ -4,7 +4,7 @@
 
 **Estímulo**
 
-- Um utilizador não consegue acessar dados sensíveis que não devem ser acessados sem permissões específicas, através de SQL injections ou ataques semelhantes.
+- Um utilizador não consegue acessar dados sensíveis que não devem ser acessados sem permissões específicas.
 
 **Artefato**
 
@@ -12,7 +12,7 @@
 
 **Ambiente**
 
-- Operação normal do sistema, com vários utilizadores a interagir em simultâneo e a tendo o modelo ML realizar previsões.
+- Operação normal do sistema a modelo ML realizar previsões.
 
 **Resposta**
 
@@ -21,4 +21,4 @@
 
 **Medida da Resposta**
 
-Qualquer utilizador com sessão iniciada tem um token de autenticação associado (como OAuth ou JWT) e políticas de permissões para garantir que apenas acedam aos dados que são supostos, e caso queiram acessar dados indevidamente as informações sensíveis já estarão armazenadas de forma encriptada, reduzindo o risco de exposição.
+Qualquer utilizador com sessão iniciada tem um token de autenticação associado (como OAuth ou JWT) para garantir que apenas acedam aos dados que são supostos, e caso queiram acessar dados indevidamente as informações sensíveis já estarão armazenadas de forma encriptada, reduzindo o risco de exposição.
