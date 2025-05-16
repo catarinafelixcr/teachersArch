@@ -35,12 +35,12 @@ for i, path in MODEL_PATHS.items():
         logging.info(f"Attempting to load model {i} from: {path}")
         if not os.path.exists(path):
             logging.error(f"File NOT FOUND for model {i} at path: {path}")
-            MODELS[i] = None # Explicitly mark as not loaded or skip adding
+            MODELS[i] = None 
             all_models_loaded = False
             continue
         MODELS[i] = joblib.load(path)
         logging.info(f"Successfully loaded model {i}.")
-    except FileNotFoundError: # Should be caught by os.path.exists, but good to keep
+    except FileNotFoundError: 
         logging.error(f"FileNotFoundError for model {i} from path: {path}")
         MODELS[i] = None
         all_models_loaded = False
@@ -49,6 +49,7 @@ for i, path in MODEL_PATHS.items():
         MODELS[i] = None
         all_models_loaded = False
 
+# Remove None entries if you prefer to check with .get() or 'in'
 MODELS = {k: v for k, v in MODELS.items() if v is not None}
 
 logging.info(f"Loaded models: {list(MODELS.keys())}")
@@ -92,7 +93,7 @@ def select_model(data_registo=None, grupo=None, stage=None):
 
     first_date = get_first_extraction_date(grupo)
 
-    for i in range(5): # i will be 0, 1, 2, 3, 4
+    for i in range(5): 
         model_key_to_try = i + 1
         start = first_date + timedelta(days=30 * i)
         end = start + timedelta(days=30)
