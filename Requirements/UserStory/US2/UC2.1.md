@@ -20,9 +20,6 @@ UC2.1. Visualizar a previsão de notas dos alunos de um grupo.
 
 **Extensions**:
 
-3a. As previsões apresentam um nível de confiança baixo.
-- 3a1. O sistema informa "Previsões com baixa confiança (probabilidade < 70%)."
-
-3b. Não existe histórico de previsões.
-- 3b1. O sistema exibe uma mensagem equivalente a "No grade predictions available."
+3a. Não existe histórico de previsões.
+- 3a1. O sistema exibe uma mensagem equivalente a "No grade predictions available."
  

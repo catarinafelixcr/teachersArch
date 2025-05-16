@@ -12,7 +12,7 @@ UC7.1. - Registar um novo Professor.
 
 **Main Success Scenario:**
 1. O professor acede à página de registo.
-2. O sistema exibe o formulário de registo com os campos necessários (nome, email institucional, password, etc.).
+2. O sistema exibe o formulário de registo com os campos necessários (nome, email institucional, password, verificação de password).
 3. O professor preenche o formulário com os seus dados.
 4. O professor submete o formulário.
 5. O sistema valida os dados introduzidos (formato do email, password complexidade, campos obrigatórios).
@@ -24,7 +24,7 @@ UC7.1. - Registar um novo Professor.
 **Extensions**:
 
 5a. Validação de dados falha.
-- 5a1. O sistema exibe uma mensagem de erro clara e específica junto ao campo inválido, indicando o problema ("Enter a valid address", "Password must be at least 8 characters"). O sistema mantém os dados corretos já introduzidos no formulário para facilitar a correção.
+- 5a1. O sistema exibe uma mensagem de erro clara e específica junto ao campo inválido, indicando o problema ("Enter a valid address", "Password must be at least 8 characters"). 
 
 6a. Email institucional já registado.
 - 6a1. O sistema exibe uma mensagem de erro informando que o email institucional já está associado a uma conta existente e pode sugerir a recuperação de password.

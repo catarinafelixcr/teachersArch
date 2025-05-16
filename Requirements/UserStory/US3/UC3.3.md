@@ -21,7 +21,7 @@ UC3.2 Gerar relatório de desempenho por categorias
 **Extensions**:
 
 3a - O sistema falha ao exibir as visualizações interativas.
-- 3a1. O sistema sofre um erro técnico e exibe uma mensagem "Error Fetching visualization data. Please try again."
+- 3a1. O sistema sofre um erro técnico e exibe uma mensagem "No students found."
 
 6b - O sistema falha ao gerar o relatório.
 - 6b1. O sistema exibe uma mensagem "Error generating report. Pease try again."

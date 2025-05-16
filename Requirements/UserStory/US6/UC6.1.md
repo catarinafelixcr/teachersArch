@@ -16,12 +16,8 @@ UC.6.1. Inserir Link do Repositório GitLab
 3. O professor insere o link do repositório GitLab;
 4. O sistema recolhe os dados do GitLab e armazena-os para processamento;
 5. O sistema inicia automaticamente o processamento do modelo de Machine Learning;
-6. O professor recebe uma mensagem " "
 
 **Extensions**:
 
 3a - O link fornecido não é válido
 - 3a1. O sistema exibe a mensagem: "Repository link must be a valid GitLab URL."
-
-6a - O processamento do modelo de ML falha
-- 6a1. O sistema exibe uma mensagem: " "

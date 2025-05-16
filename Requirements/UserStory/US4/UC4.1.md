@@ -19,9 +19,6 @@ UC4.1 - Ver o desempenho dos alunos.
 5. O professor clica num aluno para ver detalhes adicionais sobre a previsão do desempenho.
 
 **Extensions**:
-
-3a. O grupo não tem dados suficientes para análise.
-- 3a1. O sistema exibe uma mensagem "Error fetching predictions:"
     
 4a. Nenhum aluno está previsto para reprovação.
 - 4a1. O sistema exibe uma mensagem "No students found"

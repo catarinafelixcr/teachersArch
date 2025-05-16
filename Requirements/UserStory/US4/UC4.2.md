@@ -20,12 +20,6 @@ UC4.2. Ver o desempenho dos grupos
 
 **Extensions**:
 
-3b. O grupo não tem dados suficientes para análise.
-- 3b1. O sistema exibe uma mensagem "Error fetching predictions:"
-    
-4a. Nenhum aluno está previsto para reprovação.
-- 4a1. O sistema exibe uma mensagem não exibe mensagem.
-
 7a. O professor clica num aluno, mas não há detalhes disponíveis
 - 7qa1. O sistema exibe uma mensagem "Error fetching student details:"
 

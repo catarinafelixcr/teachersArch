@@ -17,12 +17,9 @@ UC.6.2. Atualizar Dados do GitLab
 4. O sistema valida o link e associa-o a um repositorio já existente;
 5. O sistema recolhe apenas as novas atividades desde a última atualização;
 6. O sistema reinicia o processamento do modelo de Machine Learning;
-7. O professor recebe uma mensagem "  ".
 
 **Extensions**:
 
 3a - O link fornecido não é válido
 - 3a1. O sistema exibe uma mensagem: "Repository link must be a valid GitLab URL."
 
-6a - O processamento do modelo de ML falha
-- 6a1. O sistema exibe uma mensagem: " "

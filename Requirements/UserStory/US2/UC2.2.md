@@ -24,11 +24,9 @@ UC.2.4. Comparar a previsão em dois momentos distintos
 11. O sistema exibe três gráficos, que podem variar de acordo com a opção da métrica que o professor seleciona (Predicted Grade, Total Commits, Issues Created e Active Days)
 
 Extensions:
-3a. As previsões apresentam um nível de confiança baixo.
-- 3a1. O sistema exibe uma mensagem "Low Confidence (<70%)"
 
-3b. Não existe histórico de previsões.
-- 3b1. O sistema exibe uma mensagem equivalente a "No grade predictions available."
+3a. Não existe histórico de previsões.
+- 3a1. O sistema exibe uma mensagem equivalente a "No grade predictions available."
 
 5a. Não há previsões passadas disponíveis para comparação.
 - 5a1. O sistema exibe uma mensagem equivalente a "No options"

@@ -22,4 +22,4 @@ UC3.2 Visualizar a previsão de desempenho por categorias para um grupo
 **Extensions**:
 
 6a - O sistema falha ao exibir as visualizações interativas.
-- 6a1. O sistema sofre um erro técnico e exibe uma mensagem "Error fetching predictions:"
+- 6a1. O sistema sofre um erro técnico e exibe uma mensagem "No data"

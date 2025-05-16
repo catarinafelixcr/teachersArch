@@ -1,8 +1,8 @@
-**Test Case ID:** TC2.16 
+**Test Case ID:** TC2.9
 
 **Test Case Description**: Verificar o comportamento do sistema quando ocorre uma falha inesperada durante a geração do relatório.
 
-**Related Use Cases**: UC2.5
+**Related Use Cases**: UC2.3
 
 **Pre-conditions**:
 - O professor deve estar autenticado.
@@ -10,7 +10,7 @@
 - Previsões de notas exibidas com sucesso (TC2.1 bem-sucedido).
 
 **Steps**:
-- Clicar na opção "Gerar relatório".
+- Clicar na opção "Generate Reporto".
 
 **Expected Result**:
 - O sistema não deve gerar o relatório em PDF.
