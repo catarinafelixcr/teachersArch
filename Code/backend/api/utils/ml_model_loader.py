@@ -19,6 +19,15 @@ MODEL_PATHS = {
 }
 
 
+'''MODEL_PATHS = {
+    1: os.path.join(PROJECT_CODE_DIR, 'api','utils', 'modelo_intervalo1.pkl'),
+    2: os.path.join(PROJECT_CODE_DIR, 'api','utils', 'modelo_intervalo2.pkl'),
+    3: os.path.join(PROJECT_CODE_DIR, 'api', 'utils','modelo_intervalo3.pkl'),
+    4: os.path.join(PROJECT_CODE_DIR, 'api','utils', 'modelo_intervalo4.pkl'),
+    5: os.path.join(PROJECT_CODE_DIR, 'api','utils','modelo_intervalo5.pkl'),
+}'''
+
+
 # Carregar os modelos
 MODELS = {}
 all_models_loaded = True
@@ -111,3 +120,6 @@ def select_model(data_registo=None, grupo=None, stage=None):
     else:
         logging.error(f"Fallback model {FALLBACK_MODEL_KEY} not available for 'beyond 5 months' case!")
         raise ValueError(f"Fallback model {FALLBACK_MODEL_KEY} is unavailable.")
+    
+
+

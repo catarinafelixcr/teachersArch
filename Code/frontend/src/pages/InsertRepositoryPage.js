@@ -85,7 +85,6 @@ const handleSubmit = () => {
   }
 
   setIsLoading(true);
-  // Removed countdown setting and interval logic
 
   api.post('/api/extract_students/', {
     repo_url: trimmedLink,
@@ -103,14 +102,14 @@ const handleSubmit = () => {
         }, 100);
       } else {
         setRepoLinkError('No students found in this repository.');
-        setStudents([]); // Clear students if none found or error
+        setStudents([]); 
       }
     })
     .catch(err => {
       console.error(err);
       setIsLoading(false);
       setRepoLinkError('Error fetching students. Please check the repository link, API key, and network connection.');
-      setStudents([]); // Clear students on error
+      setStudents([]); 
     });
 };
 

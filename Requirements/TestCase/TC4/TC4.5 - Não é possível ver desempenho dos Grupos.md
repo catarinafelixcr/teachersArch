@@ -5,17 +5,27 @@
 **Related Use Cases**: UC4.2 - Ver o desempenho dos Grupos.  
 
 **Pre-conditions**:  
-- O professor deve estar autenticado no sistema.  
+
+- O professor deve estar autenticado no sistema. 
+ 
 - O sistema não tem previsões disponíveis ou os dados dos grupos são insuficientes para análise.  
 
 **Steps**:  
+
 - Aceder à dashboard.  
+
 - Selecionar a opção "Student at Risk".  
-- Selecionar um grupo para análise.  
+
+- Selecionar um grupo para análise.
+  
 - O sistema tenta carregar os dados.  
 
 **Expected result**:  
-- O sistema exibe a mensagem "Error fetching group list". 
+
+- O sistema exibe a mensagem "No students found". 
+
 - Nenhuma informação sobre desempenho dos grupos é apresentada.  
 
 **Actual result**:
+
+- Apovado.

@@ -167,7 +167,6 @@ function StudentsAtRisk() {
                   <th>Group</th>
                   <th>Grade Prediction</th>
                   <th>Risk of Failure</th>
-                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -182,7 +181,6 @@ function StudentsAtRisk() {
                       <td>{selectedGroup}</td>
                       <td>{student.predicted_grade}</td>
                       <td>{classifyRiskLevel(student.predicted_grade)}</td>
-                      <td><button onClick={() => navigate(`/studentdetails/${student.id}`)}>Ver Detalhes</button></td>
                     </tr>
                   ))
                 )}
