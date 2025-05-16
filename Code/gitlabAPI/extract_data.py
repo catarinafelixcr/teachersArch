@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 
 # Setup
 GITLAB_URL = "https://gitlab.com"
-GITLAB_TOKEN = os.getenv("GITLAB_TOKEN", 'glpat-z7gzPpe48a5krLoLa4o4')
+GITLAB_TOKEN = os.getenv("GITLAB_TOKEN", 'glpat-?')
 PROJECT_IDS = [
      61760884, 61760973, 61760822, 61708094, 61760919,61708152, 61708114, 61708087, 5052158450554251, 50554274, 50554307,
     50554328, 50554344, 50479247, 50554382

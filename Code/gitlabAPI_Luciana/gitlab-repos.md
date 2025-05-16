@@ -1,4 +1,4 @@
-Token: glpat-z7gzPpe48a5krLoLa4o4
+Token: glpat-?
 
 Repositories:
 https://gitlab.com/dei-uc/es2024/es2024-pl1
