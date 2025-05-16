@@ -4,19 +4,19 @@
 
 **Estímulo**
 
-- o utilizador acede ao site e faz um pedido de previsão de desempenho com base nos dados do GitLab, para um grupo.
+- O utilizador acede ao site e faz um pedido de previsão de desempenho com base nos dados do GitLab, para um grupo.
 
 **Artefato**
 
-- o sistema com a interface com as várias funcionalidades e o modelo ML.
+- O sistema com a interface com as várias funcionalidades e o modelo ML.
 
 **Ambiente**
 
-- acesso de vários utilizadores em simultâneo, com vários pedidos ao modelo e várias visualizações de retorno.
+- Acesso de vários utilizadores em simultâneo, com vários pedidos ao modelo e várias visualizações de retorno.
 
 **Resposta**
 
-- o sistema retorna a previsão do grupo que o professor seleciona.
+- O sistema retorna a previsão do grupo que o professor seleciona.
 
 **Medida da Resposta**
 
