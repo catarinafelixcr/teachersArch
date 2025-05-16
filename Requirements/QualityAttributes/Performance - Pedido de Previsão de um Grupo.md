@@ -20,4 +20,4 @@
 
 **Medida da Resposta**
 
-- O sistema demora cerca de 3 segundos a processar o pedido e retornar a previsão e as informações adicionais (comparação das métricas média dos grupos e categoria por grupos).
+- O sistema demora cerca de 1 segundos a processar o pedido e retornar a previsão e as informações adicionais (comparação das métricas média dos grupos e categoria por grupos).

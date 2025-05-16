@@ -4,7 +4,7 @@
 
 **Estímulo**
 
-- o utilizador acede ao site e faz um pedido de previsão de desempenho com base nos dados do GitLab, para um aluno.
+- o utilizador acede ao site e insere o link e o token e seleciona o Model Stage do repositório que quer fazer a previsão.
 
 **Artefato**
 
@@ -12,12 +12,12 @@
 
 **Ambiente**
 
-- acesso de vários utilizadores em simultâneo, com vários pedidos ao modelo e várias visualizações de retorno.
+- acesso de vários utilizadores em simultâneo, com várias inserções d elinks e tokens.
 
 **Resposta**
 
-- o sistema retorna a previsão que fez do aluno.
+- o sistema retorna os alunos do repositório do GitLab correspondente aos dados que o utilizador introduziu.
 
 **Medida da Resposta**
 
-- O sistema demora cerca de 3 segundos a processar o pedido e retornar a previsão e as informações adicionais (comparação das métricas média da turma e categoria do aluno).
+- O sistema demora até 15 minutos a extrair os dados.
